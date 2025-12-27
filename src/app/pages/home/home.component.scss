@@ -1,0 +1,210 @@
+.hero {
+  background: #ffffff;
+  border-bottom: 1px solid rgba(11, 11, 16, 0.12);
+}
+
+.hero__frame {
+  position: relative;
+  height: clamp(360px, 54vh, 620px);
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+/* Give the hero more vertical room on small screens */
+@media (max-width: 520px) {
+  .hero__frame {
+    height: clamp(520px, 78vh, 760px);
+  }
+
+  .hero__bottle {
+    bottom: 26px;
+    height: min(420px, 46vh);
+  }
+}
+
+.hero__slides {
+  position: absolute;
+  inset: 0;
+}
+
+.hero__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 350ms ease;
+}
+
+.hero__slide.is-active {
+  opacity: 1;
+}
+
+.hero__slides[data-tone='dessert'] .hero__image {
+  background:
+    radial-gradient(1100px 650px at 50% 40%, rgba(255, 140, 60, 0.16), rgba(0, 0, 0, 0)),
+    radial-gradient(900px 560px at 20% 60%, rgba(120, 40, 40, 0.18), rgba(0, 0, 0, 0)),
+    linear-gradient(135deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.35));
+}
+
+.hero__slides[data-tone='tobacco'] .hero__image {
+  background:
+    radial-gradient(1100px 650px at 50% 40%, rgba(170, 130, 90, 0.16), rgba(0, 0, 0, 0)),
+    radial-gradient(900px 560px at 20% 60%, rgba(90, 70, 50, 0.18), rgba(0, 0, 0, 0)),
+    linear-gradient(135deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.35));
+}
+
+.hero__slides[data-tone='fruit'] .hero__image {
+  background:
+    radial-gradient(1100px 650px at 50% 40%, rgba(255, 64, 190, 0.14), rgba(0, 0, 0, 0)),
+    radial-gradient(900px 560px at 20% 60%, rgba(85, 160, 255, 0.14), rgba(0, 0, 0, 0)),
+    linear-gradient(135deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.35));
+}
+
+.hero__image {
+  position: absolute;
+  inset: 0;
+  transform: scale(1.02);
+}
+
+.hero__shade {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(900px 560px at 50% 10%, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0)),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.18));
+}
+
+.hero__content {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: clamp(1.25rem, 5vw, 4rem);
+}
+
+.hero__text {
+  margin-top: clamp(2.5rem, 7vh, 5rem);
+  max-width: 34rem;
+  text-align: center;
+}
+
+.hero__title {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: var(--fw-black);
+  letter-spacing: -0.03em;
+  font-size: clamp(2.2rem, 8.5vw, 3.6rem);
+  white-space: pre-line;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.hero__subtitle {
+  margin: 1rem auto 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  max-width: 30rem;
+}
+
+.hero__cta {
+  margin: 1.25rem auto 0;
+  width: 220px;
+  height: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #d97a2b;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 14px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero__cta:hover {
+  filter: brightness(1.05);
+}
+
+.hero__bottle {
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  transform: translateX(-50%);
+  width: min(240px, 62vw);
+  height: min(360px, 42vh);
+  border-radius: 22px;
+  background:
+    radial-gradient(60% 60% at 50% 25%, rgba(255, 255, 255, 0.35), rgba(0, 0, 0, 0)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.06));
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+}
+
+.hero__dots {
+  position: absolute;
+  bottom: 18px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.35);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.dot--active {
+  background: #ff8a1f;
+}
+
+.hero__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 0;
+  background: rgba(0, 0, 0, 0.22);
+  color: rgba(255, 255, 255, 0.9);
+  display: none;
+  place-items: center;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.hero__nav:hover {
+  background: rgba(0, 0, 0, 0.32);
+}
+
+.hero__nav--prev {
+  left: 12px;
+}
+
+.hero__nav--next {
+  right: 12px;
+}
+
+@media (min-width: 860px) {
+  .hero__nav {
+    display: grid;
+  }
+
+  /* More breathing room between CTA and dots on large screens */
+  .hero__text {
+    margin-top: 3.5rem;
+  }
+
+  .hero__dots {
+    bottom: 10px;
+  }
+}
+

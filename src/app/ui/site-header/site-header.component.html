@@ -1,0 +1,112 @@
+<header class="header">
+  <div class="header__top">
+    <div class="container header__topInner">
+      <div class="header__topLeft">
+        <span class="header__pill">Free Shipping On Orders Over $60</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="header__bar">
+    <div class="container header__barInner">
+      <div class="header__left">
+        <button
+          class="menuBtn"
+          type="button"
+          (click)="toggleMenu()"
+          [attr.aria-expanded]="isMenuOpen()"
+          aria-label="Open menu"
+        >
+          <svg class="menuIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M3 6h18M3 12h18M3 18h18" />
+          </svg>
+        </button>
+
+        <nav class="nav" aria-label="Primary">
+          <a class="nav__item" href="/">Home</a>
+          <a class="nav__item" href="/collections/all-products">Shop</a>
+          <a class="nav__item" href="#">About</a>
+        </nav>
+      </div>
+
+      <a class="brand brand--center" href="/" (click)="closeMenu()" aria-label="Vape Lab Group">
+        <span class="brand__mark" aria-hidden="true"></span>
+        <span class="brand__text">VAPE LAB GROUP</span>
+      </a>
+
+      <div class="actions" aria-label="Header actions">
+        <a class="iconBtn iconBtn--cart" href="#" aria-label="Cart">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path
+              d="M6 7h15l-2 7H8L6 3H3"
+            />
+            <path d="M9 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" />
+            <path d="M18 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" />
+          </svg>
+          <span class="cartBadge" *ngIf="cartCount() > 0">{{ cartCount() }}</span>
+        </a>
+
+        <a class="iconBtn" href="#" aria-label="Search">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z" />
+            <path d="M21 21l-4.3-4.3" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="drawer" *ngIf="isDrawerVisible()" role="dialog" aria-modal="true" aria-label="Menu">
+    <button class="drawer__backdrop" type="button" (click)="closeMenu()" aria-label="Close menu"></button>
+    <aside
+      #drawerPanel
+      class="drawer__panel"
+      [class.drawer__panel--dragging]="isDrawerDragging()"
+      [style.transform]="'translateX(' + drawerX() + 'px)'"
+      (pointerdown)="onDrawerPointerDown($event, drawerPanel)"
+    >
+      <div class="drawer__top">
+        <button class="drawer__close" type="button" (click)="closeMenu()" aria-label="Close menu">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M6 6L18 18M18 6L6 18" />
+          </svg>
+        </button>
+
+        <a class="drawer__login" href="#" (click)="closeMenu()">
+          <svg class="drawer__loginIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" />
+            <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+          </svg>
+          <span>Log in</span>
+        </a>
+      </div>
+
+      <nav class="drawer__nav" aria-label="Mobile navigation">
+        <a class="drawer__row" href="/collections/all-products" (click)="closeMenu()">ALL PRODUCTS</a>
+        <a class="drawer__row" href="#" (click)="closeMenu()">DESSERTS</a>
+        <a class="drawer__row" href="#" (click)="closeMenu()">ENERGY</a>
+        <a class="drawer__row" href="#" (click)="closeMenu()">FRUIT</a>
+        <a class="drawer__row" href="#" (click)="closeMenu()">PARTY MIX</a>
+        <a class="drawer__row" href="#" (click)="closeMenu()">TOBACCO</a>
+
+        <a class="drawer__row drawer__row--chevron" href="#" (click)="closeMenu()">
+          <span>INFORMATION</span>
+          <!-- <span class="drawer__chev" aria-hidden="true">›</span> -->
+        </a>
+        <a class="drawer__row drawer__row--chevron" href="#" (click)="closeMenu()">
+          <span>POLICY PAGES</span>
+          <!-- <span class="drawer__chev" aria-hidden="true">›</span> -->
+        </a>
+      </nav>
+
+      <div class="drawer__bottom">
+        <a class="drawer__email" href="mailto:hello@vapelabgroup.com.au">
+          <span class="drawer__at" aria-hidden="true">@</span>
+          <span>hello@vapelabgroup.com.au</span>
+        </a>
+      </div>
+    </aside>
+  </div>
+</header>
+
+

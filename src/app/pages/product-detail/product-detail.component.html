@@ -1,0 +1,88 @@
+<section class="pdp" *ngIf="product() as p; else notFound">
+  <div class="container pdp__crumbs">
+    <a routerLink="/">Home</a>
+    <span class="pdp__sep">/</span>
+    <a routerLink="/collections/all-products">All Products</a>
+  </div>
+
+  <div class="container pdp__top">
+    <div class="pdp__gallery">
+      <img class="pdp__image" *ngIf="heroImage() as img" [src]="img" [alt]="p.title" />
+      <div class="pdp__thumbs" *ngIf="p.images.length > 1">
+        <img class="pdp__thumb" *ngFor="let t of p.images" [src]="t" [alt]="p.title" />
+      </div>
+    </div>
+
+    <div class="pdp__info">
+      <div class="pdp__kicker">{{ p.title }}</div>
+      <h1 class="pdp__title">{{ p.title }}</h1>
+      <div class="pdp__price">Sale price {{ formatPrice(p.price) }}</div>
+
+      <div class="pdp__qty">
+        <div class="pdp__qtyLabel">Quantity</div>
+        <div class="qty">
+          <button class="qty__btn" type="button" (click)="dec()" aria-label="Decrease quantity">−</button>
+          <div class="qty__value" aria-label="Quantity">{{ qty() }}</div>
+          <button class="qty__btn" type="button" (click)="inc()" aria-label="Increase quantity">+</button>
+        </div>
+      </div>
+
+      <button class="pdp__add" type="button">Add To Cart</button>
+
+      <ul class="pdp__highlights">
+        <li *ngFor="let h of p.highlights">{{ h }}</li>
+      </ul>
+
+      <div class="pdp__ship">Free shipping on orders over $60</div>
+    </div>
+  </div>
+
+  <div class="container pdp__below">
+    <div class="pdp__stats">
+      <div class="pdp__stat">10,000+ Happy Customers</div>
+      <div class="pdp__stat">1,500+ 5 Star Reviews</div>
+    </div>
+
+    <details class="acc" open>
+      <summary class="acc__sum">Description</summary>
+      <div class="acc__body">{{ p.description }}</div>
+    </details>
+
+    <details class="acc">
+      <summary class="acc__sum">Disclaimer</summary>
+      <div class="acc__body">{{ p.disclaimer }}</div>
+    </details>
+
+    <details class="acc">
+      <summary class="acc__sum">Our Products</summary>
+      <div class="acc__body">
+        What is VG and PG used in our E-liquid? PG &amp; VG are food-safe liquids that make up the bulk of our e-liquid.
+        This is demo copy mirroring the structure of the public page.
+      </div>
+    </details>
+  </div>
+
+  <div class="container pdp__related" *ngIf="related().length">
+    <h2 class="pdp__relatedTitle">You may also like...</h2>
+    <div class="pdp__relatedGrid">
+      <app-product-card
+        *ngFor="let r of related()"
+        [title]="r.title"
+        [price]="formatPrice(r.price)"
+        [imageUrl]="r.images[0]"
+        [imageAlt]="r.title"
+        [link]="'/collections/all-products/products/' + r.slug"
+        addMode="icon"
+      />
+    </div>
+  </div>
+</section>
+
+<ng-template #notFound>
+  <div class="container" style="padding: 3rem 0;">
+    <h2>Product not found</h2>
+    <p class="muted">Try a different URL.</p>
+  </div>
+</ng-template>
+
+

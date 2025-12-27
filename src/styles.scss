@@ -1,1 +1,391 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global styles (demo lookalike theme) */
+
+:root {
+  color-scheme: light;
+  /* Light-first palette (mainly white, some black accents) */
+  --bg: #ffffff;
+  --text: #0b0b10;
+  --muted: rgba(11, 11, 16, 0.62);
+  --border: rgba(11, 11, 16, 0.12);
+  --surface: rgba(11, 11, 16, 0.03);
+  --surface-2: rgba(11, 11, 16, 0.06);
+  --shadow: 0 18px 60px rgba(11, 11, 16, 0.12);
+  --accent-pink: rgba(255, 64, 190, 0.9);
+  --accent-blue: rgba(85, 160, 255, 0.85);
+  --container: 1120px;
+  --radius: 16px;
+
+  /* Typography (closer to retail Shopify vibe) */
+  --font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Apple Color Emoji', 'Segoe UI Emoji';
+  --fs-body: 16px;
+  --lh-body: 1.4;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-black: 800;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  letter-spacing: 0;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  font-family: inherit;
+  color: var(--text);
+}
+
+h2 {
+  font-weight: var(--fw-bold);
+  font-size: clamp(1.6rem, 2.2vw, 2.15rem);
+  letter-spacing: 0;
+}
+
+.container {
+  width: min(var(--container), calc(100% - 2rem));
+}
+
+.btn {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  border-radius: 999px;
+  padding: 0.55rem 0.9rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background: rgba(11, 11, 16, 0.03);
+  border-color: rgba(11, 11, 16, 0.18);
+}
+
+.btn--primary {
+  border-color: rgba(11, 11, 16, 0.9);
+  background: #0b0b10;
+  color: #fff;
+}
+
+.btn--primary:hover {
+  filter: brightness(1.06);
+}
+
+.btn--ghost {
+  background: transparent;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.section {
+  padding: 2rem 0;
+}
+
+.section__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.section__head--center {
+  justify-content: center;
+  text-align: center;
+}
+
+.section__head h2 {
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.section__link {
+  color: rgba(11, 11, 16, 0.72);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.section__link:hover {
+  color: #0b0b10;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.grid--products {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.productCard {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 16px;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 140px auto;
+}
+
+.productCard__img {
+  background: linear-gradient(135deg, rgba(11, 11, 16, 0.06), rgba(255, 255, 255, 0)),
+    radial-gradient(60% 60% at 30% 30%, rgba(255, 64, 190, 0.22), rgba(255, 255, 255, 0));
+}
+
+.productCard__body {
+  padding: 0.9rem 0.95rem 1rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.productCard__meta {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.productCard__name {
+  font-weight: var(--fw-semibold);
+  letter-spacing: -0.01em;
+}
+
+.productCard__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.4rem;
+}
+
+.productCard__price {
+  white-space: nowrap;
+}
+
+/* Best Sellers (Swiper) */
+.bestSellers {
+  margin-top: 1rem;
+}
+
+.bestSellers__swiper {
+  width: 100%;
+}
+
+/* Swiper controls styling (web component ::part hooks) */
+.bestSellers__swiper::part(button-prev),
+.bestSellers__swiper::part(button-next) {
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid rgba(11, 11, 16, 0.14);
+  background: rgba(255, 255, 255, 0.95);
+  color: rgba(11, 11, 16, 0.78);
+  box-shadow: 0 10px 30px rgba(11, 11, 16, 0.12);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.bestSellers__swiper::part(button-prev):hover,
+.bestSellers__swiper::part(button-next):hover {
+  background: #ffffff;
+  box-shadow: 0 14px 38px rgba(11, 11, 16, 0.16);
+}
+
+.bestSellers:hover .bestSellers__swiper::part(button-prev),
+.bestSellers:hover .bestSellers__swiper::part(button-next),
+.bestSellers:focus-within .bestSellers__swiper::part(button-prev),
+.bestSellers:focus-within .bestSellers__swiper::part(button-next) {
+  opacity: 1;
+}
+
+.bestSellers__swiper::part(pagination) {
+  position: static;
+  margin-top: 1.25rem;
+}
+
+.bestSellers__swiper::part(bullet) {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(11, 11, 16, 0.22);
+  opacity: 1;
+  margin: 0 6px;
+  transition: transform 180ms ease, background 180ms ease;
+}
+
+.bestSellers__swiper::part(bullet-active) {
+  background: rgba(11, 11, 16, 0.92);
+  transform: scale(1.25);
+  margin-bottom: 1px;
+  margin-right: 6px;
+  margin-left: 6px;
+}
+
+@media (max-width: 899px) {
+  // .bestCard__media {
+  //   height: 360px;
+  // }
+}
+
+.grid--collections {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.collectionCard {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 16px;
+  padding: 1rem;
+  text-decoration: none;
+  color: var(--text);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 90px;
+  position: relative;
+  overflow: hidden;
+}
+
+.collectionCard::after {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(circle at 30% 30%, rgba(11, 11, 16, 0.06), rgba(255, 255, 255, 0) 55%);
+  transform: rotate(12deg);
+}
+
+.collectionCard__title,
+.collectionCard__cta {
+  position: relative;
+  z-index: 1;
+}
+
+.collectionCard__title {
+  font-weight: 650;
+}
+
+.collectionCard__cta {
+  color: rgba(11, 11, 16, 0.7);
+}
+
+.collectionCard[data-tone='pink']::after {
+  background: radial-gradient(circle at 30% 30%, rgba(255, 64, 190, 0.35), rgba(0, 0, 0, 0) 55%);
+}
+.collectionCard[data-tone='blue']::after {
+  background: radial-gradient(circle at 30% 30%, rgba(85, 160, 255, 0.35), rgba(0, 0, 0, 0) 55%);
+}
+.collectionCard[data-tone='lime']::after {
+  background: radial-gradient(circle at 30% 30%, rgba(120, 255, 155, 0.3), rgba(0, 0, 0, 0) 55%);
+}
+.collectionCard[data-tone='orange']::after {
+  background: radial-gradient(circle at 30% 30%, rgba(255, 159, 64, 0.35), rgba(0, 0, 0, 0) 55%);
+}
+.collectionCard[data-tone='purple']::after {
+  background: radial-gradient(circle at 30% 30%, rgba(170, 120, 255, 0.35), rgba(0, 0, 0, 0) 55%);
+}
+.collectionCard[data-tone='teal']::after {
+  background: radial-gradient(circle at 30% 30%, rgba(64, 255, 226, 0.3), rgba(0, 0, 0, 0) 55%);
+}
+
+.section--split {
+  padding-top: 1rem;
+}
+
+.split {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 18px;
+  padding: 1.25rem;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.split__left h2 {
+  margin: 0;
+}
+
+.split__left p {
+  margin: 0.75rem 0 1rem;
+}
+
+.feature {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 0.85rem;
+  padding: 0.9rem;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(11, 11, 16, 0.02);
+}
+
+.feature__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(11, 11, 16, 0.05);
+}
+
+.feature__icon svg {
+  width: 20px;
+  height: 20px;
+  fill: #0b0b10;
+  opacity: 0.9;
+}
+
+.feature__title {
+  font-weight: 650;
+}
+
+.feature__desc {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-top: 0.15rem;
+}
+
+@media (min-width: 760px) {
+  .grid--products {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .grid--collections {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .split {
+    grid-template-columns: 1fr 1.2fr;
+    align-items: start;
+    padding: 1.6rem;
+  }
+}

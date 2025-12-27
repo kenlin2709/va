@@ -1,0 +1,40 @@
+<a *ngIf="link; else staticCard" class="pc pc--link" [routerLink]="link">
+  <ng-container *ngTemplateOutlet="cardContent"></ng-container>
+</a>
+
+<ng-template #staticCard>
+  <div class="pc">
+    <ng-container *ngTemplateOutlet="cardContent"></ng-container>
+  </div>
+</ng-template>
+
+<ng-template #cardContent>
+  <div class="pc__media">
+    <img class="pc__img" [src]="imageUrl || ''" [alt]="imageAlt || title" loading="lazy" decoding="async" />
+
+    <button
+      *ngIf="addMode === 'icon'"
+      class="pc__add pc__add--icon"
+      type="button"
+      [attr.aria-label]="addAriaLabel"
+      (click)="onAddClick($event)"
+    >
+      <span class="material-symbols-outlined" aria-hidden="true">add_shopping_cart</span>
+    </button>
+  </div>
+
+  <div class="pc__title">{{ title }}</div>
+  <div class="pc__price">{{ price }}</div>
+
+  <button
+    *ngIf="addMode === 'text'"
+    class="pc__add pc__add--text"
+    type="button"
+    [attr.aria-label]="addAriaLabel"
+    (click)="onAddClick($event)"
+  >
+    {{ addLabel }}
+  </button>
+</ng-template>
+
+

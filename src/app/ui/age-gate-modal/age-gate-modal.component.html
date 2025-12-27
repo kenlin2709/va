@@ -1,0 +1,26 @@
+<div class="ageGate" *ngIf="isOpen() || isBlocked()" role="dialog" aria-modal="true">
+  <div class="ageGate__backdrop" aria-hidden="true"></div>
+  <div class="ageGate__panel">
+    <div class="ageGate__logo" aria-hidden="true"></div>
+    <h2 class="ageGate__title">Age Verification</h2>
+    <p class="ageGate__copy">
+      <strong>THE PRODUCTS FOR SALE ON THIS WEBSITE ARE INTENDED FOR ADULTS ONLY.</strong>
+    </p>
+    <p class="ageGate__copy">
+      By entering this site you certify that you are of legal smoking age (18+) and you agree to our terms and
+      conditions.
+    </p>
+
+    <div class="ageGate__actions" *ngIf="isOpen()">
+      <button class="btn btn--primary" type="button" (click)="accept()">YES, I AM 18</button>
+      <button class="btn btn--ghost" type="button" (click)="decline()">NO, I AM UNDER 18 YEARS</button>
+    </div>
+
+    <div class="ageGate__blocked" *ngIf="isBlocked()">
+      <p class="ageGate__copy muted">You indicated you are under 18. This demo will keep the site blocked.</p>
+      <button class="btn btn--ghost" type="button" (click)="accept()">I AM 18+ (unlock)</button>
+    </div>
+  </div>
+</div>
+
+

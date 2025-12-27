@@ -1,0 +1,58 @@
+.ageGate {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+}
+
+.ageGate__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+}
+
+.ageGate__panel {
+  position: relative;
+  z-index: 1;
+  width: min(560px, calc(100vw - 2rem));
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.96);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.ageGate__logo {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 64, 190, 0.95), rgba(0, 0, 0, 0)),
+    linear-gradient(135deg, rgba(85, 160, 255, 0.6), rgba(255, 159, 64, 0.25));
+  border: 1px solid var(--border);
+  margin-bottom: 0.9rem;
+}
+
+.ageGate__title {
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.ageGate__copy {
+  margin: 0.7rem 0 0;
+  color: rgba(11, 11, 16, 0.82);
+  line-height: 1.5;
+}
+
+.ageGate__actions {
+  margin-top: 1.2rem;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.ageGate__blocked {
+  margin-top: 1.2rem;
+}
+
+
