@@ -18,7 +18,7 @@ export const PRODUCT_CATALOG: Product[] = [
     price: 26.95,
     inStock: true,
     images: [
-     'https://vapelabgroup.com.au/cdn/shop/products/Mumm_s.png?crop=center&height=900&v=1631301263&width=900'
+     'https://snowplusaus.com/wp-content/uploads/2025/03/7.png'
     ],
     highlights: ['Lab-Crafted Quality', 'Perfect VG/PG Balance', 'Unforgettable Flavours', 'Made In Australian'],
     description:
@@ -31,7 +31,7 @@ export const PRODUCT_CATALOG: Product[] = [
     title: 'Bonkers Banana Vape Juice',
     price: 26.95,
     inStock: true,
-    images: ['https://vapelabgroup.com.au/cdn/shop/products/Mumm_s.png?crop=center&height=900&v=1631301263&width=900'],
+    images: ['https://snowplusaus.com/wp-content/uploads/2025/03/7.png'],
     highlights: ['Lab-Crafted Quality', 'Perfect VG/PG Balance', 'Unforgettable Flavours', 'Made In Australian'],
     description: 'A smooth banana flavour profile (demo content). This product DOES NOT contain nicotine.',
     disclaimer:

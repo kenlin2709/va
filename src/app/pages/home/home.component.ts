@@ -1,11 +1,12 @@
-import { CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, Component, inject, PLATFORM_ID, signal } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, Component, computed, inject, PLATFORM_ID, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { isPlatformBrowser } from '@angular/common';
 import { ProductCardComponent } from '../../ui/product-card/product-card.component';
 import { PRODUCT_CATALOG } from '../../shared/product-catalog';
+import { firstValueFrom } from 'rxjs';
+import { CategoriesApiService, Category } from '../../shared/api/categories-api.service';
 
 type Product = { name: string; category: string; price: string; imageUrl?: string };
-type Collection = { title: string; href: string; tone: 'pink' | 'blue' | 'lime' | 'orange' | 'purple' | 'teal' };
 type Feature = { title: string; description: string; icon: 'flask' | 'cherries' | 'cloud' };
 type HeroSlide = {
   title: string;
@@ -13,6 +14,7 @@ type HeroSlide = {
   cta: string;
   href: string;
   tone: 'dessert' | 'tobacco' | 'fruit';
+  imageUrl: string;
 };
 
 @Component({
@@ -27,6 +29,7 @@ type HeroSlide = {
 export class HomeComponent {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
+  private readonly categoriesApi = inject(CategoriesApiService);
 
   readonly heroSlides: HeroSlide[] = [
     {
@@ -34,22 +37,33 @@ export class HomeComponent {
       subtitle: 'Indulge in rich, dessert-inspired blends like vanilla custard, apple crumble, and chocolate.',
       cta: 'Shop Here',
       href: '#',
-      tone: 'dessert'
+      tone: 'dessert',
+      imageUrl: '/images/hero/20250618456-2-scaled.jpg'
     },
     {
       title: 'Classic. Smooth.\nRefined.',
       subtitle: 'Discover rich tobacco notes crafted for the authentic taste you know and love.',
       cta: 'Shop Here',
       href: '#',
-      tone: 'tobacco'
+      tone: 'tobacco',
+      imageUrl: '/images/hero/20250618456-4-scaled.jpg'
     },
     {
       title: 'Fresh. Juicy.\nUnforgettable.',
       subtitle: 'Bursting with flavour—sweet, tangy, and always refreshing.',
       cta: 'Shop Here',
       href: '#',
-      tone: 'fruit'
-    }
+      tone: 'fruit',
+      imageUrl: '/images/hero/54846548.jpg'
+    },
+    {
+      title: 'Lab-Crafted.\nAustralian.',
+      subtitle: 'Premium blends made for smooth hits, bold flavour, and reliable performance.',
+      cta: 'Shop Here',
+      href: '#',
+      tone: 'dessert',
+      imageUrl: '/images/hero/home-2-06-2048x1158.jpg'
+    },
   ];
 
   readonly heroIndex = signal(0);
@@ -61,9 +75,40 @@ export class HomeComponent {
   private swipeStartX = 0;
   private swipeStartY = 0;
 
+  readonly apiCategories = signal<Category[]>([]);
+
+  readonly collectionsForView = computed(() => {
+    const cats = this.apiCategories();
+    if (!cats.length) {
+      // SSR/prerender + initial load fallback
+      return [
+        { title: 'All Products', href: '/collections/all-products', imageUrl: '' },
+        { title: 'Desserts', href: '/collections/all-products', imageUrl: '' },
+        { title: 'Energy', href: '/collections/all-products', imageUrl: '' },
+        { title: 'Fruit', href: '/collections/all-products', imageUrl: '' },
+        { title: 'Tobacco', href: '/collections/all-products', imageUrl: '' },
+        { title: 'Party Mix', href: '/collections/all-products', imageUrl: '' },
+      ];
+    }
+
+    // Keep "All Products" first if it exists
+    const sorted = [...cats].sort((a, b) => {
+      if (a.name === 'All Products') return -1;
+      if (b.name === 'All Products') return 1;
+      return a.name.localeCompare(b.name);
+    });
+
+    return sorted.slice(0, 6).map((c) => ({
+      title: c.name,
+      href: c.name === 'All Products' ? '/collections/all-products' : '/collections/all-products',
+      imageUrl: c.categoryImageUrl ?? '',
+    }));
+  });
+
   ngOnInit(): void {
     if (!this.isBrowser) return;
     this.startAutoRotate();
+    void this.loadCategories();
   }
 
   ngOnDestroy(): void {
@@ -128,6 +173,15 @@ export class HomeComponent {
     this.startAutoRotate();
   }
 
+  private async loadCategories(): Promise<void> {
+    try {
+      const cats = await firstValueFrom(this.categoriesApi.list());
+      this.apiCategories.set(cats);
+    } catch {
+      // keep fallback
+    }
+  }
+
   readonly bestSellers = PRODUCT_CATALOG.filter((p) =>
     [
       'peppermint-tobacco-vape-juice',
@@ -141,15 +195,6 @@ export class HomeComponent {
     price: `$${p.price.toFixed(2)}`,
     imageUrl: p.images[0]
   }));
-
-  readonly collections: Collection[] = [
-    { title: 'All Products', href: '#', tone: 'purple' },
-    { title: 'Desserts', href: '#', tone: 'pink' },
-    { title: 'Energy', href: '#', tone: 'orange' },
-    { title: 'Fruit', href: '#', tone: 'lime' },
-    { title: 'Tobacco', href: '#', tone: 'blue' },
-    { title: 'Party Mix', href: '#', tone: 'teal' }
-  ];
 
   readonly features: Feature[] = [
     {

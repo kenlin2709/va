@@ -1,0 +1,53 @@
+.adminPage {
+  max-width: 1180px;
+}
+
+.adminPage__head {
+  margin-bottom: 14px;
+}
+
+.adminPage__head h1 {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  color: var(--a-text);
+}
+
+.adminPage__muted {
+  margin: 6px 0 0;
+  color: var(--a-muted);
+}
+
+.dashGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 1100px) {
+  .dashGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.dashCard {
+  border-radius: 16px;
+  background: var(--a-surface);
+  border: 1px solid var(--a-border);
+  padding: 14px;
+}
+
+.dashCard__label {
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--a-muted);
+}
+
+.dashCard__value {
+  margin-top: 8px;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+

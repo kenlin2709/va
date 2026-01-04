@@ -1,0 +1,77 @@
+<section class="adminPage">
+  <header class="adminPage__head">
+    <div>
+      <h1>Products</h1>
+      <p class="adminPage__muted">Manage your catalog</p>
+    </div>
+    <div class="adminPage__actions">
+      <button type="button" class="btnA btnA--ghost" (click)="reload()">Refresh</button>
+      <button type="button" class="btnA btnA--ghost" (click)="goCreate()">New product</button>
+      <label class="sort">
+        <span class="sort__label">Sort</span>
+        <select class="sort__select" [value]="sort()" (change)="sort.set(($any($event.target).value))">
+          <option value="default">Default</option>
+          <option value="stockAsc">Stock (low → high)</option>
+          <option value="stockDesc">Stock (high → low)</option>
+        </select>
+      </label>
+    </div>
+  </header>
+
+  <div class="status" *ngIf="error() || loading()">
+    <div class="status__loading" *ngIf="loading()">Loading…</div>
+    <div class="status__error" *ngIf="error()">{{ error() }}</div>
+  </div>
+
+  <div class="grid grid--one">
+    <div class="card">
+      <div class="card__head">
+        <h2>Products ({{ products().length }})</h2>
+      </div>
+
+      <div class="tableWrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Category</th>
+              <th>Stock</th>
+              <th class="table__actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of productsSorted()">
+              <td class="table__nameCell">
+                <span class="pIcon" aria-hidden="true">
+                  <img
+                    *ngIf="p.productImageUrl; else pIconFallback"
+                    class="pIcon__img"
+                    [src]="p.productImageUrl"
+                    [alt]="p.name"
+                    loading="lazy"
+                    referrerpolicy="no-referrer"
+                    (error)="$any($event.target).style.display='none'"
+                  />
+                  <ng-template #pIconFallback>
+                    <span class="pIcon__fallback">{{ (p.name || '?').slice(0, 1).toUpperCase() }}</span>
+                  </ng-template>
+                </span>
+                <span class="table__name">{{ p.name }}</span>
+              </td>
+              <td>${{ p.price | number: '1.2-2' }}</td>
+              <td>{{ p.categoryId ? (categoriesById().get(p.categoryId)?.name ?? '—') : '—' }}</td>
+              <td [class.table__stockLow]="p.stockQty < 10">{{ p.stockQty }}</td>
+              <td class="table__actions">
+                <button type="button" class="btnA btnA--ghost" (click)="goEdit(p)">Edit</button>
+                <button type="button" class="btnA btnA--danger" (click)="delete(p)">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+

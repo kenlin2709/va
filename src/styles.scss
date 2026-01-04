@@ -258,63 +258,125 @@ h2 {
 }
 
 .grid--collections {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
+  gap: 18px;
 }
 
-.collectionCard {
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.8);
+@media (min-width: 720px) {
+  .grid--collections {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+  }
+}
+
+@media (min-width: 1040px) {
+  .grid--collections {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 26px;
+  }
+}
+
+.collectionTile {
   border-radius: 16px;
-  padding: 1rem;
-  text-decoration: none;
-  color: var(--text);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  min-height: 90px;
-  position: relative;
   overflow: hidden;
-}
-
-.collectionCard::after {
-  content: '';
-  position: absolute;
-  inset: -40%;
-  background: radial-gradient(circle at 30% 30%, rgba(11, 11, 16, 0.06), rgba(255, 255, 255, 0) 55%);
-  transform: rotate(12deg);
-}
-
-.collectionCard__title,
-.collectionCard__cta {
   position: relative;
+  min-height: 230px;
+  border: 1px solid rgba(11, 11, 16, 0.12);
+  background:
+    radial-gradient(120% 120% at 30% 20%, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0) 60%),
+    linear-gradient(135deg, rgba(11, 11, 16, 0.25), rgba(11, 11, 16, 0.06));
+  text-decoration: none;
+  display: grid;
+  place-items: center;
+}
+
+.collectionTile__bg {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transform: scale(1.02);
+}
+
+.collectionTile__shade {
+  position: absolute;
+  inset: 0;
+}
+
+.collectionTile__content {
+  position: absolute;
+  inset: 0;
   z-index: 1;
+  text-align: center;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.collectionCard__title {
-  font-weight: 650;
+.collectionTile__title {
+  color: rgba(255, 255, 255, 0.96);
+  font-weight: 850;
+  font-size: clamp(1.5rem, 2.2vw, 2.15rem);
+  letter-spacing: -0.02em;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  transition: transform 220ms ease;
 }
 
-.collectionCard__cta {
-  color: rgba(11, 11, 16, 0.7);
+.collectionTile__cta {
+  position: absolute;
+  left: 50%;
+  bottom: 63px;
+  width: 120px;
+  height: 44px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 750;
+  background: rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transform: translate(-50%, 14px);
+  transition: transform 220ms ease, opacity 220ms ease, background 180ms ease;
 }
 
-.collectionCard[data-tone='pink']::after {
-  background: radial-gradient(circle at 30% 30%, rgba(255, 64, 190, 0.35), rgba(0, 0, 0, 0) 55%);
+.collectionTile:hover .collectionTile__cta,
+.collectionTile:focus-visible .collectionTile__cta,
+.collectionTile:focus-within .collectionTile__cta {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  background: rgba(0, 0, 0, 0.22);
 }
-.collectionCard[data-tone='blue']::after {
-  background: radial-gradient(circle at 30% 30%, rgba(85, 160, 255, 0.35), rgba(0, 0, 0, 0) 55%);
+
+.collectionTile:hover .collectionTile__title,
+.collectionTile:focus-visible .collectionTile__title,
+.collectionTile:focus-within .collectionTile__title {
+  transform: translateY(-16px);
 }
-.collectionCard[data-tone='lime']::after {
-  background: radial-gradient(circle at 30% 30%, rgba(120, 255, 155, 0.3), rgba(0, 0, 0, 0) 55%);
+
+@media (hover: none) {
+  /* On touch devices, show CTA by default (no hover). */
+  .collectionTile__cta {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  .collectionTile__title {
+    transform: translateY(-16px);
+  }
 }
-.collectionCard[data-tone='orange']::after {
-  background: radial-gradient(circle at 30% 30%, rgba(255, 159, 64, 0.35), rgba(0, 0, 0, 0) 55%);
-}
-.collectionCard[data-tone='purple']::after {
-  background: radial-gradient(circle at 30% 30%, rgba(170, 120, 255, 0.35), rgba(0, 0, 0, 0) 55%);
-}
-.collectionCard[data-tone='teal']::after {
-  background: radial-gradient(circle at 30% 30%, rgba(64, 255, 226, 0.3), rgba(0, 0, 0, 0) 55%);
+
+@media (prefers-reduced-motion: reduce) {
+  .collectionTile__cta {
+    transition: none;
+  }
+  .collectionTile__title {
+    transition: none;
+  }
 }
 
 .section--split {

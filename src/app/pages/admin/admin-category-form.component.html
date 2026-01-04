@@ -1,0 +1,55 @@
+<section class="adminPage">
+  <header class="adminPage__head">
+    <div>
+      <h1>{{ isEdit() ? 'Edit category' : 'Create category' }}</h1>
+      <p class="adminPage__muted">
+        {{ isEdit() ? 'Update category details' : 'Add a new category to organize products' }}
+      </p>
+    </div>
+    <div class="adminPage__actions">
+      <a class="btnA btnA--ghost" routerLink="/admin/categories">Back</a>
+    </div>
+  </header>
+
+  <div class="status" *ngIf="error() || loading()">
+    <div class="status__loading" *ngIf="loading()">Loading…</div>
+    <div class="status__error" *ngIf="error()">{{ error() }}</div>
+  </div>
+
+  <div class="card">
+    <form class="form" [formGroup]="form" (ngSubmit)="submit()">
+      <label class="field">
+        <span>Name</span>
+        <input formControlName="name" placeholder="Category name" />
+      </label>
+
+      <label class="field">
+        <span>Upload image</span>
+        <input type="file" accept="image/*" (change)="onImageSelected($event)" [disabled]="uploading() || loading()" />
+        <small class="hint" *ngIf="uploading()">Uploading…</small>
+        <small class="hint" *ngIf="!uploading()">Image will upload when you click Save.</small>
+      </label>
+
+      <label class="field field--full">
+        <span>Description (optional)</span>
+        <textarea formControlName="description" rows="5"></textarea>
+      </label>
+
+      <div class="field field--full">
+        <span>Preview</span>
+        <div class="imgPreview" *ngIf="imagePreviewUrl() || existingImageUrl(); else noPreview">
+          <img class="imgPreview__img" [src]="imagePreviewUrl() || existingImageUrl()!" alt="Selected category image" />
+        </div>
+        <ng-template #noPreview>
+          <div class="imgPreview imgPreview--empty">No image selected</div>
+        </ng-template>
+      </div>
+
+      <div class="actions">
+        <button class="btnA btnA--primary" type="submit" [disabled]="form.invalid || loading()">Save</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+

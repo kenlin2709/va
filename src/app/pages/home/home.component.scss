@@ -38,31 +38,13 @@
   opacity: 1;
 }
 
-.hero__slides[data-tone='dessert'] .hero__image {
-  background:
-    radial-gradient(1100px 650px at 50% 40%, rgba(255, 140, 60, 0.16), rgba(0, 0, 0, 0)),
-    radial-gradient(900px 560px at 20% 60%, rgba(120, 40, 40, 0.18), rgba(0, 0, 0, 0)),
-    linear-gradient(135deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.35));
-}
-
-.hero__slides[data-tone='tobacco'] .hero__image {
-  background:
-    radial-gradient(1100px 650px at 50% 40%, rgba(170, 130, 90, 0.16), rgba(0, 0, 0, 0)),
-    radial-gradient(900px 560px at 20% 60%, rgba(90, 70, 50, 0.18), rgba(0, 0, 0, 0)),
-    linear-gradient(135deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.35));
-}
-
-.hero__slides[data-tone='fruit'] .hero__image {
-  background:
-    radial-gradient(1100px 650px at 50% 40%, rgba(255, 64, 190, 0.14), rgba(0, 0, 0, 0)),
-    radial-gradient(900px 560px at 20% 60%, rgba(85, 160, 255, 0.14), rgba(0, 0, 0, 0)),
-    linear-gradient(135deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.35));
-}
-
 .hero__image {
   position: absolute;
   inset: 0;
   transform: scale(1.02);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .hero__shade {
@@ -195,7 +177,10 @@
 
 @media (min-width: 860px) {
   .hero__nav {
-    display: grid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 5px;
   }
 
   /* More breathing room between CTA and dots on large screens */

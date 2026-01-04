@@ -1,0 +1,34 @@
+.adminPage {
+  max-width: 1180px;
+}
+
+.adminPage__head h1 {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  color: var(--a-text);
+}
+
+.adminPage__muted {
+  margin: 6px 0 0;
+  color: var(--a-muted);
+}
+
+.phCard {
+  margin-top: 14px;
+  border-radius: 18px;
+  background: var(--a-surface);
+  border: 1px solid var(--a-border);
+  padding: 14px;
+}
+
+.phCard__title {
+  font-weight: 800;
+}
+
+.phCard__muted {
+  margin-top: 6px;
+  color: var(--a-muted);
+}
+
+

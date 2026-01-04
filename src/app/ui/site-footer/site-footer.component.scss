@@ -1,7 +1,7 @@
 .footer {
   margin-top: 2.5rem;
   border-top: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.85);
+  background: #fff;
 }
 
 .footer__inner {
@@ -9,6 +9,12 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
+}
+
+.footer__col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
 .footer__brand {
@@ -22,8 +28,19 @@
   margin-bottom: 0.6rem;
 }
 
+.footer__muted {
+  color: var(--muted);
+}
+
+p.footer__muted {
+  margin: 0.5rem 0 1.2rem;
+  max-width: 42ch;
+}
+
 .footer__link {
-  display: inline-flex;
+  /* Make links stack as rows (Angular removes whitespace between inline elements) */
+  display: block;
+  width: fit-content;
   color: rgba(11, 11, 16, 0.78);
   text-decoration: none;
   padding: 0.25rem 0;
@@ -31,10 +48,6 @@
 
 .footer__link:hover {
   color: #0b0b10;
-}
-
-.footer__muted {
-  color: var(--muted);
 }
 
 .footer__bottom {

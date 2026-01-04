@@ -24,6 +24,7 @@
 .pc__img {
   width: auto;
   max-width: min(220px, 100%);
+  max-height: 220px;
   object-fit: contain;
   display: block;
   transform: scale(1);

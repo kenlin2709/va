@@ -1,0 +1,65 @@
+<section class="adminPage">
+  <header class="adminPage__head">
+    <div>
+      <h1>Categories</h1>
+      <p class="adminPage__muted">Organize products into collections</p>
+    </div>
+    <div class="adminPage__actions">
+      <button type="button" class="btnA btnA--ghost" (click)="reload()">Refresh</button>
+      <button type="button" class="btnA btnA--ghost" (click)="goCreate()">New category</button>
+    </div>
+  </header>
+
+  <div class="status" *ngIf="error() || loading()">
+    <div class="status__loading" *ngIf="loading()">Loading…</div>
+    <div class="status__error" *ngIf="error()">{{ error() }}</div>
+  </div>
+
+  <div class="grid grid--one">
+    <div class="card">
+      <div class="card__head">
+        <h2>Categories ({{ categories().length }})</h2>
+      </div>
+
+      <div class="tableWrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th class="table__actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of categories()">
+              <td class="table__nameCell">
+                <span class="cIcon" aria-hidden="true">
+                  <img
+                    *ngIf="c.categoryImageUrl; else cIconFallback"
+                    class="cIcon__img"
+                    [src]="c.categoryImageUrl"
+                    [alt]="c.name"
+                    loading="lazy"
+                    referrerpolicy="no-referrer"
+                    (error)="$any($event.target).style.display='none'"
+                  />
+                  <ng-template #cIconFallback>
+                    <span class="cIcon__fallback">{{ (c.name || '?').slice(0, 1).toUpperCase() }}</span>
+                  </ng-template>
+                </span>
+                <span class="table__name">{{ c.name }}</span>
+              </td>
+              <td class="table__muted">{{ c.description || '—' }}</td>
+              <td class="table__actions">
+                <button type="button" class="btnA btnA--ghost" (click)="goEdit(c)">Edit</button>
+                <button type="button" class="btnA btnA--danger" (click)="delete(c)">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+

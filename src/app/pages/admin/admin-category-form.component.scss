@@ -1,0 +1,158 @@
+.adminPage {
+  max-width: 1180px;
+}
+
+.adminPage__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.adminPage__head h1 {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  color: var(--a-text);
+}
+
+.adminPage__muted {
+  margin: 6px 0 0;
+  color: var(--a-muted);
+}
+
+.adminPage__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.status__error {
+  color: var(--a-danger);
+}
+
+.card {
+  background: var(--a-surface);
+  border: 1px solid var(--a-border);
+  border-radius: 18px;
+  padding: 14px;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field--full {
+  grid-column: 1 / -1;
+}
+
+.field span {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--a-muted);
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  border: 1px solid var(--a-border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font: inherit;
+  background: #fff;
+  color: var(--a-text);
+  outline: none;
+}
+
+.field input[type='file'] {
+  padding: 9px 12px;
+}
+
+.hint {
+  color: var(--a-muted);
+  font-size: 12px;
+}
+
+.imgPreview {
+  margin-top: 6px;
+  border: 1px solid var(--a-border);
+  border-radius: 16px;
+  background: #fff;
+  padding: 10px;
+  display: grid;
+  place-items: center;
+  min-height: 160px;
+}
+
+.imgPreview__img {
+  width: min(520px, 100%);
+  max-height: 220px;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.imgPreview--empty {
+  color: var(--a-muted);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-color: rgba(0, 0, 0, 0.28);
+}
+
+.actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.btnA {
+  appearance: none;
+  border: 1px solid var(--a-border);
+  background: #fff;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font: inherit;
+  font-weight: 700;
+  color: var(--a-text);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btnA--primary {
+  background: var(--a-primary);
+  color: #fff;
+  border-color: var(--a-primary);
+}
+
+.btnA--ghost {
+  background: transparent;
+}
+
+.btnA:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 720px) {
+  .form {
+    grid-template-columns: 1fr;
+  }
+}
+
+

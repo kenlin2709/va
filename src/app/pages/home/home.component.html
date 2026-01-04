@@ -3,7 +3,7 @@
     <div class="hero__frame" (pointerdown)="onHeroPointerDown($event)" (pointerup)="onHeroPointerUp($event)">
       <div class="hero__slides" [attr.data-tone]="heroSlides[heroIndex()].tone">
         <article class="hero__slide" *ngFor="let s of heroSlides; let i = index" [class.is-active]="i === heroIndex()">
-          <div class="hero__image" aria-hidden="true"></div>
+          <div class="hero__image" aria-hidden="true" [style.backgroundImage]="'url(' + s.imageUrl + ')'"></div>
           <div class="hero__shade" aria-hidden="true"></div>
 
           <div class="hero__content">
@@ -70,16 +70,23 @@
       </div>
     </section>
 
-    <section class="section">
-      <div class="section__head">
+    <section class="section px-4">
+      <div class="section__head section__head--center">
         <h2>Flavour Collections</h2>
-        <span class="muted">Browse by style</span>
       </div>
 
       <div class="grid grid--collections">
-        <a class="collectionCard" *ngFor="let c of collections" [attr.data-tone]="c.tone" [href]="c.href">
-          <div class="collectionCard__title">{{ c.title }}</div>
-          <div class="collectionCard__cta">View</div>
+        <a
+          class="collectionTile"
+          *ngFor="let c of collectionsForView()"
+          [href]="c.href"
+        >
+          <div class="collectionTile__bg" aria-hidden="true" [style.backgroundImage]="c.imageUrl ? 'url(' + c.imageUrl + ')' : null"></div>
+          <div class="collectionTile__shade" aria-hidden="true"></div>
+          <div class="collectionTile__content">
+            <div class="collectionTile__title">{{ c.title }}</div>
+            <div class="collectionTile__cta">View</div>
+          </div>
         </a>
       </div>
     </section>

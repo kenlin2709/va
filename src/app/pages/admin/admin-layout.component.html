@@ -1,0 +1,34 @@
+<div class="adminShell">
+  <aside class="adminNav" aria-label="Admin navigation">
+    <div class="adminNav__brand">
+      <div class="adminNav__logo" aria-hidden="true">VA</div>
+      <div class="adminNav__text">
+        <div class="adminNav__title">Admin</div>
+        <div class="adminNav__sub">Vape Lab</div>
+      </div>
+    </div>
+
+    <nav class="adminNav__links">
+      <a
+        *ngFor="let item of nav"
+        class="adminNav__link"
+        [routerLink]="item.link"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: item.link === '/admin' }"
+      >
+        <span class="adminNav__icon" aria-hidden="true" [attr.data-icon]="item.icon"></span>
+        <span class="adminNav__label">{{ item.label }}</span>
+      </a>
+    </nav>
+
+    <div class="adminNav__footer">
+      <div class="adminNav__hint">Tip: this admin is a separate UI layer.</div>
+    </div>
+  </aside>
+
+  <main class="adminMain">
+    <router-outlet />
+  </main>
+</div>
+
+
