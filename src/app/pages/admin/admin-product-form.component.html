@@ -26,13 +26,19 @@
         <input formControlName="price" type="number" step="0.01" min="0" />
       </label>
 
-      <label class="field">
-        <span>Category (optional)</span>
-        <select formControlName="categoryId">
-          <option value="">— None —</option>
-          <option *ngFor="let c of categories()" [value]="c._id">{{ c.name }}</option>
-        </select>
-      </label>
+      <div class="field field--full">
+        <span>Categories (optional)</span>
+        <div class="catPick">
+          <label class="catPick__item" *ngFor="let c of categories()">
+            <input
+              type="checkbox"
+              [checked]="form.controls.categoryIds.value.includes(c._id)"
+              (change)="toggleCategory(c._id, $any($event.target).checked)"
+            />
+            <span>{{ c.name }}</span>
+          </label>
+        </div>
+      </div>
 
       <label class="field">
         <span>Upload image</span>

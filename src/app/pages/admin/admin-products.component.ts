@@ -46,6 +46,18 @@ export class AdminProductsComponent {
     return copy;
   });
 
+  primaryCategoryName(p: Product): string {
+    const ids = p.categoryIds ?? [];
+    const primaryId = ids.length ? ids[0] : p.categoryId;
+    if (!primaryId) return '—';
+    return this.categoriesById().get(primaryId)?.name ?? '—';
+  }
+
+  extraCategoryCount(p: Product): number {
+    const ids = p.categoryIds ?? [];
+    return ids.length > 1 ? ids.length - 1 : 0;
+  }
+
   constructor() {
     void this.reload();
   }

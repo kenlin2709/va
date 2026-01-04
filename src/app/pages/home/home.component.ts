@@ -83,11 +83,11 @@ export class HomeComponent {
       // SSR/prerender + initial load fallback
       return [
         { title: 'All Products', href: '/collections/all-products', imageUrl: '' },
-        { title: 'Desserts', href: '/collections/all-products', imageUrl: '' },
-        { title: 'Energy', href: '/collections/all-products', imageUrl: '' },
-        { title: 'Fruit', href: '/collections/all-products', imageUrl: '' },
-        { title: 'Tobacco', href: '/collections/all-products', imageUrl: '' },
-        { title: 'Party Mix', href: '/collections/all-products', imageUrl: '' },
+        { title: 'Desserts', href: '/collections/desserts', imageUrl: '' },
+        { title: 'Energy', href: '/collections/energy', imageUrl: '' },
+        { title: 'Fruit', href: '/collections/fruit', imageUrl: '' },
+        { title: 'Tobacco', href: '/collections/tobacco', imageUrl: '' },
+        { title: 'Party Mix', href: '/collections/party-mix', imageUrl: '' },
       ];
     }
 
@@ -100,10 +100,19 @@ export class HomeComponent {
 
     return sorted.slice(0, 6).map((c) => ({
       title: c.name,
-      href: c.name === 'All Products' ? '/collections/all-products' : '/collections/all-products',
+      href: c.name === 'All Products' ? '/collections/all-products' : `/collections/${this.slugify(c.name)}`,
       imageUrl: c.categoryImageUrl ?? '',
     }));
   });
+
+  private slugify(name: string): string {
+    return name
+      .toLowerCase()
+      .trim()
+      .replace(/['"]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
 
   ngOnInit(): void {
     if (!this.isBrowser) return;

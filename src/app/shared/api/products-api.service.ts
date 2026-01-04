@@ -7,6 +7,7 @@ export type Product = {
   name: string;
   price: number;
   categoryId?: string;
+  categoryIds?: string[];
   productImageUrl?: string;
   description?: string;
   disclaimer?: string;
@@ -45,6 +46,7 @@ export class ProductsApiService {
     name: string;
     price: number;
     categoryId?: string;
+    categoryIds?: string[];
     productImageUrl?: string;
     description?: string;
     disclaimer?: string;
@@ -63,6 +65,7 @@ export class ProductsApiService {
       name: string;
       price: number;
       categoryId?: string;
+      categoryIds?: string[];
       productImageUrl?: string;
       description?: string;
       disclaimer?: string;

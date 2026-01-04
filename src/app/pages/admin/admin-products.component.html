@@ -60,7 +60,10 @@
                 <span class="table__name">{{ p.name }}</span>
               </td>
               <td>${{ p.price | number: '1.2-2' }}</td>
-              <td>{{ p.categoryId ? (categoriesById().get(p.categoryId)?.name ?? '—') : '—' }}</td>
+              <td>
+                {{ primaryCategoryName(p) }}
+                <span class="table__muted" *ngIf="extraCategoryCount(p) > 0">+{{ extraCategoryCount(p) }}</span>
+              </td>
               <td [class.table__stockLow]="p.stockQty < 10">{{ p.stockQty }}</td>
               <td class="table__actions">
                 <button type="button" class="btnA btnA--ghost" (click)="goEdit(p)">Edit</button>

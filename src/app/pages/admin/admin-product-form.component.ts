@@ -35,7 +35,7 @@ export class AdminProductFormComponent {
   readonly form = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     price: new FormControl<number>(0, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),
-    categoryId: new FormControl<string>('', { nonNullable: true }),
+    categoryIds: new FormControl<string[]>([], { nonNullable: true }),
     productImageUrl: new FormControl<string>('', { nonNullable: true }),
     stockQty: new FormControl<number>(0, { nonNullable: true, validators: [Validators.min(0)] }),
     description: new FormControl<string>('', { nonNullable: true }),
@@ -63,7 +63,7 @@ export class AdminProductFormComponent {
         this.form.setValue({
           name: p.name,
           price: p.price,
-          categoryId: p.categoryId ?? '',
+          categoryIds: p.categoryIds ?? (p.categoryId ? [p.categoryId] : []),
           productImageUrl: p.productImageUrl ?? '',
           stockQty: p.stockQty ?? 0,
           description: p.description ?? '',
@@ -74,7 +74,7 @@ export class AdminProductFormComponent {
         this.form.reset({
           name: '',
           price: 0,
-          categoryId: '',
+          categoryIds: [],
           productImageUrl: '',
           stockQty: 0,
           description: '',
@@ -103,9 +103,8 @@ export class AdminProductFormComponent {
         const form = new FormData();
         form.append('name', this.form.controls.name.value);
         form.append('price', String(this.form.controls.price.value));
-        if (this.form.controls.categoryId.value) form.append('categoryId', this.form.controls.categoryId.value);
-        if (this.form.controls.productImageUrl.value)
-          form.append('productImageUrl', this.form.controls.productImageUrl.value);
+        if (this.form.controls.categoryIds.value.length)
+          form.append('categoryIds', JSON.stringify(this.form.controls.categoryIds.value));
         form.append('stockQty', String(this.form.controls.stockQty.value ?? 0));
         if (this.form.controls.description.value) form.append('description', this.form.controls.description.value);
         if (this.form.controls.disclaimer.value) form.append('disclaimer', this.form.controls.disclaimer.value);
@@ -117,8 +116,7 @@ export class AdminProductFormComponent {
         const payload = {
           name: this.form.controls.name.value,
           price: this.form.controls.price.value,
-          categoryId: this.form.controls.categoryId.value || undefined,
-          productImageUrl: this.form.controls.productImageUrl.value || undefined,
+          categoryIds: this.form.controls.categoryIds.value.length ? this.form.controls.categoryIds.value : undefined,
           stockQty: this.form.controls.stockQty.value ?? 0,
           description: this.form.controls.description.value || undefined,
           disclaimer: this.form.controls.disclaimer.value || undefined,
@@ -147,6 +145,13 @@ export class AdminProductFormComponent {
     this.revokePreviewUrl();
     this.imagePreviewUrl.set(URL.createObjectURL(file));
     if (input) input.value = '';
+  }
+
+  toggleCategory(id: string, checked: boolean) {
+    const next = new Set(this.form.controls.categoryIds.value ?? []);
+    if (checked) next.add(id);
+    else next.delete(id);
+    this.form.controls.categoryIds.setValue([...next]);
   }
 
   private revokePreviewUrl() {

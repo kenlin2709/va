@@ -1,0 +1,107 @@
+<section class="ap">
+  <div class="ap__head">
+    <div class="container">
+      <h1 class="ap__title">{{ currentCategory()?.name || 'Collection' }}</h1>
+
+      <div class="ap__toolbar">
+        <button class="ap__filterBtn" type="button" (click)="openDrawer()">
+          <span>Filter and sort</span>
+          <span class="ap__pill" *ngIf="hasAnyFilter()">•</span>
+        </button>
+
+        <div class="ap__count">{{ sorted().length }} products</div>
+      </div>
+
+      <div class="ap__note" *ngIf="error()">{{ error() }}</div>
+    </div>
+  </div>
+
+  <div class="container ap__gridWrap">
+    <div class="ap__grid">
+      <app-product-card
+        *ngFor="let p of sorted()"
+        [title]="p.title"
+        [price]="formatPrice(p.price)"
+        [imageUrl]="p.imageUrl || null"
+        [imageAlt]="p.title"
+        [link]="p.slug ? ('/collections/all-products/products/' + p.slug) : null"
+        addMode="icon"
+      />
+    </div>
+  </div>
+
+  <!-- Filter drawer (same as All Products) -->
+  <div class="apDrawer" *ngIf="isDrawerOpen()" role="dialog" aria-modal="true" aria-label="Filter and sort">
+    <button class="apDrawer__backdrop" type="button" (click)="closeDrawer()" aria-label="Close"></button>
+
+    <aside class="apDrawer__panel">
+      <div class="apDrawer__top">
+        <div class="apDrawer__title">Filter and sort</div>
+        <button class="apDrawer__close" type="button" (click)="closeDrawer()" aria-label="Close">×</button>
+      </div>
+
+      <div class="apDrawer__body">
+        <div class="apDrawer__section">
+          <div class="apDrawer__label">Sort by</div>
+          <select class="apDrawer__select" [value]="sortKey()" (change)="sortKey.set(($any($event.target).value))">
+            <option value="featured">Featured</option>
+            <option value="best">Best Selling</option>
+            <option value="az">Alphabetically, A-Z</option>
+            <option value="za">Alphabetically, Z-A</option>
+            <option value="price_asc">Price, low to high</option>
+            <option value="price_desc">Price, high to low</option>
+          </select>
+        </div>
+
+        <div class="apDrawer__section">
+          <div class="apDrawer__label">Availability</div>
+          <label class="apDrawer__row">
+            <input type="radio" name="avail" [checked]="availability() === 'all'" (change)="availability.set('all')" />
+            <span>All</span>
+          </label>
+          <label class="apDrawer__row">
+            <input type="radio" name="avail" [checked]="availability() === 'in'" (change)="availability.set('in')" />
+            <span>In stock</span>
+          </label>
+          <label class="apDrawer__row">
+            <input type="radio" name="avail" [checked]="availability() === 'out'" (change)="availability.set('out')" />
+            <span>Out of stock</span>
+          </label>
+        </div>
+
+        <div class="apDrawer__section">
+          <div class="apDrawer__label">Price</div>
+          <div class="apDrawer__price">
+            <label class="apDrawer__priceField">
+              <span>$ From</span>
+              <input
+                type="number"
+                inputmode="decimal"
+                [value]="priceMin() ?? ''"
+                (input)="setPriceMin(($any($event.target).value))"
+              />
+            </label>
+            <label class="apDrawer__priceField">
+              <span>$ To</span>
+              <input
+                type="number"
+                inputmode="decimal"
+                [value]="priceMax() ?? ''"
+                (input)="setPriceMax(($any($event.target).value))"
+              />
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="apDrawer__bottom">
+        <button class="apDrawer__clear" type="button" (click)="clearAll()">Clear all</button>
+        <button class="apDrawer__apply" type="button" (click)="closeDrawer()">
+          View ({{ sorted().length }})
+        </button>
+      </div>
+    </aside>
+  </div>
+</section>
+
+
