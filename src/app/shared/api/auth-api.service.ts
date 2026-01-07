@@ -62,6 +62,10 @@ export class AuthApiService {
   updateMe(body: Partial<Pick<Customer, 'firstName' | 'lastName' | 'phone' | 'shippingAddress'>>) {
     return this.http.patch<{ customer: Customer }>(`${this.baseUrl}/auth/me`, body);
   }
+
+  changePassword(body: { currentPassword: string; newPassword: string }) {
+    return this.http.patch<{ updated: true }>(`${this.baseUrl}/auth/me/password`, body);
+  }
 }
 
 

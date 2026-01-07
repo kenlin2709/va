@@ -60,6 +60,24 @@
       </div>
     </div>
   </form>
+
+  <div class="card card--spaced" *ngIf="auth.isAuthenticated()">
+    <div class="row">
+      <div class="cardTitle">Update password</div>
+    </div>
+
+    <div class="acctAlert acctAlert--error" *ngIf="pwError()">{{ pwError() }}</div>
+    <div class="acctAlert acctAlert--ok" *ngIf="pwSuccess()">{{ pwSuccess() }}</div>
+
+    <form class="addrForm" [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+      <input class="fieldInput" type="password" formControlName="currentPassword" placeholder="Current password" />
+      <input class="fieldInput" type="password" formControlName="newPassword" placeholder="New password (min 8 chars)" />
+      <input class="fieldInput" type="password" formControlName="confirmPassword" placeholder="Confirm new password" />
+      <button class="saveBtn" type="submit" [disabled]="pwSaving()">
+        {{ pwSaving() ? 'Updating…' : 'Update password' }}
+      </button>
+    </form>
+  </div>
 </div>
 
 
