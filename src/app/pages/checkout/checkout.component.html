@@ -1,0 +1,140 @@
+<section class="co">
+  <div class="container co__wrap">
+    <div class="co__grid">
+      <div class="co__left">
+        <div class="co__top">
+          <div class="co__brand">VAPE LAB GROUP</div>
+          <div class="co__account" *ngIf="auth.customer() as c">{{ c.email }}</div>
+        </div>
+
+        <h1 class="co__title">Delivery</h1>
+
+        <div class="co__error" *ngIf="error()">{{ error() }}</div>
+
+        <form class="coForm" [formGroup]="form" (ngSubmit)="submit()">
+          <label class="coField">
+            <span>Country/Region</span>
+            <select formControlName="country">
+              <option value="Australia">Australia</option>
+            </select>
+          </label>
+
+          <div class="coRow2">
+            <label class="coField">
+              <span>First name</span>
+              <input formControlName="firstName" type="text" autocomplete="given-name" />
+            </label>
+            <label class="coField">
+              <span>Last name</span>
+              <input formControlName="lastName" type="text" autocomplete="family-name" />
+            </label>
+          </div>
+
+          <label class="coField">
+            <span>Address</span>
+            <input formControlName="address1" type="text" autocomplete="address-line1" />
+          </label>
+
+          <label class="coField">
+            <span>Apartment, suite, etc. (optional)</span>
+            <input formControlName="address2" type="text" autocomplete="address-line2" />
+          </label>
+
+          <div class="coRow3">
+            <label class="coField">
+              <span>City</span>
+              <input formControlName="city" type="text" autocomplete="address-level2" />
+            </label>
+            <label class="coField">
+              <span>State/territory</span>
+              <input formControlName="state" type="text" autocomplete="address-level1" />
+            </label>
+            <label class="coField">
+              <span>Postcode</span>
+              <input formControlName="postcode" type="text" autocomplete="postal-code" />
+            </label>
+          </div>
+
+          <label class="coField">
+            <span>Phone</span>
+            <input formControlName="phone" type="tel" autocomplete="tel" />
+          </label>
+
+          <h2 class="co__sectionTitle">Shipping method</h2>
+          <div class="coHint">Enter your shipping address to view available shipping methods.</div>
+
+          <h2 class="co__sectionTitle">Payment</h2>
+          <div class="coHint">All transactions are secure and encrypted.</div>
+
+          <details class="coAcc" open>
+            <summary class="coAcc__sum">Bank Deposit</summary>
+            <div class="coAcc__body">
+              PLEASE MAKE A TRANSFER FROM YOUR BANK ACCOUNT NOW OR WE CANNOT SHIP YOUR ORDER. You will need to put
+              your order number as the reference for your purchase. Please email your payment receipt to
+              hello&#64;vapelabgroup.com.au for confirmation.
+              <div style="height: 10px;"></div>
+              Account name: VLG Distribution Pty Ltd<br />
+              Bank: Westpac<br />
+              BSB: 033090<br />
+              Account number: 693517
+            </div>
+          </details>
+
+          <h2 class="co__sectionTitle">Billing address</h2>
+          <label class="coRadio">
+            <input type="radio" checked />
+            <span>Same as shipping address</span>
+          </label>
+          <label class="coRadio">
+            <input type="radio" />
+            <span>Use a different billing address</span>
+          </label>
+
+          <button class="coBtn" type="submit" [disabled]="submitting()">
+            {{ submitting() ? 'Placing…' : 'Complete order' }}
+          </button>
+        </form>
+
+        <footer class="coFoot">
+          <a href="#">Refund policy</a>
+          <a href="#">Shipping</a>
+          <a href="#">Privacy policy</a>
+          <a href="#">Terms of service</a>
+        </footer>
+      </div>
+
+      <aside class="co__right">
+        <div class="sum">
+          <div class="sumItem" *ngFor="let it of items()">
+            <div class="sumThumb" [style.backgroundImage]="it.imageUrl ? 'url(' + it.imageUrl + ')' : null">
+              <div class="sumQty">{{ it.qty }}</div>
+            </div>
+            <div class="sumName">{{ it.title }}</div>
+            <div class="sumPrice">{{ formatMoney(it.price * it.qty) }}</div>
+          </div>
+
+          <div class="sumRow">
+            <input class="sumCode" type="text" placeholder="Discount code or gift card" />
+            <button class="sumApply" type="button">Apply</button>
+          </div>
+
+          <div class="sumLine">
+            <div class="muted">Subtotal · {{ cart.count() }} items</div>
+            <div>{{ formatMoney(subtotal()) }}</div>
+          </div>
+          <div class="sumLine">
+            <div class="muted">Shipping</div>
+            <div class="muted">Enter shipping address</div>
+          </div>
+
+          <div class="sumTotal">
+            <div>Total</div>
+            <div class="sumTotal__amt"><span class="sumTotal__cur">AUD</span> {{ formatMoney(subtotal()) }}</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+

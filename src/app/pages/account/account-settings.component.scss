@@ -1,4 +1,12 @@
 /* Match screenshot: light page, simple cards */
+.acctCard {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  padding: 1.15rem;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.05);
+}
+
 .acctCard__head {
   display: flex;
   align-items: center;
@@ -89,6 +97,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .label {
@@ -100,6 +109,8 @@
 .value {
   font-weight: 700;
   font-size: 0.92rem;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .cardTitle {
@@ -109,7 +120,7 @@
 
 .nameInputs {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 0.6rem;
   margin: 0.6rem 0 0.85rem;
 }
@@ -122,6 +133,8 @@
   padding: 0 0.75rem;
   background: #fff;
   font-size: 0.92rem;
+  min-width: 0;
+  width: 100%;
 }
 
 .grid2 {
@@ -133,6 +146,23 @@
 @media (min-width: 720px) {
   .grid2 {
     grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .acctCard__head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .acctBtn {
+    width: 100%;
+  }
+
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 

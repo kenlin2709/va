@@ -33,6 +33,7 @@
             <input
               type="checkbox"
               [checked]="form.controls.categoryIds.value.includes(c._id)"
+              [disabled]="isAllProductsCategory(c._id)"
               (change)="toggleCategory(c._id, $any($event.target).checked)"
             />
             <span>{{ c.name }}</span>

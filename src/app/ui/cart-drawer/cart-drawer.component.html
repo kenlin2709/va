@@ -53,7 +53,7 @@
         <div class="cartSummary__value">{{ cart.formatMoney(cart.subtotal()) }}</div>
       </div>
 
-      <button class="cartBtn cartBtn--primary" type="button">Check Out</button>
+      <button class="cartBtn cartBtn--primary" type="button" (click)="goCheckout()">Check Out</button>
       <button class="cartBtn cartBtn--ghost" type="button" (click)="close()">Continue Shopping</button>
 
       <div class="cartPanel__fine">100% Secure &amp; Protected Payments</div>

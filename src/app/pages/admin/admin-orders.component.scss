@@ -1,70 +1,25 @@
-.acctCard {
-  background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 16px;
-  padding: 1.15rem;
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.05);
-}
-
-.acctCard__head {
+.adminPage__actions {
   display: flex;
+  gap: 0.6rem;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1rem;
 }
 
-.acctCard__title {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 850;
+.adminTools {
+  margin: 0.75rem 0 1rem;
 }
 
-.acctCard__muted {
-  margin: 0.25rem 0 0;
-  color: rgba(0, 0, 0, 0.6);
-  font-weight: 650;
-}
-
-.acctBtn {
-  height: 40px;
-  padding: 0 0.9rem;
+.adminTools__search {
+  width: 100%;
+  max-width: 560px;
+  height: 44px;
   border-radius: 12px;
-  border: 0;
-  cursor: pointer;
-  font-weight: 850;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  padding: 0 0.85rem;
+  background: #fff;
 }
 
-.acctBtn--ghost {
-  background: rgba(0, 0, 0, 0.06);
-  color: #111;
-}
-
-.acctNote {
-  padding: 0.9rem;
-  border-radius: 14px;
-  background: rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-.acctNote__title {
-  font-weight: 850;
-  margin-bottom: 0.25rem;
-}
-
-.acctNote__sub {
-  color: rgba(0, 0, 0, 0.75);
-  font-weight: 650;
-}
-
-.acctNote a {
-  color: #111;
-  font-weight: 800;
-  text-decoration: underline;
-}
-
-.acctError {
-  margin-top: 0.75rem;
+.adminNotice {
+  margin: 0.75rem 0;
   padding: 0.75rem 0.9rem;
   border-radius: 12px;
   border: 1px solid rgba(220, 38, 38, 0.25);
@@ -74,81 +29,16 @@
 }
 
 .tableWrap {
-  margin-top: 1rem;
   overflow: auto;
   border-radius: 14px;
   border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 560px;
-}
-
-.orderCards {
-  margin-top: 1rem;
-  display: none;
-  gap: 0.75rem;
-}
-
-.orderCard {
-  width: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 16px;
-  padding: 0.9rem;
-  background: #fff;
-  display: grid;
-  gap: 0.75rem;
-  text-align: left;
-}
-
-button.orderCard {
-  cursor: pointer;
-  appearance: none;
-}
-
-button.orderCard:hover {
-  background: rgba(0, 0, 0, 0.02);
-}
-
-.orderCard__top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 0.75rem;
-}
-
-.orderCard__label {
-  color: rgba(0, 0, 0, 0.55);
-  font-weight: 800;
-  text-transform: uppercase;
-  font-size: 0.78rem;
-  letter-spacing: 0.02em;
-}
-
-.orderCard__id {
-  margin-top: 0.25rem;
-  font-weight: 900;
-}
-
-.orderCard__meta {
-  display: grid;
-  gap: 0.35rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.orderCard__row {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.orderCard__cta {
-  padding-top: 0.75rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
-  font-weight: 700;
+  min-width: 920px;
 }
 
 .table th,
@@ -156,6 +46,7 @@ button.orderCard:hover {
   text-align: left;
   padding: 0.85rem 0.9rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  vertical-align: top;
 }
 
 .table th {
@@ -166,8 +57,14 @@ button.orderCard:hover {
   font-weight: 800;
 }
 
-.muted {
+.table__muted {
   color: rgba(0, 0, 0, 0.55);
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.85rem;
+  word-break: break-all;
 }
 
 .strong {
@@ -206,22 +103,7 @@ button.orderCard:hover {
   background: rgba(0, 0, 0, 0.02);
 }
 
-.mono {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-  font-size: 0.85rem;
-  word-break: break-all;
-}
-
-@media (max-width: 720px) {
-  .tableWrap {
-    display: none;
-  }
-  .orderCards {
-    display: grid;
-  }
-}
-
-.acctModalBackdrop {
+.adminModalBackdrop {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.45);
@@ -232,7 +114,7 @@ button.orderCard:hover {
   z-index: 9999;
 }
 
-.acctModal {
+.adminModal {
   width: min(980px, 100%);
   max-height: min(84vh, 980px);
   overflow: auto;
@@ -242,7 +124,7 @@ button.orderCard:hover {
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.22);
 }
 
-.acctModal__head {
+.adminModal__head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -251,24 +133,20 @@ button.orderCard:hover {
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-.acctModal__title {
+.adminModal__title {
   font-size: 1.1rem;
   font-weight: 900;
 }
 
-.acctModal__sub {
+.adminModal__sub {
   margin-top: 0.35rem;
   display: flex;
   align-items: center;
   gap: 0.45rem;
 }
 
-.acctModal__dot {
+.adminModal__dot {
   opacity: 0.5;
-}
-
-.acctModal__body {
-  padding: 1.1rem;
 }
 
 .iconBtn {
@@ -280,14 +158,15 @@ button.orderCard:hover {
   font-weight: 900;
 }
 
-.acctModal__grid {
+.adminModal__grid {
+  padding: 1.1rem;
   display: grid;
   grid-template-columns: 1fr 1.2fr;
   gap: 1rem;
 }
 
 @media (max-width: 920px) {
-  .acctModal__grid {
+  .adminModal__grid {
     grid-template-columns: 1fr;
   }
 }
@@ -322,6 +201,57 @@ button.orderCard:hover {
   text-transform: uppercase;
   font-size: 0.78rem;
   letter-spacing: 0.02em;
+}
+
+.statusEdit {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.statusEdit__select {
+  height: 38px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  padding: 0 0.65rem;
+  background: #fff;
+  text-transform: capitalize;
+}
+
+.statusEdit__btn {
+  height: 38px;
+  padding: 0 0.8rem;
+  border-radius: 12px;
+}
+
+.textInput {
+  width: 100%;
+  height: 38px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  padding: 0 0.65rem;
+  background: #fff;
+}
+
+.shipmentActions {
+  margin-top: 0.8rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.trackLink {
+  margin-top: 0.35rem;
+  font-weight: 750;
+}
+
+.trackLink a {
+  color: rgba(0, 0, 0, 0.72);
+  text-decoration: underline;
+}
+
+.trackLink a:hover {
+  color: rgba(0, 0, 0, 0.9);
 }
 
 .items {

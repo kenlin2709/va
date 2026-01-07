@@ -25,6 +25,7 @@ export class AdminProductFormComponent {
   readonly uploading = signal(false); // file is uploaded during Save
 
   readonly categories = signal<Category[]>([]);
+  private allProductsCategoryId: string | null = null;
   private selectedImage: File | null = null;
   readonly imagePreviewUrl = signal<string | null>(null);
   readonly existingImageUrl = signal<string | null>(null);
@@ -56,6 +57,8 @@ export class AdminProductFormComponent {
     try {
       const cats = await firstValueFrom(this.categoriesApi.list());
       this.categories.set(cats);
+      this.allProductsCategoryId =
+        cats.find((c) => c.name.trim().toLowerCase() === 'all products')?._id ?? null;
 
       const id = this.productId();
       if (id) {
@@ -69,6 +72,7 @@ export class AdminProductFormComponent {
           description: p.description ?? '',
           disclaimer: p.disclaimer ?? '',
         });
+        this.ensureAllProductsSelected();
         this.existingImageUrl.set(p.productImageUrl ?? null);
       } else {
         this.form.reset({
@@ -80,6 +84,7 @@ export class AdminProductFormComponent {
           description: '',
           disclaimer: '',
         });
+        this.ensureAllProductsSelected(true);
         this.existingImageUrl.set(null);
       }
     } catch (e: any) {
@@ -91,6 +96,7 @@ export class AdminProductFormComponent {
 
   async submit() {
     if (this.form.invalid) return;
+    this.ensureAllProductsSelected();
     this.loading.set(true);
     this.error.set(null);
     this.uploading.set(!!this.selectedImage);
@@ -148,10 +154,27 @@ export class AdminProductFormComponent {
   }
 
   toggleCategory(id: string, checked: boolean) {
+    // "All Products" must always remain selected.
+    if (this.allProductsCategoryId && id === this.allProductsCategoryId && !checked) {
+      this.ensureAllProductsSelected();
+      return;
+    }
     const next = new Set(this.form.controls.categoryIds.value ?? []);
     if (checked) next.add(id);
     else next.delete(id);
     this.form.controls.categoryIds.setValue([...next]);
+  }
+
+  isAllProductsCategory(id: string): boolean {
+    return !!this.allProductsCategoryId && id === this.allProductsCategoryId;
+  }
+
+  private ensureAllProductsSelected(forceIfEmpty = false): void {
+    if (!this.allProductsCategoryId) return;
+    const current = this.form.controls.categoryIds.value ?? [];
+    if (!current.length && !forceIfEmpty) return;
+    if (current.includes(this.allProductsCategoryId)) return;
+    this.form.controls.categoryIds.setValue([this.allProductsCategoryId, ...current]);
   }
 
   private revokePreviewUrl() {

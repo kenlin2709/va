@@ -11,6 +11,8 @@
 
         <div class="ap__count">{{ sorted().length }} products</div>
       </div>
+
+      <div class="ap__note" *ngIf="error()">{{ error() }}</div>
     </div>
   </div>
 
@@ -22,7 +24,7 @@
         [price]="formatPrice(p.price)"
         [imageUrl]="p.imageUrl || null"
         [imageAlt]="p.title"
-        [link]="'/collections/all-products/products/' + p.slug"
+        [link]="'/products/' + p.id"
         addMode="icon"
         (add)="addToCart(p)"
       />

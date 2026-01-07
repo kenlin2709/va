@@ -42,6 +42,8 @@
   font-size: 0.82rem;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .acctNav__list {

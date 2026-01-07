@@ -77,8 +77,7 @@ export const routes: Routes = [
       {
         path: 'orders',
         loadComponent: () =>
-          import('./pages/admin/admin-placeholder.component').then((m) => m.AdminPlaceholderComponent),
-        data: { title: 'Orders', subtitle: 'Order management (coming soon)' },
+          import('./pages/admin/admin-orders.component').then((m) => m.AdminOrdersComponent),
       },
       {
         path: 'customers',
@@ -109,5 +108,14 @@ export const routes: Routes = [
   {
     path: 'collections/all-products/products/:slug',
     loadComponent: () => import('./pages/product-detail/product-detail.component').then((m) => m.ProductDetailComponent)
+  },
+  {
+    path: 'products/:id',
+    loadComponent: () =>
+      import('./pages/product-detail-api/product-detail-api.component').then((m) => m.ProductDetailApiComponent),
+  },
+  {
+    path: 'checkout',
+    loadComponent: () => import('./pages/checkout/checkout.component').then((m) => m.CheckoutComponent),
   }
 ];

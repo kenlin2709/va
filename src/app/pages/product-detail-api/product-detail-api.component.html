@@ -1,0 +1,73 @@
+<section class="pdp" *ngIf="product() as p; else states">
+  <div class="container pdp__crumbs">
+    <a routerLink="/">Home</a>
+    <span class="pdp__sep">/</span>
+    <a routerLink="/collections/all-products">All Products</a>
+  </div>
+
+  <div class="container pdp__top">
+    <div class="pdp__gallery">
+      <img class="pdp__image" *ngIf="heroImage() as img; else noImg" [src]="img" [alt]="p.name" />
+      <ng-template #noImg>
+        <div class="pdp__image pdp__image--empty">No image</div>
+      </ng-template>
+    </div>
+
+    <div class="pdp__info">
+      <div class="pdp__kicker">{{ p.name }}</div>
+      <h1 class="pdp__title">{{ p.name }}</h1>
+      <div class="pdp__price">Sale price {{ formatPrice(p.price) }}</div>
+
+      <div class="pdp__qty">
+        <div class="pdp__qtyLabel">Quantity</div>
+        <div class="qty">
+          <button class="qty__btn" type="button" (click)="dec()" aria-label="Decrease quantity">−</button>
+          <div class="qty__value" aria-label="Quantity">{{ qty() }}</div>
+          <button class="qty__btn" type="button" (click)="inc()" aria-label="Increase quantity">+</button>
+        </div>
+      </div>
+
+      <button class="pdp__add" type="button" (click)="addToCart()">Add To Cart</button>
+
+      <div class="pdp__ship">Free shipping on orders over $60</div>
+    </div>
+  </div>
+
+  <div class="container pdp__below">
+    <details class="acc" open *ngIf="p.description">
+      <summary class="acc__sum">Description</summary>
+      <div class="acc__body">{{ p.description }}</div>
+    </details>
+
+    <details class="acc" *ngIf="p.disclaimer">
+      <summary class="acc__sum">Disclaimer</summary>
+      <div class="acc__body">{{ p.disclaimer }}</div>
+    </details>
+  </div>
+
+  <div class="container pdp__related" *ngIf="related().length">
+    <h2 class="pdp__relatedTitle">You may also like...</h2>
+    <div class="pdp__relatedGrid">
+      <app-product-card
+        *ngFor="let r of related()"
+        [title]="r.name"
+        [price]="formatPrice(r.price)"
+        [imageUrl]="r.productImageUrl || null"
+        [imageAlt]="r.name"
+        [link]="'/products/' + r._id"
+        addMode="icon"
+        (add)="cart.add({ id: r._id, title: r.name, price: r.price, imageUrl: r.productImageUrl ?? null }, 1)"
+      />
+    </div>
+  </div>
+</section>
+
+<ng-template #states>
+  <div class="container" style="padding: 3rem 0;">
+    <div *ngIf="loading()">Loading…</div>
+    <div *ngIf="!loading() && error()" class="muted">{{ error() }}</div>
+    <div *ngIf="!loading() && !error()">Product not found</div>
+  </div>
+</ng-template>
+
+

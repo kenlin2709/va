@@ -1,0 +1,165 @@
+<section class="adminPage">
+  <div class="adminPage__head">
+    <div>
+      <h1 class="adminPage__title">Orders</h1>
+      <p class="adminPage__muted">View all customer orders.</p>
+    </div>
+
+    <div class="adminPage__actions">
+      <button class="btnA btnA--ghost" type="button" (click)="reload()" [disabled]="loading()">Refresh</button>
+    </div>
+  </div>
+
+  <div class="adminTools">
+    <input
+      class="adminTools__search"
+      type="search"
+      placeholder="Search by order id, customer id, email…"
+      [value]="q()"
+      (input)="setQuery(($any($event.target).value))"
+    />
+  </div>
+
+  <div class="adminNotice" *ngIf="error()">{{ error() }}</div>
+
+  <div class="tableWrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Order</th>
+          <th>Customer</th>
+          <th>Status</th>
+          <th>Items</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="loading()">
+          <td colspan="6" class="table__muted">Loading…</td>
+        </tr>
+        <tr *ngFor="let o of filtered()" class="rowLink" (click)="open(o)">
+          <td class="table__muted">{{ o.createdAt ? (o.createdAt | date : 'medium') : '—' }}</td>
+          <td>
+            <div class="mono">{{ orderDisplayId(o) }}</div>
+          </td>
+          <td class="mono">{{ o.customerEmail || o.customerId }}</td>
+          <td>
+            <span class="pill" [class.pill--on]="o.status === 'paid'" [class.pill--off]="o.status !== 'paid'">
+              {{ o.status }}
+            </span>
+          </td>
+          <td>{{ itemCount(o) }}</td>
+          <td class="strong">{{ formatMoney(o.total) }}</td>
+        </tr>
+        <tr *ngIf="!loading() && filtered().length === 0">
+          <td colspan="6" class="table__muted">No orders found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="adminModalBackdrop" *ngIf="selected()" (click)="close()">
+  <div class="adminModal" (click)="$event.stopPropagation()">
+    <div class="adminModal__head">
+      <div>
+        <div class="adminModal__title">Order {{ orderDisplayId(selected()!) }}</div>
+        <div class="adminModal__sub">
+          <span class="pill" [class.pill--on]="selected()!.status === 'paid'" [class.pill--off]="selected()!.status !== 'paid'">
+            {{ selected()!.status }}
+          </span>
+          <span class="adminModal__dot">•</span>
+          <span class="table__muted">{{ selected()!.createdAt ? (selected()!.createdAt | date : 'medium') : '—' }}</span>
+        </div>
+      </div>
+      <button class="iconBtn" type="button" (click)="close()">✕</button>
+    </div>
+
+    <div class="adminModal__grid">
+      <div class="card">
+        <div class="card__title">Customer</div>
+        <div class="card__row">
+          <span class="card__label">Status</span>
+          <div class="statusEdit" (click)="$event.stopPropagation()">
+            <select class="statusEdit__select" [value]="statusDraft()" (change)="setStatusDraft($any($event.target).value)">
+              <option value="pending">pending</option>
+              <option value="paid">paid</option>
+              <option value="shipped">shipped</option>
+            </select>
+            <button class="btnA btnA--primary statusEdit__btn" type="button" (click)="saveStatus()" [disabled]="savingStatus()">
+              {{ savingStatus() ? 'Saving…' : 'Save' }}
+            </button>
+          </div>
+        </div>
+        <div class="acctAlert acctAlert--error" *ngIf="statusError()">{{ statusError() }}</div>
+        <div class="card__row"><span class="card__label">Email</span><span class="mono">{{ selected()!.customerEmail || selected()!.customerInfo?.email || '—' }}</span></div>
+        <div class="card__row"><span class="card__label">Name</span><span>{{ customerName(selected()!) || '—' }}</span></div>
+        <div class="card__row"><span class="card__label">Phone</span><span>{{ customerPhone(selected()!) || '—' }}</span></div>
+        <div class="card__row"><span class="card__label">Shipping</span><span>{{ shippingAddressText(selected()!) || '—' }}</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card__title">Shipment</div>
+        <div class="card__row">
+          <span class="card__label">Carrier</span>
+          <input
+            class="textInput"
+            [value]="carrierDraft()"
+            placeholder="e.g. Australia Post"
+            (input)="setCarrierDraft($any($event.target).value)"
+            (click)="$event.stopPropagation()"
+          />
+        </div>
+        <div class="card__row">
+          <span class="card__label">Tracking</span>
+          <div (click)="$event.stopPropagation()">
+            <input
+              class="textInput"
+              [value]="trackingDraft()"
+              placeholder="Tracking number"
+              (input)="setTrackingDraft($any($event.target).value)"
+            />
+            <div class="trackLink" *ngIf="trackingDraft()">
+              <a
+                [href]="ausPostTrackingUrl(trackingDraft())"
+                target="_blank"
+                rel="noopener noreferrer"
+                (click)="$event.stopPropagation()"
+              >
+                Track on AusPost
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="shipmentActions" (click)="$event.stopPropagation()">
+          <button class="btnA btnA--primary" type="button" (click)="saveShipment()" [disabled]="savingShipment()">
+            {{ savingShipment() ? 'Saving…' : 'Save shipment' }}
+          </button>
+        </div>
+        <div class="acctAlert acctAlert--error" *ngIf="shipmentError()">{{ shipmentError() }}</div>
+      </div>
+
+      <div class="card">
+        <div class="card__title">Order items</div>
+        <div class="items">
+          <div class="item" *ngFor="let it of selected()!.items">
+            <div class="item__thumb" [style.backgroundImage]="it.imageUrl ? 'url(' + it.imageUrl + ')' : null"></div>
+            <div class="item__info">
+              <div class="item__name">{{ it.name }}</div>
+              <div class="item__meta table__muted">{{ it.qty }} × {{ formatMoney(it.price) }}</div>
+            </div>
+            <div class="item__total strong">{{ formatMoney(it.price * it.qty) }}</div>
+          </div>
+        </div>
+
+        <div class="totals">
+          <div class="totals__row"><span class="table__muted">Subtotal</span><span class="strong">{{ formatMoney(selected()!.subtotal) }}</span></div>
+          <div class="totals__row"><span class="table__muted">Total</span><span class="strong">{{ formatMoney(selected()!.total) }}</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

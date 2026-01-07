@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 import { CartService } from '../../shared/cart/cart.service';
 
@@ -13,9 +14,15 @@ import { CartService } from '../../shared/cart/cart.service';
 })
 export class CartDrawerComponent {
   readonly cart = inject(CartService);
+  private readonly router = inject(Router);
 
   close(): void {
     this.cart.close();
+  }
+
+  async goCheckout(): Promise<void> {
+    this.cart.close();
+    await this.router.navigateByUrl('/checkout');
   }
 }
 

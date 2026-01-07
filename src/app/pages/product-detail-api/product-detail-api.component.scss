@@ -1,0 +1,11 @@
+/* Reuse the same PDP styles */
+@import '../product-detail/product-detail.component.scss';
+
+.pdp__image--empty {
+  display: grid;
+  place-items: center;
+  min-height: 280px;
+  color: rgba(11, 11, 16, 0.55);
+}
+
+

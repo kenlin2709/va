@@ -1,17 +1,18 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductCardComponent } from '../../ui/product-card/product-card.component';
-import { PRODUCT_CATALOG } from '../../shared/product-catalog';
 import { CartService } from '../../shared/cart/cart.service';
+import { ProductsApiService } from '../../shared/api/products-api.service';
+import { firstValueFrom } from 'rxjs';
 
 type SortKey = 'featured' | 'best' | 'az' | 'za' | 'price_asc' | 'price_desc';
 
 type Product = {
+  id: string;
   title: string;
   price: number; // AUD
   inStock: boolean;
   imageUrl?: string;
-  slug?: string;
 };
 
 function byTitleAsc(a: Product, b: Product): number {
@@ -32,17 +33,37 @@ function byPriceAsc(a: Product, b: Product): number {
 })
 export class AllProductsComponent {
   private readonly cart = inject(CartService);
-  // Demo data from shared catalog (slug-based for navigation).
-  // Reference listing: https://vapelabgroup.com.au/collections/all-products
-  readonly products = signal<Product[]>(
-    PRODUCT_CATALOG.map((p) => ({
-      title: p.title,
-      price: p.price,
-      inStock: p.inStock,
-      slug: p.slug,
-      imageUrl: p.images[0]
-    }))
-  );
+  private readonly productsApi = inject(ProductsApiService);
+
+  // Backend-driven products
+  readonly products = signal<Product[]>([]);
+  readonly loading = signal(false);
+  readonly error = signal<string | null>(null);
+
+  constructor() {
+    void this.load();
+  }
+
+  private async load(): Promise<void> {
+    this.loading.set(true);
+    this.error.set(null);
+    try {
+      const res = await firstValueFrom(this.productsApi.list({ limit: 200 }));
+      this.products.set(
+        res.items.map((p) => ({
+          id: p._id,
+          title: p.name,
+          price: p.price,
+          inStock: (p.stockQty ?? 0) > 0,
+          imageUrl: p.productImageUrl ?? undefined,
+        })),
+      );
+    } catch (e: any) {
+      this.error.set(e?.error?.message ?? e?.message ?? 'Failed to load products');
+    } finally {
+      this.loading.set(false);
+    }
+  }
 
   // UI state (drawer)
   readonly isDrawerOpen = signal(false);
@@ -118,10 +139,9 @@ export class AllProductsComponent {
   }
 
   addToCart(p: Product): void {
-    if (!p.slug) return;
     this.cart.add(
       {
-        id: p.slug,
+        id: p.id,
         title: p.title,
         price: p.price,
         imageUrl: p.imageUrl ?? null,

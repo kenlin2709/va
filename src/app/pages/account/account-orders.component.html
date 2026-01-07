@@ -20,11 +20,43 @@
 
   <div class="acctError" *ngIf="error()">{{ error() }}</div>
 
+  <div class="orderCards" *ngIf="auth.isAuthenticated()">
+    <div class="orderCard muted" *ngIf="loading()">Loading…</div>
+    <button class="orderCard" type="button" *ngFor="let o of orders()" (click)="open(o)">
+      <div class="orderCard__top">
+        <div class="orderCard__left">
+          <div class="orderCard__label">Order</div>
+          <div class="orderCard__id mono">{{ orderDisplayId(o) }}</div>
+        </div>
+        <span class="pill" [class.pill--on]="o.status === 'paid'" [class.pill--off]="o.status !== 'paid'">
+          {{ o.status }}
+        </span>
+      </div>
+      <div class="orderCard__meta">
+        <div class="orderCard__row">
+          <span class="muted">Date</span>
+          <span class="muted">{{ o.createdAt ? (o.createdAt | date : 'medium') : '—' }}</span>
+        </div>
+        <div class="orderCard__row">
+          <span class="muted">Items</span>
+          <span class="strong">{{ itemCount(o) }}</span>
+        </div>
+        <div class="orderCard__row">
+          <span class="muted">Total</span>
+          <span class="strong">{{ formatMoney(o.total) }}</span>
+        </div>
+      </div>
+      <div class="orderCard__cta muted">Tap to view details</div>
+    </button>
+    <div class="orderCard muted" *ngIf="!loading() && orders().length === 0">No orders yet.</div>
+  </div>
+
   <div class="tableWrap" *ngIf="auth.isAuthenticated()">
     <table class="table">
       <thead>
         <tr>
           <th>Date</th>
+          <th>Order</th>
           <th>Status</th>
           <th>Items</th>
           <th>Total</th>
@@ -32,10 +64,11 @@
       </thead>
       <tbody>
         <tr *ngIf="loading()">
-          <td colspan="4" class="muted">Loading…</td>
+          <td colspan="5" class="muted">Loading…</td>
         </tr>
-        <tr *ngFor="let o of orders()">
+        <tr *ngFor="let o of orders()" class="rowLink" (click)="open(o)">
           <td class="muted">{{ o.createdAt ? (o.createdAt | date : 'medium') : '—' }}</td>
+          <td class="mono">{{ orderDisplayId(o) }}</td>
           <td>
             <span class="pill" [class.pill--on]="o.status === 'paid'" [class.pill--off]="o.status !== 'paid'">
               {{ o.status }}
@@ -45,10 +78,84 @@
           <td class="strong">{{ formatMoney(o.total) }}</td>
         </tr>
         <tr *ngIf="!loading() && orders().length === 0">
-          <td colspan="4" class="muted">No orders yet.</td>
+          <td colspan="5" class="muted">No orders yet.</td>
         </tr>
       </tbody>
     </table>
+  </div>
+</div>
+
+<div class="acctModalBackdrop" *ngIf="selected()" (click)="close()">
+  <div class="acctModal" (click)="$event.stopPropagation()">
+    <div class="acctModal__head">
+      <div>
+        <div class="acctModal__title">Order {{ orderDisplayId(selected()!) }}</div>
+        <div class="acctModal__sub">
+          <span class="pill" [class.pill--on]="selected()!.status === 'paid'" [class.pill--off]="selected()!.status !== 'paid'">
+            {{ selected()!.status }}
+          </span>
+          <span class="acctModal__dot">•</span>
+          <span class="muted">{{ selected()!.createdAt ? (selected()!.createdAt | date : 'medium') : '—' }}</span>
+          <span class="acctModal__dot" *ngIf="loadingSelected()">•</span>
+          <span class="muted" *ngIf="loadingSelected()">Refreshing…</span>
+        </div>
+      </div>
+      <button class="iconBtn" type="button" (click)="close()">✕</button>
+    </div>
+
+    <div class="acctModal__body">
+      <div class="acctError" *ngIf="selectedError()">{{ selectedError() }}</div>
+
+      <div class="acctModal__grid">
+        <div class="card">
+          <div class="card__title">Shipping</div>
+          <div class="card__row">
+            <span class="card__label">Address</span>
+            <span>{{ shippingText(selected()!) || '—' }}</span>
+          </div>
+          <div class="card__row">
+            <span class="card__label">Carrier</span>
+            <span>{{ selected()!.shippingCarrier || '—' }}</span>
+          </div>
+          <div class="card__row">
+            <span class="card__label">Tracking</span>
+            <ng-container *ngIf="selected()!.trackingNumber; else noTracking">
+              <a
+                class="mono"
+                [href]="ausPostTrackingUrl(selected()!.trackingNumber!)"
+                target="_blank"
+                rel="noopener noreferrer"
+                (click)="$event.stopPropagation()"
+              >
+                {{ selected()!.trackingNumber }}
+              </a>
+            </ng-container>
+            <ng-template #noTracking>
+              <span class="mono">—</span>
+            </ng-template>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__title">Order items</div>
+          <div class="items">
+            <div class="item" *ngFor="let it of selected()!.items">
+              <div class="item__thumb" [style.backgroundImage]="it.imageUrl ? 'url(' + it.imageUrl + ')' : null"></div>
+              <div class="item__info">
+                <div class="item__name">{{ it.name }}</div>
+                <div class="item__meta muted">{{ it.qty }} × {{ formatMoney(it.price) }}</div>
+              </div>
+              <div class="item__total strong">{{ formatMoney(it.price * it.qty) }}</div>
+            </div>
+          </div>
+
+          <div class="totals">
+            <div class="totals__row"><span class="muted">Subtotal</span><span class="strong">{{ formatMoney(selected()!.subtotal) }}</span></div>
+            <div class="totals__row"><span class="muted">Total</span><span class="strong">{{ formatMoney(selected()!.total) }}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

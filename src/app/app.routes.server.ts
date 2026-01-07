@@ -1,6 +1,7 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
+  { path: 'checkout', renderMode: RenderMode.Server },
   { path: 'account', renderMode: RenderMode.Server },
   { path: 'account/settings', renderMode: RenderMode.Server },
   { path: 'account/orders', renderMode: RenderMode.Server },
@@ -16,6 +17,10 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'admin/settings', renderMode: RenderMode.Server },
   {
     path: 'collections/all-products/products/:slug',
+    renderMode: RenderMode.Server
+  },
+  {
+    path: 'products/:id',
     renderMode: RenderMode.Server
   },
   {
