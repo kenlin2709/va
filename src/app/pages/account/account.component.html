@@ -1,0 +1,44 @@
+<section class="acct">
+  <div class="container acct__wrap">
+    <div class="acctCard">
+      <div class="acctCard__head">
+        <h1 class="acctCard__title">Account</h1>
+        <button class="acctBtn acctBtn--ghost" type="button" (click)="logout()">Log out</button>
+      </div>
+
+      <div class="acctNote" *ngIf="!auth.isAuthenticated()">
+        <div class="acctNote__title">You’re not logged in</div>
+        <div class="acctNote__sub">
+          <a [routerLink]="['/account/login']">Log in</a>
+          or
+          <a [routerLink]="['/account/register']">create an account</a>.
+        </div>
+      </div>
+
+      <div class="acctInfo" *ngIf="auth.isAuthenticated()">
+        <div class="acctRow">
+          <div class="acctLabel">Email</div>
+          <div class="acctValue">{{ auth.customer()?.email || '—' }}</div>
+        </div>
+        <div class="acctRow">
+          <div class="acctLabel">Name</div>
+          <div class="acctValue">
+            {{
+              (auth.customer()?.firstName || '') + ' ' + (auth.customer()?.lastName || '')
+            }}
+          </div>
+        </div>
+        <div class="acctRow">
+          <div class="acctLabel">Phone</div>
+          <div class="acctValue">{{ auth.customer()?.phone || '—' }}</div>
+        </div>
+
+        <div class="acctHint">
+          Orders page coming next — once we connect the cart/checkout flow to the Orders API.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+

@@ -1,0 +1,97 @@
+.adminPage__actions {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.adminTools {
+  margin: 0.75rem 0 1rem;
+}
+
+.adminTools__search {
+  width: 100%;
+  max-width: 520px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  padding: 0 0.85rem;
+  background: #fff;
+}
+
+.adminNotice {
+  margin: 0.75rem 0;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  background: rgba(220, 38, 38, 0.08);
+  color: rgb(153, 27, 27);
+  font-weight: 650;
+}
+
+.tableWrap {
+  overflow: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 0.85rem 0.9rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.table th {
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.55);
+  font-weight: 800;
+}
+
+.table__muted {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.table__actions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.linkBtn {
+  font-weight: 750;
+  color: #111;
+  text-decoration: underline;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0 0.6rem;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.pill--on {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.25);
+  color: rgb(6, 95, 70);
+}
+
+.pill--off {
+  background: rgba(0, 0, 0, 0.04);
+  color: rgba(0, 0, 0, 0.65);
+}
+
+

@@ -1,0 +1,99 @@
+.auth {
+  padding: 2.5rem 0 4rem;
+}
+
+.auth__wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.authCard {
+  width: 100%;
+  max-width: 460px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 18px;
+  padding: 1.25rem 1.25rem 1rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+}
+
+.authCard__title {
+  margin: 0 0 0.25rem;
+  font-size: 1.6rem;
+  font-weight: 750;
+}
+
+.authCard__sub {
+  margin: 0 0 1.25rem;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.authCard__error {
+  margin: 0 0 1rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  color: rgb(153, 27, 27);
+  font-weight: 600;
+}
+
+.authForm {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.authField {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.authField__label {
+  font-weight: 650;
+  font-size: 0.95rem;
+}
+
+.authField__input {
+  width: 100%;
+  height: 46px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  padding: 0 0.85rem;
+  outline: none;
+}
+
+.authField__input:focus {
+  border-color: rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.06);
+}
+
+.authBtn {
+  height: 48px;
+  border: 0;
+  border-radius: 14px;
+  background: #111;
+  color: #fff;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.authBtn[disabled] {
+  opacity: 0.65;
+  cursor: default;
+}
+
+.authCard__foot {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.authCard__foot a {
+  color: #111;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+

@@ -1,0 +1,22 @@
+<section class="acctShell">
+  <div class="container acctShell__grid">
+    <aside class="acctNav" aria-label="Account navigation">
+      <div class="acctNav__head">
+        <div class="acctNav__title">Account</div>
+        <div class="acctNav__sub" *ngIf="auth.customer() as c">{{ c.email }}</div>
+      </div>
+
+      <nav class="acctNav__list">
+        <a class="acctNav__item" routerLink="/account/settings" routerLinkActive="is-active">Profile</a>
+        <a class="acctNav__item" routerLink="/account/orders" routerLinkActive="is-active">Orders</a>
+        <a class="acctNav__item" routerLink="/collections/all-products">Shop</a>
+      </nav>
+    </aside>
+
+    <main class="acctMain">
+      <router-outlet />
+    </main>
+  </div>
+</section>
+
+

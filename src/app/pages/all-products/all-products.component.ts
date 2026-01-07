@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductCardComponent } from '../../ui/product-card/product-card.component';
 import { PRODUCT_CATALOG } from '../../shared/product-catalog';
+import { CartService } from '../../shared/cart/cart.service';
 
 type SortKey = 'featured' | 'best' | 'az' | 'za' | 'price_asc' | 'price_desc';
 
@@ -30,6 +31,7 @@ function byPriceAsc(a: Product, b: Product): number {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AllProductsComponent {
+  private readonly cart = inject(CartService);
   // Demo data from shared catalog (slug-based for navigation).
   // Reference listing: https://vapelabgroup.com.au/collections/all-products
   readonly products = signal<Product[]>(
@@ -113,6 +115,19 @@ export class AllProductsComponent {
 
   formatPrice(n: number): string {
     return `$${n.toFixed(2)}`;
+  }
+
+  addToCart(p: Product): void {
+    if (!p.slug) return;
+    this.cart.add(
+      {
+        id: p.slug,
+        title: p.title,
+        price: p.price,
+        imageUrl: p.imageUrl ?? null,
+      },
+      1,
+    );
   }
 }
 

@@ -24,6 +24,7 @@
         [imageAlt]="p.title"
         [link]="'/collections/all-products/products/' + p.slug"
         addMode="icon"
+        (add)="addToCart(p)"
       />
     </div>
   </div>

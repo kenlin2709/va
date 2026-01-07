@@ -1,0 +1,65 @@
+<div class="acctCard">
+  <div class="acctCard__head">
+    <div>
+      <h1 class="acctCard__title">Profile</h1>
+    </div>
+    <button class="acctBtn acctBtn--ghost" type="button" *ngIf="auth.isAuthenticated()" (click)="logout()">Log out</button>
+  </div>
+
+  <div class="acctNote" *ngIf="!auth.isAuthenticated()">
+    <div class="acctNote__title">You’re not logged in</div>
+    <div class="acctNote__sub">
+      <a [routerLink]="['/account/login']">Log in</a>
+      or
+      <a [routerLink]="['/account/register']">create an account</a>.
+    </div>
+  </div>
+
+  <div class="acctAlert acctAlert--error" *ngIf="error()">{{ error() }}</div>
+  <div class="acctAlert acctAlert--ok" *ngIf="success()">{{ success() }}</div>
+
+  <form class="profileGrid" *ngIf="auth.isAuthenticated()" [formGroup]="form" (ngSubmit)="save()">
+    <div class="card">
+      <div class="row">
+        <div class="label">Name</div>
+      </div>
+      <div class="nameInputs">
+        <input class="inlineInput" type="text" formControlName="firstName" placeholder="First name" />
+        <input class="inlineInput" type="text" formControlName="lastName" placeholder="Last name" />
+      </div>
+      <div class="row">
+        <div class="label">Email</div>
+        <div class="value">{{ auth.customer()?.email }}</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div class="cardTitle">Addresses</div>
+      </div>
+
+      <div class="emptyState" *ngIf="!form.value.shipAddress1 && !form.value.shipCity && !form.value.shipPostcode">
+        <span class="emptyIcon" aria-hidden="true">ⓘ</span>
+        <span>No addresses added</span>
+      </div>
+
+      <div class="addrForm">
+        <input class="fieldInput" type="text" formControlName="shipAddress1" placeholder="Address line 1" />
+        <input class="fieldInput" type="text" formControlName="shipAddress2" placeholder="Address line 2" />
+        <div class="grid2">
+          <input class="fieldInput" type="text" formControlName="shipCity" placeholder="City" />
+          <input class="fieldInput" type="text" formControlName="shipState" placeholder="State" />
+        </div>
+        <div class="grid2">
+          <input class="fieldInput" type="text" formControlName="shipPostcode" placeholder="Postcode" />
+          <input class="fieldInput" type="text" formControlName="shipCountry" placeholder="Country" />
+        </div>
+        <button class="saveBtn" type="submit" [disabled]="saving()">
+          {{ saving() ? 'Saving…' : 'Save' }}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+

@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { CategoriesApiService, Category } from '../../shared/api/categories-api.service';
 import { ProductsApiService } from '../../shared/api/products-api.service';
 import { ProductCardComponent } from '../../ui/product-card/product-card.component';
+import { CartService } from '../../shared/cart/cart.service';
 
 function slugify(name: string): string {
   return name
@@ -24,6 +25,7 @@ type Product = {
   inStock: boolean;
   imageUrl?: string;
   slug?: string;
+  id?: string;
 };
 
 function byTitleAsc(a: Product, b: Product): number {
@@ -46,6 +48,7 @@ export class CollectionComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly categoriesApi = inject(CategoriesApiService);
   private readonly productsApi = inject(ProductsApiService);
+  private readonly cart = inject(CartService);
 
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
@@ -125,6 +128,7 @@ export class CollectionComponent {
       const res = await firstValueFrom(this.productsApi.list({ categoryId: cat._id, limit: 200 }));
       this.products.set(
         res.items.map((p) => ({
+          id: p._id,
           title: p.name,
           price: p.price,
           inStock: (p.stockQty ?? 0) > 0,
@@ -165,6 +169,14 @@ export class CollectionComponent {
 
   formatPrice(n: number): string {
     return `$${Number(n).toFixed(2)}`;
+  }
+
+  addToCart(p: Product): void {
+    const id = p.id ?? p.slug ?? p.title;
+    this.cart.add(
+      { id, title: p.title, price: p.price, imageUrl: p.imageUrl ?? null },
+      1,
+    );
   }
 }
 

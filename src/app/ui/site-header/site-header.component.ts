@@ -1,15 +1,22 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { AuthService } from '../../shared/auth/auth.service';
+import { CartService } from '../../shared/cart/cart.service';
 
 @Component({
   selector: 'app-site-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './site-header.component.html',
   styleUrl: './site-header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SiteHeaderComponent {
+  readonly auth = inject(AuthService);
+  readonly cart = inject(CartService);
+
+  // keep existing signal used by template, but drive it from CartService
   readonly cartCount = signal(0);
   readonly isMenuOpen = signal(false);
 
@@ -24,6 +31,14 @@ export class SiteHeaderComponent {
   private dragStartY = 0;
   private dragStarted = false;
   private dragCleanup: AbortController | null = null;
+
+  constructor() {
+    // If a token exists in localStorage, fetch customer so UI can reflect logged-in state.
+    void this.auth.hydrateCustomer();
+    effect(() => {
+      this.cartCount.set(this.cart.count());
+    });
+  }
 
   toggleMenu(): void {
     if (this.isMenuOpen()) {

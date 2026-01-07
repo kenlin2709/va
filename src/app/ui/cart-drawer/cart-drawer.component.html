@@ -1,0 +1,64 @@
+<div class="cartOverlay" *ngIf="cart.isOpen()" role="dialog" aria-modal="true" aria-label="Shopping cart">
+  <button class="cartOverlay__backdrop" type="button" (click)="close()" aria-label="Close cart"></button>
+
+  <aside class="cartPanel">
+    <div class="cartPanel__top">
+      <div class="cartPanel__pill">FREE Shipping On Orders Over $60</div>
+      <button class="cartPanel__close" type="button" (click)="close()" aria-label="Close cart">×</button>
+    </div>
+
+    <div class="cartPanel__head">
+      <div class="cartPanel__title">Shopping Cart</div>
+      <div class="cartPanel__count">({{ cart.count() }} items)</div>
+    </div>
+
+    <div class="cartPanel__body" *ngIf="cart.items().length; else empty">
+      <div class="cartItem" *ngFor="let it of cart.items()">
+        <div class="cartItem__thumb" [style.backgroundImage]="it.imageUrl ? 'url(' + it.imageUrl + ')' : null"></div>
+        <div class="cartItem__info">
+          <div class="cartItem__row">
+            <div class="cartItem__name">{{ it.title }}</div>
+            <div class="cartItem__price">{{ cart.formatMoney(it.price * it.qty) }}</div>
+          </div>
+
+          <div class="cartItem__row cartItem__row--bottom">
+            <div class="qty">
+              <button class="qty__btn" type="button" (click)="cart.dec(it.id)" aria-label="Decrease quantity">
+                −
+              </button>
+              <div class="qty__val">{{ it.qty }}</div>
+              <button class="qty__btn" type="button" (click)="cart.inc(it.id)" aria-label="Increase quantity">
+                +
+              </button>
+            </div>
+
+            <button class="trash" type="button" (click)="cart.remove(it.id)" aria-label="Remove item">
+              🗑
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #empty>
+      <div class="cartEmpty">
+        <div class="cartEmpty__title">Your cart is empty</div>
+        <div class="cartEmpty__sub">Add something to get started.</div>
+      </div>
+    </ng-template>
+
+    <div class="cartPanel__footer">
+      <div class="cartSummary">
+        <div class="cartSummary__label">Subtotal</div>
+        <div class="cartSummary__value">{{ cart.formatMoney(cart.subtotal()) }}</div>
+      </div>
+
+      <button class="cartBtn cartBtn--primary" type="button">Check Out</button>
+      <button class="cartBtn cartBtn--ghost" type="button" (click)="close()">Continue Shopping</button>
+
+      <div class="cartPanel__fine">100% Secure &amp; Protected Payments</div>
+    </div>
+  </aside>
+</div>
+
+

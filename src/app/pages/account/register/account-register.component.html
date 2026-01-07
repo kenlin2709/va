@@ -1,0 +1,51 @@
+<section class="auth">
+  <div class="container auth__wrap">
+    <div class="authCard">
+      <h1 class="authCard__title">Create account</h1>
+      <p class="authCard__sub">Create your account to track orders and checkout faster.</p>
+
+      <div class="authCard__error" *ngIf="error()">{{ error() }}</div>
+
+      <form class="authForm" [formGroup]="form" (ngSubmit)="submit()">
+        <div class="authGrid2">
+          <label class="authField">
+            <span class="authField__label">First name</span>
+            <input class="authField__input" type="text" formControlName="firstName" autocomplete="given-name" />
+          </label>
+
+          <label class="authField">
+            <span class="authField__label">Last name</span>
+            <input class="authField__input" type="text" formControlName="lastName" autocomplete="family-name" />
+          </label>
+        </div>
+
+        <label class="authField">
+          <span class="authField__label">Phone</span>
+          <input class="authField__input" type="tel" formControlName="phone" autocomplete="tel" />
+        </label>
+
+        <label class="authField">
+          <span class="authField__label">Email</span>
+          <input class="authField__input" type="email" formControlName="email" autocomplete="email" />
+        </label>
+
+        <label class="authField">
+          <span class="authField__label">Password</span>
+          <input class="authField__input" type="password" formControlName="password" autocomplete="new-password" />
+          <span class="authHint">Minimum 8 characters.</span>
+        </label>
+
+        <button class="authBtn" type="submit" [disabled]="loading()">
+          {{ loading() ? 'Creating…' : 'Create account' }}
+        </button>
+      </form>
+
+      <div class="authCard__foot">
+        <span>Already have an account?</span>
+        <a [routerLink]="['/account/login']">Log in</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+

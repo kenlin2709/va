@@ -1,0 +1,54 @@
+<section class="adminPage">
+  <div class="adminPage__head">
+    <div>
+      <h1 class="adminPage__title">Edit Customer</h1>
+      <p class="adminPage__muted">Update customer details and admin access.</p>
+    </div>
+
+    <div class="adminPage__actions">
+      <a class="btnA btnA--ghost" routerLink="/admin/customers">Back</a>
+      <button class="btnA btnA--primary" type="button" (click)="save()" [disabled]="saving() || loading()">
+        {{ saving() ? 'Saving…' : 'Save' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="adminNotice adminNotice--error" *ngIf="error()">{{ error() }}</div>
+
+  <div class="formCard" *ngIf="!loading(); else loadingTpl">
+    <form class="formGrid" [formGroup]="form" (ngSubmit)="save()">
+      <label class="field">
+        <span class="field__label">Email</span>
+        <input class="field__input" type="email" formControlName="email" />
+      </label>
+
+      <div class="grid2">
+        <label class="field">
+          <span class="field__label">First name</span>
+          <input class="field__input" type="text" formControlName="firstName" />
+        </label>
+
+        <label class="field">
+          <span class="field__label">Last name</span>
+          <input class="field__input" type="text" formControlName="lastName" />
+        </label>
+      </div>
+
+      <label class="field">
+        <span class="field__label">Phone</span>
+        <input class="field__input" type="text" formControlName="phone" />
+      </label>
+
+      <label class="check">
+        <input type="checkbox" formControlName="isAdmin" />
+        <span>Is Admin</span>
+      </label>
+    </form>
+  </div>
+
+  <ng-template #loadingTpl>
+    <div class="adminPage__muted">Loading…</div>
+  </ng-template>
+</section>
+
+

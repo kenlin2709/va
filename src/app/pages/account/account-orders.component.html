@@ -1,0 +1,55 @@
+<div class="acctCard">
+  <div class="acctCard__head">
+    <div>
+      <h1 class="acctCard__title">Orders</h1>
+      <p class="acctCard__muted">View your recent orders.</p>
+    </div>
+    <button class="acctBtn acctBtn--ghost" type="button" (click)="load()" [disabled]="loading()">
+      Refresh
+    </button>
+  </div>
+
+  <div class="acctNote" *ngIf="!auth.isAuthenticated()">
+    <div class="acctNote__title">Log in to see your orders</div>
+    <div class="acctNote__sub">
+      <a [routerLink]="['/account/login']">Log in</a>
+      or
+      <a [routerLink]="['/account/register']">create an account</a>.
+    </div>
+  </div>
+
+  <div class="acctError" *ngIf="error()">{{ error() }}</div>
+
+  <div class="tableWrap" *ngIf="auth.isAuthenticated()">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Items</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="loading()">
+          <td colspan="4" class="muted">Loading…</td>
+        </tr>
+        <tr *ngFor="let o of orders()">
+          <td class="muted">{{ o.createdAt ? (o.createdAt | date : 'medium') : '—' }}</td>
+          <td>
+            <span class="pill" [class.pill--on]="o.status === 'paid'" [class.pill--off]="o.status !== 'paid'">
+              {{ o.status }}
+            </span>
+          </td>
+          <td>{{ itemCount(o) }}</td>
+          <td class="strong">{{ formatMoney(o.total) }}</td>
+        </tr>
+        <tr *ngIf="!loading() && orders().length === 0">
+          <td colspan="4" class="muted">No orders yet.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+

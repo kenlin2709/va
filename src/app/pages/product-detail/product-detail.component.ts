@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { findProductBySlug, PRODUCT_CATALOG, type Product } from '../../shared/product-catalog';
 import { ProductCardComponent } from '../../ui/product-card/product-card.component';
+import { CartService } from '../../shared/cart/cart.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -14,6 +15,7 @@ import { ProductCardComponent } from '../../ui/product-card/product-card.compone
 })
 export class ProductDetailComponent {
   private readonly route = inject(ActivatedRoute);
+  readonly cart = inject(CartService);
 
   readonly slug = signal<string>('');
   readonly qty = signal(1);
@@ -47,6 +49,20 @@ export class ProductDetailComponent {
 
   formatPrice(n: number): string {
     return `$${n.toFixed(2)}`;
+  }
+
+  addToCart(): void {
+    const p = this.product();
+    if (!p) return;
+    this.cart.add(
+      {
+        id: p.slug,
+        title: p.title,
+        price: p.price,
+        imageUrl: p.images?.[0] ?? null,
+      },
+      this.qty(),
+    );
   }
 }
 

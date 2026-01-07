@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <button class="pdp__add" type="button">Add To Cart</button>
+      <button class="pdp__add" type="button" (click)="addToCart()">Add To Cart</button>
 
       <ul class="pdp__highlights">
         <li *ngFor="let h of p.highlights">{{ h }}</li>
@@ -73,6 +73,7 @@
         [imageAlt]="r.title"
         [link]="'/collections/all-products/products/' + r.slug"
         addMode="icon"
+        (add)="cart.add({ id: r.slug, title: r.title, price: r.price, imageUrl: r.images[0] }, 1)"
       />
     </div>
   </div>

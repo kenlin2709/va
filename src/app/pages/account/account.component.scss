@@ -1,0 +1,98 @@
+.acct {
+  padding: 2.5rem 0 4rem;
+}
+
+.acct__wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.acctCard {
+  width: 100%;
+  max-width: 720px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 18px;
+  padding: 1.25rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+}
+
+.acctCard__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.acctCard__title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 750;
+}
+
+.acctBtn {
+  height: 40px;
+  padding: 0 0.9rem;
+  border-radius: 12px;
+  border: 0;
+  cursor: pointer;
+  font-weight: 750;
+}
+
+.acctBtn--ghost {
+  background: rgba(0, 0, 0, 0.06);
+  color: #111;
+}
+
+.acctNote {
+  padding: 0.9rem;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.acctNote__title {
+  font-weight: 750;
+  margin-bottom: 0.25rem;
+}
+
+.acctNote__sub {
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.acctNote a {
+  color: #111;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.acctInfo {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.acctRow {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 0.75rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+}
+
+.acctLabel {
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 700;
+}
+
+.acctValue {
+  font-weight: 650;
+}
+
+.acctHint {
+  margin-top: 0.5rem;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+

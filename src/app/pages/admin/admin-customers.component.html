@@ -1,0 +1,63 @@
+<section class="adminPage">
+  <div class="adminPage__head">
+    <div>
+      <h1 class="adminPage__title">Customers</h1>
+      <p class="adminPage__muted">View and edit customer accounts.</p>
+    </div>
+
+    <div class="adminPage__actions">
+      <button class="btnA btnA--ghost" type="button" (click)="reload()" [disabled]="loading()">Refresh</button>
+    </div>
+  </div>
+
+  <div class="adminTools">
+    <input
+      class="adminTools__search"
+      type="search"
+      placeholder="Search by email, name, phone…"
+      [value]="q()"
+      (input)="setQuery(($any($event.target).value))"
+    />
+  </div>
+
+  <div class="adminNotice adminNotice--error" *ngIf="error()">{{ error() }}</div>
+
+  <div class="tableWrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Admin</th>
+          <th>Created</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="loading()">
+          <td colspan="6" class="table__muted">Loading…</td>
+        </tr>
+        <tr *ngFor="let c of filtered()">
+          <td>{{ displayName(c) }}</td>
+          <td>{{ c.email }}</td>
+          <td>{{ c.phone || '—' }}</td>
+          <td>
+            <span class="pill" [class.pill--on]="c.isAdmin" [class.pill--off]="!c.isAdmin">
+              {{ c.isAdmin ? 'Yes' : 'No' }}
+            </span>
+          </td>
+          <td class="table__muted">{{ c.createdAt ? (c.createdAt | date : 'mediumDate') : '—' }}</td>
+          <td class="table__actions">
+            <a class="linkBtn" [routerLink]="['/admin/customers', c._id, 'edit']">Edit</a>
+          </td>
+        </tr>
+        <tr *ngIf="!loading() && filtered().length === 0">
+          <td colspan="6" class="table__muted">No customers found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+

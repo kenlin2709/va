@@ -1,0 +1,78 @@
+.acctShell {
+  padding: 1.5rem 0 3.5rem;
+}
+
+.acctShell__grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 980px) {
+  .acctShell__grid {
+    grid-template-columns: 240px 1fr;
+    align-items: start;
+    gap: 1.25rem;
+  }
+}
+
+.acctNav {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  padding: 0.9rem;
+}
+
+.acctNav__head {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  margin-bottom: 0.7rem;
+}
+
+.acctNav__title {
+  font-weight: 850;
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+  color: #111;
+}
+
+.acctNav__sub {
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 650;
+  font-size: 0.82rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.acctNav__list {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.acctNav__item {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 0.75rem;
+  border-radius: 10px;
+  color: rgba(0, 0, 0, 0.76);
+  font-weight: 750;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.acctNav__item:hover {
+  background: rgba(0, 0, 0, 0.04);
+  color: #111;
+}
+
+.acctNav__item.is-active {
+  background: rgba(0, 0, 0, 0.06);
+  color: #111;
+}
+
+.acctMain {
+  min-width: 0;
+}
+
+

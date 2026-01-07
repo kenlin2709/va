@@ -64,6 +64,7 @@
               [imageAlt]="p.name"
               [link]="'/collections/all-products/products/' + p.slug"
               addMode="icon"
+              (add)="addBestSellerToCart(p)"
             />
           </swiper-slide>
         </swiper-container>

@@ -5,6 +5,7 @@ import { ProductCardComponent } from '../../ui/product-card/product-card.compone
 import { PRODUCT_CATALOG } from '../../shared/product-catalog';
 import { firstValueFrom } from 'rxjs';
 import { CategoriesApiService, Category } from '../../shared/api/categories-api.service';
+import { CartService } from '../../shared/cart/cart.service';
 
 type Product = { name: string; category: string; price: string; imageUrl?: string };
 type Feature = { title: string; description: string; icon: 'flask' | 'cherries' | 'cloud' };
@@ -30,6 +31,7 @@ export class HomeComponent {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly categoriesApi = inject(CategoriesApiService);
+  private readonly cart = inject(CartService);
 
   readonly heroSlides: HeroSlide[] = [
     {
@@ -202,7 +204,8 @@ export class HomeComponent {
     slug: p.slug,
     name: p.title,
     price: `$${p.price.toFixed(2)}`,
-    imageUrl: p.images[0]
+    imageUrl: p.images[0],
+    priceNumber: p.price,
   }));
 
   readonly features: Feature[] = [
@@ -236,6 +239,18 @@ export class HomeComponent {
     { name: 'Grapezilla Vape Juice', category: 'Fruit', price: '$26.95' },
     { name: 'Raging Raspberry Vape Juice', category: 'Fruit', price: '$26.95' }
   ];
+
+  addBestSellerToCart(p: { slug: string; name: string; priceNumber: number; imageUrl?: string }): void {
+    this.cart.add(
+      {
+        id: p.slug,
+        title: p.name,
+        price: p.priceNumber,
+        imageUrl: p.imageUrl ?? null,
+      },
+      1,
+    );
+  }
 }
 
 

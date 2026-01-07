@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { adminGuard } from './shared/auth/admin.guard';
 
 export const routes: Routes = [
   {
@@ -6,7 +7,36 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/home/home.component').then((m) => m.HomeComponent)
   },
   {
+    path: 'account/login',
+    loadComponent: () =>
+      import('./pages/account/login/account-login.component').then((m) => m.AccountLoginComponent),
+  },
+  {
+    path: 'account/register',
+    loadComponent: () =>
+      import('./pages/account/register/account-register.component').then((m) => m.AccountRegisterComponent),
+  },
+  {
+    path: 'account',
+    loadComponent: () =>
+      import('./pages/account/account-layout.component').then((m) => m.AccountLayoutComponent),
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'settings' },
+      {
+        path: 'settings',
+        loadComponent: () =>
+          import('./pages/account/account-settings.component').then((m) => m.AccountSettingsComponent),
+      },
+      {
+        path: 'orders',
+        loadComponent: () =>
+          import('./pages/account/account-orders.component').then((m) => m.AccountOrdersComponent),
+      },
+    ],
+  },
+  {
     path: 'admin',
+    canActivate: [adminGuard],
     loadComponent: () => import('./pages/admin/admin-layout.component').then((m) => m.AdminLayoutComponent),
     children: [
       {
@@ -53,8 +83,12 @@ export const routes: Routes = [
       {
         path: 'customers',
         loadComponent: () =>
-          import('./pages/admin/admin-placeholder.component').then((m) => m.AdminPlaceholderComponent),
-        data: { title: 'Customers', subtitle: 'Customer management (coming soon)' },
+          import('./pages/admin/admin-customers.component').then((m) => m.AdminCustomersComponent),
+      },
+      {
+        path: 'customers/:id/edit',
+        loadComponent: () =>
+          import('./pages/admin/admin-customer-form.component').then((m) => m.AdminCustomerFormComponent),
       },
       {
         path: 'settings',
