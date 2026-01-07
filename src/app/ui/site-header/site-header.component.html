@@ -26,6 +26,7 @@
           <a class="nav__item" href="/">Home</a>
           <a class="nav__item" href="/collections/all-products">Shop</a>
           <a class="nav__item" href="#">About</a>
+          <a class="nav__item" *ngIf="auth.customer()?.isAdmin" [routerLink]="['/admin']">Admin</a>
         </nav>
       </div>
 
@@ -98,6 +99,9 @@
 
       <nav class="drawer__nav" aria-label="Mobile navigation">
         <a class="drawer__row" href="/collections/all-products" (click)="closeMenu()">ALL PRODUCTS</a>
+        <a class="drawer__row" *ngIf="auth.customer()?.isAdmin" [routerLink]="['/admin']" (click)="closeMenu()">
+          ADMIN
+        </a>
         <a class="drawer__row" href="#" (click)="closeMenu()">DESSERTS</a>
         <a class="drawer__row" href="#" (click)="closeMenu()">ENERGY</a>
         <a class="drawer__row" href="#" (click)="closeMenu()">FRUIT</a>
