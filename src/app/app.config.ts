@@ -14,6 +14,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
-    { provide: API_BASE_URL, useValue: 'http://localhost:3000' },
+    { provide: API_BASE_URL, useValue: 'https://va-backend-nu.vercel.app/' },
   ]
 };
