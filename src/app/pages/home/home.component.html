@@ -92,18 +92,18 @@
       </div>
     </section>
 
-    <section class="section section--split">
-      <div class="split">
+    <section class="section section--vape-lab">
+      <div class="split split--vape-lab">
         <div class="split__left">
           <h2>Vape Lab Standard</h2>
           <p class="muted">
-            Crafted in Melbourne. Enjoyed Australia-wide. This section mirrors the public homepage messaging.
+            Crafted in Melbourne. Enjoyed Australia-wide. Premium blends made for smooth hits, bold flavour, and reliable performance.
           </p>
           <a class="btn btn--primary" href="#">Explore Our Lab</a>
         </div>
 
         <div class="split__right">
-          <div class="feature" *ngFor="let f of features">
+          <div class="feature feature--enhanced" *ngFor="let f of features">
             <div class="feature__icon" aria-hidden="true">
               <svg *ngIf="f.icon === 'flask'" viewBox="0 0 24 24">
                 <path
@@ -130,24 +130,35 @@
       </div>
     </section>
 
-    <section class="section">
-      <div class="section__head">
+    <section class="section px-3">
+      <div class="section__head section__head--center">
         <h2>Discover Them All</h2>
-        <a class="section__link" href="#">Shop</a>
       </div>
 
-      <div class="grid grid--products">
-        <article class="productCard" *ngFor="let p of discoverAll">
-          <div class="productCard__img" aria-hidden="true"></div>
-          <div class="productCard__body">
-            <div class="productCard__meta">{{ p.category }}</div>
-            <div class="productCard__name">{{ p.name }}</div>
-            <div class="productCard__row">
-              <strong class="productCard__price">{{ p.price }}</strong>
-              <button class="btn btn--ghost" type="button">+ Add To Cart</button>
-            </div>
-          </div>
-        </article>
+      <div class="bestSellers">
+        <swiper-container
+          class="bestSellers__swiper"
+          navigation="true"
+          pagination="true"
+          pagination-clickable="true"
+          slides-per-view="2"
+          space-between="40"
+          speed="450"
+          [breakpoints]="bestSellerBreakpoints"
+        >
+          <swiper-slide *ngFor="let p of bestSellers">
+            <app-product-card
+              class="mt-4"
+              [title]="p.name"
+              [price]="p.price"
+              [imageUrl]="p.imageUrl || null"
+              [imageAlt]="p.name"
+              [link]="'/collections/all-products/products/' + p.slug"
+              addMode="icon"
+              (add)="addBestSellerToCart(p)"
+            />
+          </swiper-slide>
+        </swiper-container>
       </div>
     </section>
   </div>

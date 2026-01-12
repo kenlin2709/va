@@ -37,7 +37,8 @@ export class AdminOrdersComponent {
         String(o.orderId ?? '').toLowerCase().includes(term) ||
         String(o._id).toLowerCase().includes(term) ||
         String(o.customerId).toLowerCase().includes(term) ||
-        String(o.customerEmail ?? '').toLowerCase().includes(term)
+        String(o.customerEmail ?? '').toLowerCase().includes(term) ||
+        String(o.referralCodeUsed ?? '').toLowerCase().includes(term)
       );
     });
   });

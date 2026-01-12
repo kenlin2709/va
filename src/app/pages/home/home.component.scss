@@ -133,6 +133,125 @@
   gap: 10px;
 }
 
+/* Vape Lab Standard Section */
+.section--vape-lab {
+  position: relative;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(11, 11, 16, 0.12);
+  margin: 3rem 0;
+}
+
+.split--vape-lab {
+  position: relative;
+  z-index: 1;
+  background: #ffffff;
+  border: none;
+  border-radius: 0;
+  padding: 2rem;
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+}
+
+.split--vape-lab .split__left {
+  max-width: 480px;
+}
+
+.split--vape-lab .split__left h2 {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: var(--fw-black);
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin: 0 0 1rem 0;
+}
+
+.split--vape-lab .split__left p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0 0 1.5rem 0;
+  font-weight: 500;
+}
+
+.split--vape-lab .btn--primary {
+  background: #0b0b10;
+  border: none;
+  color: white;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.split--vape-lab .btn--primary:hover {
+  transform: translateY(-2px);
+  background: #1a1a1a;
+}
+
+.feature--enhanced {
+  background: #ffffff;
+  border: 1px solid rgba(11, 11, 16, 0.12);
+  border-radius: 16px;
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(11, 11, 16, 0.06);
+}
+
+.feature--enhanced:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(11, 11, 16, 0.12);
+}
+
+.feature--enhanced .feature__icon {
+  background: rgba(11, 11, 16, 0.03);
+  border: 1px solid rgba(11, 11, 16, 0.08);
+}
+
+.feature--enhanced .feature__icon svg {
+  fill: #0b0b10;
+  opacity: 0.8;
+}
+
+.feature--enhanced .feature__title {
+  color: var(--text);
+  font-weight: var(--fw-bold);
+  font-size: 1.05rem;
+}
+
+.feature--enhanced .feature__desc {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+@media (min-width: 760px) {
+  .split--vape-lab {
+    grid-template-columns: 1fr 1.3fr;
+    padding: 3rem 2.5rem;
+    gap: 3rem;
+  }
+
+  .section--vape-lab {
+    margin: 4rem 0;
+  }
+}
+
+@media (max-width: 759px) {
+  .section--vape-lab {
+    margin: 2rem 1rem;
+    border-radius: 20px;
+  }
+
+  .split--vape-lab {
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+}
+
 .dot {
   width: 10px;
   height: 10px;

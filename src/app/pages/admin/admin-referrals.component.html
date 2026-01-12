@@ -1,0 +1,100 @@
+<section class="adminPage">
+  <div class="adminPage__head">
+    <div>
+      <h1 class="adminPage__title">Referrals</h1>
+      <p class="adminPage__muted">Create referral programs (discount rules) and assign them to customers.</p>
+    </div>
+
+    <div class="adminPage__actions">
+      <button class="btnA btnA--ghost" type="button" (click)="reload()" [disabled]="loading()">Refresh</button>
+    </div>
+  </div>
+
+  <div class="adminNotice adminNotice--error" *ngIf="error()">{{ error() }}</div>
+
+  <div class="grid grid--one">
+    <div class="card">
+      <div class="card__head">
+        <h2>Create referral</h2>
+      </div>
+
+      <form class="formGrid" [formGroup]="form" (ngSubmit)="create()">
+        <label class="field">
+          <span class="field__label">Name</span>
+          <input class="field__input" type="text" formControlName="name" placeholder="e.g. Influencer 10%" />
+        </label>
+
+        <div class="grid2">
+          <label class="field">
+            <span class="field__label">Discount type</span>
+            <select class="field__input" formControlName="discountType">
+              <option value="percent">Percent</option>
+              <option value="amount">Fixed amount</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span class="field__label">Discount value</span>
+            <input class="field__input" type="number" formControlName="discountValue" min="0" step="0.01" />
+          </label>
+        </div>
+
+        <label class="check">
+          <input type="checkbox" formControlName="active" />
+          <span>Active</span>
+        </label>
+
+        <div class="adminPage__actions" style="justify-content: flex-start;">
+          <button class="btnA btnA--primary" type="submit" [disabled]="loading()">Create</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card__head">
+        <h2>Referral programs ({{ count() }})</h2>
+      </div>
+
+      <div class="tableWrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Discount</th>
+              <th>Status</th>
+              <th class="table__actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="loading()">
+              <td colspan="4" class="table__muted">Loading…</td>
+            </tr>
+            <tr *ngFor="let r of referrals()">
+              <td class="strong">{{ r.name }}</td>
+              <td class="mono">
+                <span *ngIf="r.discountType === 'percent'">{{ r.discountValue }}%</span>
+                <span *ngIf="r.discountType === 'amount'">${{ r.discountValue }}</span>
+              </td>
+              <td>
+                <span class="pill" [class.pill--on]="r.active" [class.pill--off]="!r.active">
+                  {{ r.active ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+              <td class="table__actions">
+                <button class="btnA btnA--ghost" type="button" (click)="toggleActive(r)" [disabled]="loading()">
+                  {{ r.active ? 'Disable' : 'Enable' }}
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="!loading() && referrals().length === 0">
+              <td colspan="4" class="table__muted">No referrals yet.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+

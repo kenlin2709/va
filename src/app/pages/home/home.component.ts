@@ -198,14 +198,7 @@ export class HomeComponent {
     }
   }
 
-  readonly bestSellers = PRODUCT_CATALOG.filter((p) =>
-    [
-      'peppermint-tobacco-vape-juice',
-      'dram-tobacco-vape-juice',
-      'marks-american-bourbon-vape-juice',
-      'koheeba-tobacco-vape-juice'
-    ].includes(p.slug)
-  ).map((p) => ({
+  readonly bestSellers = PRODUCT_CATALOG.map((p) => ({
     slug: p.slug,
     name: p.title,
     price: `$${p.price.toFixed(2)}`,

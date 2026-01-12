@@ -41,6 +41,10 @@
           <span class="muted">Items</span>
           <span class="strong">{{ itemCount(o) }}</span>
         </div>
+        <div class="orderCard__row" *ngIf="o.discountAmount && o.discountAmount > 0">
+          <span class="muted">Discount</span>
+          <span class="strong success">-{{ formatMoney(o.discountAmount) }}</span>
+        </div>
         <div class="orderCard__row">
           <span class="muted">Total</span>
           <span class="strong">{{ formatMoney(o.total) }}</span>
@@ -59,12 +63,13 @@
           <th>Order</th>
           <th>Status</th>
           <th>Items</th>
+          <th>Referral</th>
           <th>Total</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngIf="loading()">
-          <td colspan="5" class="muted">Loading…</td>
+          <td colspan="6" class="muted">Loading…</td>
         </tr>
         <tr *ngFor="let o of orders()" class="rowLink" (click)="open(o)">
           <td class="muted">{{ o.createdAt ? (o.createdAt | date : 'medium') : '—' }}</td>
@@ -75,10 +80,14 @@
             </span>
           </td>
           <td>{{ itemCount(o) }}</td>
+          <td>
+            <span *ngIf="o.referralCodeUsed" class="mono">{{ o.referralCodeUsed }}</span>
+            <span *ngIf="!o.referralCodeUsed" class="muted">—</span>
+          </td>
           <td class="strong">{{ formatMoney(o.total) }}</td>
         </tr>
         <tr *ngIf="!loading() && orders().length === 0">
-          <td colspan="5" class="muted">No orders yet.</td>
+          <td colspan="6" class="muted">No orders yet.</td>
         </tr>
       </tbody>
     </table>
@@ -154,6 +163,14 @@
 
           <div class="totals">
             <div class="totals__row"><span class="muted">Subtotal</span><span class="strong">{{ formatMoney(selected()!.subtotal) }}</span></div>
+            <div class="totals__row" *ngIf="selected()!.discountAmount && selected()!.discountAmount! > 0">
+              <span class="muted">Discount</span>
+              <span class="strong success">-{{ formatMoney(selected()!.discountAmount!) }}</span>
+            </div>
+            <div class="totals__row" *ngIf="selected()!.referralCodeUsed">
+              <span class="muted">Referral Code</span>
+              <span class="mono">{{ selected()!.referralCodeUsed }}</span>
+            </div>
             <div class="totals__row"><span class="muted">Total</span><span class="strong">{{ formatMoney(selected()!.total) }}</span></div>
           </div>
         </div>

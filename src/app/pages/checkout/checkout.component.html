@@ -136,13 +136,23 @@
           </div>
 
           <div class="sumRow">
-            <input class="sumCode" type="text" placeholder="Discount code or gift card" />
-            <button class="sumApply" type="button">Apply</button>
+            <form [formGroup]="referralForm" novalidate>
+              <input class="sumCode" type="text" placeholder="Referral code" formControlName="referralCode" />
+            </form>
+            <div *ngIf="referralLoading()" class="sumCode__loading">Validating…</div>
+            <div *ngIf="referralError()" class="sumCode__error">{{ referralError() }}</div>
+            <div *ngIf="referralValidation()" class="sumCode__success">
+              ✓ {{ referralValidation()?.programName }} applied
+            </div>
           </div>
 
           <div class="sumLine">
             <div class="muted">Subtotal · {{ cart.count() }} items</div>
             <div>{{ formatMoney(subtotal()) }}</div>
+          </div>
+          <div class="sumLine" *ngIf="discountAmount() > 0">
+            <div class="muted">Referral discount</div>
+            <div class="sumDiscount">-{{ formatMoney(discountAmount()) }}</div>
           </div>
           <div class="sumLine">
             <div class="muted">Shipping</div>
@@ -151,7 +161,7 @@
 
           <div class="sumTotal">
             <div>Total</div>
-            <div class="sumTotal__amt"><span class="sumTotal__cur">AUD</span> {{ formatMoney(subtotal()) }}</div>
+            <div class="sumTotal__amt"><span class="sumTotal__cur">AUD</span> {{ formatMoney(total()) }}</div>
           </div>
         </div>
       </aside>

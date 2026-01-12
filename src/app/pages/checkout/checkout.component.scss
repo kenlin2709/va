@@ -263,6 +263,24 @@
   padding: 0 0.85rem;
 }
 
+.sumCode__loading {
+  font-size: 0.85rem;
+  color: rgba(0, 0, 0, 0.6);
+  font-style: italic;
+}
+
+.sumCode__error {
+  font-size: 0.85rem;
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.sumCode__success {
+  font-size: 0.85rem;
+  color: #16a34a;
+  font-weight: 600;
+}
+
 .sumApply {
   height: 44px;
   border-radius: 12px;
@@ -276,6 +294,11 @@
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 0;
+}
+
+.sumDiscount {
+  color: #16a34a;
+  font-weight: 700;
 }
 
 .muted {

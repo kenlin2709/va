@@ -16,6 +16,7 @@ export class AdminLayoutComponent {
     { label: 'Categories', icon: 'tag', link: '/admin/categories' },
     { label: 'Orders', icon: 'receipt', link: '/admin/orders' },
     { label: 'Customers', icon: 'users', link: '/admin/customers' },
+    { label: 'Referrals', icon: 'tag', link: '/admin/referrals' },
     { label: 'Settings', icon: 'settings', link: '/admin/settings' },
   ] as const;
 }

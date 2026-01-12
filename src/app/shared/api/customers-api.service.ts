@@ -10,11 +10,15 @@ export type Customer = {
   lastName?: string;
   phone?: string;
   isAdmin?: boolean;
+  referralProgramId?: string;
+  referralCode?: string;
   createdAt?: string;
   updatedAt?: string;
 };
 
-export type UpdateCustomerRequest = Partial<Pick<Customer, 'email' | 'firstName' | 'lastName' | 'phone' | 'isAdmin'>>;
+export type UpdateCustomerRequest = Partial<
+  Pick<Customer, 'email' | 'firstName' | 'lastName' | 'phone' | 'isAdmin' | 'referralProgramId'>
+>;
 
 @Injectable({ providedIn: 'root' })
 export class CustomersApiService {

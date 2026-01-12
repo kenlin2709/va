@@ -31,12 +31,13 @@
           <th>Customer</th>
           <th>Status</th>
           <th>Items</th>
+          <th>Referral</th>
           <th>Total</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngIf="loading()">
-          <td colspan="6" class="table__muted">Loading…</td>
+          <td colspan="7" class="table__muted">Loading…</td>
         </tr>
         <tr *ngFor="let o of filtered()" class="rowLink" (click)="open(o)">
           <td class="table__muted">{{ o.createdAt ? (o.createdAt | date : 'medium') : '—' }}</td>
@@ -50,10 +51,11 @@
             </span>
           </td>
           <td>{{ itemCount(o) }}</td>
+          <td class="mono">{{ o.referralCodeUsed || '—' }}</td>
           <td class="strong">{{ formatMoney(o.total) }}</td>
         </tr>
         <tr *ngIf="!loading() && filtered().length === 0">
-          <td colspan="6" class="table__muted">No orders found.</td>
+          <td colspan="7" class="table__muted">No orders found.</td>
         </tr>
       </tbody>
     </table>
@@ -154,6 +156,10 @@
         </div>
 
         <div class="totals">
+          <div class="totals__row" *ngIf="(selected()!.discountAmount ?? 0) > 0">
+            <span class="table__muted">Discount</span>
+            <span class="strong">-{{ formatMoney(selected()!.discountAmount!) }}</span>
+          </div>
           <div class="totals__row"><span class="table__muted">Subtotal</span><span class="strong">{{ formatMoney(selected()!.subtotal) }}</span></div>
           <div class="totals__row"><span class="table__muted">Total</span><span class="strong">{{ formatMoney(selected()!.total) }}</span></div>
         </div>

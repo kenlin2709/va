@@ -35,8 +35,10 @@ export type Order = {
   };
   items: OrderItem[];
   subtotal: number;
+  discountAmount?: number;
   total: number;
   status: 'pending' | 'paid' | 'shipped';
+  referralCodeUsed?: string;
   shippingName?: string;
   shippingAddress1?: string;
   shippingCity?: string;
@@ -55,6 +57,13 @@ export type AdminUpdateOrderStatusRequest = {
 export type AdminUpdateOrderShipmentRequest = {
   shippingCarrier?: string;
   trackingNumber?: string;
+};
+
+export type ValidateReferralResponse = {
+  code: string;
+  discountType: 'percent' | 'amount';
+  discountValue: number;
+  programName: string;
 };
 @Injectable({ providedIn: 'root' })
 export class OrdersApiService {
@@ -88,8 +97,13 @@ export class OrdersApiService {
     shippingCity?: string;
     shippingState?: string;
     shippingPostcode?: string;
+    referralCode?: string;
   }) {
     return this.http.post<Order>(`${this.baseUrl}/orders`, body);
+  }
+
+  validateReferral(code: string) {
+    return this.http.get<ValidateReferralResponse>(`${this.baseUrl}/orders/validate-referral/${encodeURIComponent(code)}`);
   }
 }
 

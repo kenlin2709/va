@@ -8,7 +8,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { CartService } from '../../shared/cart/cart.service';
 import { AuthService } from '../../shared/auth/auth.service';
-import { OrdersApiService } from '../../shared/api/orders-api.service';
+import { OrdersApiService, ValidateReferralResponse } from '../../shared/api/orders-api.service';
 import { AuthApiService } from '../../shared/api/auth-api.service';
 
 function isMongoId(id: string): boolean {
@@ -40,6 +40,25 @@ export class CheckoutComponent {
   readonly items = computed(() => this.cart.items());
   readonly subtotal = computed(() => this.cart.subtotal());
 
+  // Referral state
+  readonly referralValidation = signal<ValidateReferralResponse | null>(null);
+  readonly referralError = signal<string | null>(null);
+  readonly referralLoading = signal(false);
+
+  readonly discountAmount = computed(() => {
+    const referral = this.referralValidation();
+    if (!referral) return 0;
+
+    const subtotal = this.subtotal();
+    if (referral.discountType === 'percent') {
+      return Math.min(subtotal, (subtotal * referral.discountValue) / 100);
+    } else {
+      return Math.min(subtotal, referral.discountValue);
+    }
+  });
+
+  readonly total = computed(() => Math.max(0, this.subtotal() - this.discountAmount()));
+
   readonly form = this.fb.group({
     email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
     password: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(8)]],
@@ -52,6 +71,10 @@ export class CheckoutComponent {
     state: ['', [Validators.required]],
     postcode: ['', [Validators.required]],
     phone: ['', [Validators.required]],
+  });
+
+  readonly referralForm = this.fb.group({
+    referralCode: [''],
   });
 
   constructor() {
@@ -81,6 +104,19 @@ export class CheckoutComponent {
       .get('email')
       ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.emailAlreadyRegistered.set(false));
+
+    // Validate referral code when it changes
+    this.referralForm
+      .get('referralCode')
+      ?.valueChanges.pipe(
+        takeUntilDestroyed(this.destroyRef),
+        map((v) => String(v ?? '').trim()),
+        debounceTime(500),
+        distinctUntilChanged(),
+        filter((code) => code.length > 0),
+        switchMap((code) => this.validateReferralCode(code)),
+      )
+      .subscribe();
 
     // Proactively detect existing emails after user finishes typing (debounced) so we can show a login link
     // without waiting for "Complete order".
@@ -165,6 +201,21 @@ export class CheckoutComponent {
     await this.router.navigate(['/account/login'], { queryParams: { email, next: '/checkout' } });
   }
 
+  private async validateReferralCode(code: string): Promise<void> {
+    this.referralLoading.set(true);
+    this.referralError.set(null);
+
+    try {
+      const response = await firstValueFrom(this.ordersApi.validateReferral(code));
+      this.referralValidation.set(response);
+    } catch (e: any) {
+      this.referralValidation.set(null);
+      this.referralError.set(e?.error?.message ?? 'Invalid referral code');
+    } finally {
+      this.referralLoading.set(false);
+    }
+  }
+
   async submit(): Promise<void> {
     this.error.set(null);
 
@@ -195,11 +246,13 @@ export class CheckoutComponent {
       if (!ok) return;
 
       const v = this.form.value;
+      const referralV = this.referralForm.value;
       const shippingName = `${v.firstName} ${v.lastName}`.trim();
 
       await firstValueFrom(
         this.ordersApi.create({
           items: this.items().map((it) => ({ productId: it.id, qty: it.qty })),
+          referralCode: String(referralV.referralCode ?? '').trim() || undefined,
           shippingName,
           shippingAddress1: v.address1!,
           shippingCity: v.city!,

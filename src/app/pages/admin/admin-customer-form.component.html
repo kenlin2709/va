@@ -43,6 +43,26 @@
         <input type="checkbox" formControlName="isAdmin" />
         <span>Is Admin</span>
       </label>
+
+      <label class="field">
+        <span class="field__label">Referral Program</span>
+        <select class="field__input" formControlName="referralProgramId">
+          <option value="">None</option>
+          <option *ngFor="let referral of referrals()" [value]="referral._id">
+            {{ referral.name }} - {{ referral.discountType === 'percent' ? referral.discountValue + '%' : '$' + referral.discountValue }}
+          </option>
+        </select>
+      </label>
+
+      <div class="field" *ngIf="customer()?.referralCode">
+        <span class="field__label">Referral Code</span>
+        <div class="field__input" style="background: #f5f5f5; font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;">
+          {{ customer()?.referralCode }}
+        </div>
+        <small style="color: var(--a-muted); font-size: 12px; margin-top: 4px;">
+          This code will be automatically generated when a referral program is assigned.
+        </small>
+      </div>
     </form>
   </div>
 

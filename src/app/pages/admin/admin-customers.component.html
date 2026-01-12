@@ -29,6 +29,7 @@
           <th>Name</th>
           <th>Email</th>
           <th>Phone</th>
+          <th>Referral</th>
           <th>Admin</th>
           <th>Created</th>
           <th></th>
@@ -36,12 +37,16 @@
       </thead>
       <tbody>
         <tr *ngIf="loading()">
-          <td colspan="6" class="table__muted">Loading…</td>
+          <td colspan="7" class="table__muted">Loading…</td>
         </tr>
         <tr *ngFor="let c of filtered()">
           <td>{{ displayName(c) }}</td>
           <td>{{ c.email }}</td>
           <td>{{ c.phone || '—' }}</td>
+          <td>
+            <span *ngIf="c.referralCode" class="mono">{{ c.referralCode }}</span>
+            <span *ngIf="!c.referralCode" class="table__muted">None</span>
+          </td>
           <td>
             <span class="pill" [class.pill--on]="c.isAdmin" [class.pill--off]="!c.isAdmin">
               {{ c.isAdmin ? 'Yes' : 'No' }}
@@ -53,7 +58,7 @@
           </td>
         </tr>
         <tr *ngIf="!loading() && filtered().length === 0">
-          <td colspan="6" class="table__muted">No customers found.</td>
+          <td colspan="7" class="table__muted">No customers found.</td>
         </tr>
       </tbody>
     </table>

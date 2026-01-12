@@ -90,6 +90,11 @@ export const routes: Routes = [
           import('./pages/admin/admin-customer-form.component').then((m) => m.AdminCustomerFormComponent),
       },
       {
+        path: 'referrals',
+        loadComponent: () =>
+          import('./pages/admin/admin-referrals.component').then((m) => m.AdminReferralsComponent),
+      },
+      {
         path: 'settings',
         loadComponent: () =>
           import('./pages/admin/admin-placeholder.component').then((m) => m.AdminPlaceholderComponent),
@@ -117,5 +122,9 @@ export const routes: Routes = [
   {
     path: 'checkout',
     loadComponent: () => import('./pages/checkout/checkout.component').then((m) => m.CheckoutComponent),
+  },
+  {
+    path: 'contact',
+    loadComponent: () => import('./pages/contact/contact.component').then((m) => m.ContactComponent),
   }
 ];
