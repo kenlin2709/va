@@ -89,12 +89,12 @@ export class HomeComponent {
     if (!cats.length) {
       // SSR/prerender + initial load fallback
       return [
-        { title: 'All Products', href: '/collections/all-products', imageUrl: '' },
-        { title: 'Desserts', href: '/collections/desserts', imageUrl: '' },
-        { title: 'Energy', href: '/collections/energy', imageUrl: '' },
-        { title: 'Fruit', href: '/collections/fruit', imageUrl: '' },
-        { title: 'Tobacco', href: '/collections/tobacco', imageUrl: '' },
-        { title: 'Party Mix', href: '/collections/party-mix', imageUrl: '' },
+        { title: 'All Products', href: '/collections/all-products', imageUrl: '/images/hero/20250618456-2-scaled.jpg' },
+        { title: 'Desserts', href: '/collections/desserts', imageUrl: '/images/hero/20250618456-4-scaled.jpg' },
+        { title: 'Energy', href: '/collections/energy', imageUrl: '/images/hero/54846548.jpg' },
+        { title: 'Fruit', href: '/collections/fruit', imageUrl: '/images/hero/home-2-06-2048x1158.jpg' },
+        { title: 'Tobacco', href: '/collections/tobacco', imageUrl: '/images/hero/20250618456-2-scaled.jpg' },
+        { title: 'Party Mix', href: '/collections/party-mix', imageUrl: '/images/hero/54846548.jpg' },
       ];
     }
 

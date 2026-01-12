@@ -50,6 +50,43 @@ p.footer__muted {
   color: #0b0b10;
 }
 
+.footer__contact {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.footer__social {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.footer__social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(11, 11, 16, 0.05);
+  color: rgba(11, 11, 16, 0.7);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.footer__social-link:hover {
+  background: rgba(219, 116, 39, 0.1);
+  color: #db7427;
+  transform: translateY(-1px);
+}
+
+.footer__social-icon {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
 .footer__bottom {
   border-top: 1px solid rgba(11, 11, 16, 0.18);
   background: #0b0b10;

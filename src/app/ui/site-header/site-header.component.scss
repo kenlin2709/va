@@ -332,6 +332,41 @@
   align-items: center;
 }
 
+.drawer__social-bottom {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(11, 11, 16, 0.12);
+}
+
+.drawer__social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(11, 11, 16, 0.05);
+  color: rgba(11, 11, 16, 0.7);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.drawer__social-link:hover {
+  background: rgba(219, 116, 39, 0.1);
+  color: #db7427;
+  transform: translateY(-1px);
+}
+
+.drawer__social-icon {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
 .drawer__chev {
   font-size: 26px;
   opacity: 0.65;
@@ -340,6 +375,9 @@
 
 .drawer__bottom {
   padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .drawer__email {
