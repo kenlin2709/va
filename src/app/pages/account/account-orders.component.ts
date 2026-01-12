@@ -83,7 +83,7 @@ export class AccountOrdersComponent {
   }
 
   orderDisplayId(o: Order): string {
-    return o.orderId || o._id;
+    return String(o.orderId || o._id).toUpperCase();
   }
 
   shippingText(o: Order): string {

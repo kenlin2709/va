@@ -36,7 +36,14 @@
       </a>
 
       <div class="actions" aria-label="Header actions">
-        <button class="iconBtn iconBtn--cart" type="button" (click)="cart.toggle()" aria-label="Cart">
+        <button
+          #cartBtn
+          class="iconBtn iconBtn--cart"
+          type="button"
+          (click)="cart.toggle()"
+          aria-label="Cart"
+          data-cart-target="true"
+        >
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
             <path
               d="M6 7h15l-2 7H8L6 3H3"

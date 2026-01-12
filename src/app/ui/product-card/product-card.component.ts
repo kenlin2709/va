@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { CartFlyService } from '../../shared/cart/cart-fly.service';
 
 export type ProductCardAddMode = 'icon' | 'text' | 'none';
 
@@ -13,6 +14,9 @@ export type ProductCardAddMode = 'icon' | 'text' | 'none';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductCardComponent {
+  private readonly el = inject(ElementRef<HTMLElement>);
+  private readonly cartFly = inject(CartFlyService);
+
   @Input({ required: true }) title!: string;
   @Input({ required: true }) price!: string;
   @Input() imageUrl: string | null = null;
@@ -30,6 +34,11 @@ export class ProductCardComponent {
   onAddClick(ev: MouseEvent): void {
     ev.preventDefault();
     ev.stopPropagation();
+
+    const host = this.el.nativeElement as HTMLElement;
+    const img = host.querySelector('.pc__img') as HTMLElement | null;
+    this.cartFly.flyFromElement(img ?? (ev.currentTarget as HTMLElement | null), this.imageUrl);
+
     this.add.emit();
   }
 }

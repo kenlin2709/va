@@ -7,7 +7,7 @@
 
   <div class="container pdp__top">
     <div class="pdp__gallery">
-      <img class="pdp__image" *ngIf="heroImage() as img" [src]="img" [alt]="p.title" />
+      <img #heroImg class="pdp__image" *ngIf="heroImage() as img" [src]="img" [alt]="p.title" />
       <div class="pdp__thumbs" *ngIf="p.images.length > 1">
         <img class="pdp__thumb" *ngFor="let t of p.images" [src]="t" [alt]="p.title" />
       </div>

@@ -33,6 +33,11 @@ export class HomeComponent {
   private readonly categoriesApi = inject(CategoriesApiService);
   private readonly cart = inject(CartService);
 
+  readonly bestSellerBreakpoints = {
+    900: { slidesPerView: 3, spaceBetween: 64 },
+    1280: { slidesPerView: 4, spaceBetween: 64 },
+  } as const;
+
   readonly heroSlides: HeroSlide[] = [
     {
       title: 'Sweet. Smooth.\nDecadent.',

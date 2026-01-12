@@ -60,7 +60,7 @@ export class CartService {
     this.isOpen.set(!this.isOpen());
   }
 
-  add(item: Omit<CartItem, 'qty'>, qty = 1): void {
+  add(item: Omit<CartItem, 'qty'>, qty = 1, opts?: { openDrawer?: boolean }): void {
     const q = Math.max(1, Math.floor(qty));
     const next = [...this.items()];
     const idx = next.findIndex((x) => x.id === item.id);
@@ -71,7 +71,7 @@ export class CartService {
     }
     this.items.set(next);
     this.persist();
-    this.open();
+    if (opts?.openDrawer) this.open();
   }
 
   setQty(id: string, qty: number): void {

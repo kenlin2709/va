@@ -12,6 +12,28 @@
         <div class="co__error" *ngIf="error()">{{ error() }}</div>
 
         <form class="coForm" [formGroup]="form" (ngSubmit)="submit()">
+          <ng-container *ngIf="!auth.isAuthenticated()">
+            <div class="co__sectionTitle">Account</div>
+            <div class="coHint">Create an account to complete checkout and track your order.</div>
+
+            <div class="coRow2">
+              <label class="coField">
+                <span>Email</span>
+                <input formControlName="email" type="email" autocomplete="email" />
+              </label>
+              <label class="coField">
+                <span>Password</span>
+                <input formControlName="password" type="password" autocomplete="new-password" />
+              </label>
+            </div>
+
+            <div class="coHint" *ngIf="emailAlreadyRegistered()">
+              That email is already registered.
+              <button class="coLinkBtn" type="button" (click)="goToLogin()">Log in</button>
+              to continue checkout.
+            </div>
+          </ng-container>
+
           <label class="coField">
             <span>Country/Region</span>
             <select formControlName="country">

@@ -194,6 +194,8 @@ h2 {
 /* Best Sellers (Swiper) */
 .bestSellers {
   margin-top: 1rem;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 .bestSellers__swiper {
@@ -258,8 +260,10 @@ h2 {
 }
 
 .grid--collections {
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 @media (min-width: 720px) {
@@ -280,7 +284,8 @@ h2 {
   border-radius: 16px;
   overflow: hidden;
   position: relative;
-  min-height: 230px;
+  aspect-ratio: 1 / 1;
+  min-height: 180px;
   border: 1px solid rgba(11, 11, 16, 0.12);
   background:
     radial-gradient(120% 120% at 30% 20%, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0) 60%),

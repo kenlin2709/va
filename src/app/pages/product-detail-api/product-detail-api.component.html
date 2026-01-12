@@ -7,7 +7,7 @@
 
   <div class="container pdp__top">
     <div class="pdp__gallery">
-      <img class="pdp__image" *ngIf="heroImage() as img; else noImg" [src]="img" [alt]="p.name" />
+      <img #heroImg class="pdp__image" *ngIf="heroImage() as img; else noImg" [src]="img" [alt]="p.name" />
       <ng-template #noImg>
         <div class="pdp__image pdp__image--empty">No image</div>
       </ng-template>

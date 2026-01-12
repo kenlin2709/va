@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../shared/auth/auth.service';
 import { CartService } from '../../shared/cart/cart.service';
+import { CartFlyService } from '../../shared/cart/cart-fly.service';
 
 @Component({
   selector: 'app-site-header',
@@ -12,9 +13,12 @@ import { CartService } from '../../shared/cart/cart.service';
   styleUrl: './site-header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SiteHeaderComponent {
+export class SiteHeaderComponent implements AfterViewInit {
   readonly auth = inject(AuthService);
   readonly cart = inject(CartService);
+  private readonly cartFly = inject(CartFlyService);
+
+  @ViewChild('cartBtn', { read: ElementRef }) private readonly cartBtn?: ElementRef<HTMLElement>;
 
   // keep existing signal used by template, but drive it from CartService
   readonly cartCount = signal(0);
@@ -38,6 +42,10 @@ export class SiteHeaderComponent {
     effect(() => {
       this.cartCount.set(this.cart.count());
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.cartFly.registerTarget(this.cartBtn?.nativeElement ?? null);
   }
 
   toggleMenu(): void {

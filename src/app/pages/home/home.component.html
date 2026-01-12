@@ -53,7 +53,7 @@
           slides-per-view="2"
           space-between="40"
           speed="450"
-          breakpoints='{"900":{"slidesPerView":3,"spaceBetween":64},"1280":{"slidesPerView":4,"spaceBetween":64}}'
+          [breakpoints]="bestSellerBreakpoints"
         >
           <swiper-slide *ngFor="let p of bestSellers">
             <app-product-card

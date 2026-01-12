@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, ViewChild, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { ProductsApiService, Product } from '../../shared/api/products-api.service';
 import { ProductCardComponent } from '../../ui/product-card/product-card.component';
 import { CartService } from '../../shared/cart/cart.service';
+import { CartFlyService } from '../../shared/cart/cart-fly.service';
 
 @Component({
   selector: 'app-product-detail-api',
@@ -19,6 +20,9 @@ export class ProductDetailApiComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly productsApi = inject(ProductsApiService);
   readonly cart = inject(CartService);
+  private readonly cartFly = inject(CartFlyService);
+
+  @ViewChild('heroImg', { read: ElementRef }) private readonly heroImg?: ElementRef<HTMLElement>;
 
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
@@ -65,6 +69,9 @@ export class ProductDetailApiComponent {
   addToCart(): void {
     const p = this.product();
     if (!p) return;
+
+    this.cartFly.flyFromElement(this.heroImg?.nativeElement ?? null, this.heroImage() ?? p.productImageUrl ?? null);
+
     this.cart.add(
       {
         id: p._id,

@@ -66,6 +66,12 @@ export class AuthApiService {
   changePassword(body: { currentPassword: string; newPassword: string }) {
     return this.http.patch<{ updated: true }>(`${this.baseUrl}/auth/me/password`, body);
   }
+
+  emailExists(email: string) {
+    return this.http.get<{ exists: boolean }>(`${this.baseUrl}/auth/email-exists`, {
+      params: { email },
+    });
+  }
 }
 
 

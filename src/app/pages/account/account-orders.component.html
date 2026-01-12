@@ -115,7 +115,10 @@
           </div>
           <div class="card__row">
             <span class="card__label">Carrier</span>
-            <span>{{ selected()!.shippingCarrier || '—' }}</span>
+            <span *ngIf="selected()!.shippingCarrier; else noCarrier">{{ selected()!.shippingCarrier }}</span>
+            <ng-template #noCarrier>
+              <span class="muted">Not assigned yet.</span>
+            </ng-template>
           </div>
           <div class="card__row">
             <span class="card__label">Tracking</span>
@@ -131,7 +134,7 @@
               </a>
             </ng-container>
             <ng-template #noTracking>
-              <span class="mono">—</span>
+              <span class="muted">Tracking will appear once your order ships.</span>
             </ng-template>
           </div>
         </div>

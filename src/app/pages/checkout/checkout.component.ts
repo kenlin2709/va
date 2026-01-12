@@ -1,12 +1,15 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, computed, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { CartService } from '../../shared/cart/cart.service';
 import { AuthService } from '../../shared/auth/auth.service';
 import { OrdersApiService } from '../../shared/api/orders-api.service';
+import { AuthApiService } from '../../shared/api/auth-api.service';
 
 function isMongoId(id: string): boolean {
   return /^[a-f\d]{24}$/i.test(id);
@@ -24,17 +27,22 @@ export class CheckoutComponent {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly ordersApi = inject(OrdersApiService);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly authApi = inject(AuthApiService);
 
   readonly cart = inject(CartService);
   readonly auth = inject(AuthService);
 
   readonly submitting = signal(false);
   readonly error = signal<string | null>(null);
+  readonly emailAlreadyRegistered = signal(false);
 
   readonly items = computed(() => this.cart.items());
   readonly subtotal = computed(() => this.cart.subtotal());
 
   readonly form = this.fb.group({
+    email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
+    password: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(8)]],
     country: ['Australia', [Validators.required]],
     firstName: ['', [Validators.required]],
     lastName: ['', [Validators.required]],
@@ -50,6 +58,51 @@ export class CheckoutComponent {
     // Ensure we have customer info for prefilling.
     void this.auth.hydrateCustomer();
 
+    // If not authenticated, require email/password (create account or login) before placing order.
+    effect(() => {
+      const authed = this.auth.isAuthenticated();
+      const emailCtrl = this.form.get('email');
+      const passwordCtrl = this.form.get('password');
+      if (!emailCtrl || !passwordCtrl) return;
+
+      if (authed) {
+        emailCtrl.disable({ emitEvent: false });
+        passwordCtrl.disable({ emitEvent: false });
+      } else {
+        emailCtrl.enable({ emitEvent: false });
+        passwordCtrl.enable({ emitEvent: false });
+
+        emailCtrl.updateValueAndValidity({ emitEvent: false });
+        passwordCtrl.updateValueAndValidity({ emitEvent: false });
+      }
+    });
+
+    this.form
+      .get('email')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.emailAlreadyRegistered.set(false));
+
+    // Proactively detect existing emails after user finishes typing (debounced) so we can show a login link
+    // without waiting for "Complete order".
+    this.form
+      .get('email')
+      ?.valueChanges.pipe(
+        takeUntilDestroyed(this.destroyRef),
+        map((v) => String(v ?? '').trim()),
+        debounceTime(450),
+        distinctUntilChanged(),
+        filter(() => !this.auth.isAuthenticated()),
+        filter((email) => !!email),
+        filter(() => !!this.form.get('email')?.valid),
+        switchMap((email) =>
+          this.authApi.emailExists(email).pipe(
+            map((res) => !!res.exists),
+            catchError(() => of(false)),
+          ),
+        ),
+      )
+      .subscribe((exists) => this.emailAlreadyRegistered.set(exists));
+
     effect(() => {
       const c = this.auth.customer();
       if (!c) return;
@@ -60,6 +113,7 @@ export class CheckoutComponent {
 
       this.form.patchValue(
         {
+          email: c.email ?? '',
           country: s?.country ?? 'Australia',
           firstName: first,
           lastName: last,
@@ -79,13 +133,40 @@ export class CheckoutComponent {
     return `$${Number(n).toFixed(2)}`;
   }
 
+  private async ensureAuthenticatedForCheckout(): Promise<boolean> {
+    if (this.auth.isAuthenticated()) return true;
+
+    const email = String(this.form.value.email ?? '').trim();
+    const password = String(this.form.value.password ?? '');
+
+    // Create account (creates session). If email already exists, show login link prompt.
+    try {
+      await this.auth.register({
+        email,
+        password,
+        firstName: (this.form.value.firstName || '').trim() || undefined,
+        lastName: (this.form.value.lastName || '').trim() || undefined,
+        phone: (this.form.value.phone || '').trim() || undefined,
+      });
+      return true;
+    } catch (e: any) {
+      const msg = String(e?.error?.message ?? e?.message ?? '').toLowerCase();
+      const status = e?.status;
+      const looksLikeAlreadyExists = status === 409 || msg.includes('already') || msg.includes('exists');
+      if (!looksLikeAlreadyExists) throw e;
+
+      this.emailAlreadyRegistered.set(true);
+      return false;
+    }
+  }
+
+  async goToLogin(): Promise<void> {
+    const email = String(this.form.value.email ?? '').trim() || undefined;
+    await this.router.navigate(['/account/login'], { queryParams: { email, next: '/checkout' } });
+  }
+
   async submit(): Promise<void> {
     this.error.set(null);
-
-    if (!this.auth.isAuthenticated()) {
-      await this.router.navigateByUrl('/account/login');
-      return;
-    }
 
     if (!this.items().length) {
       this.error.set('Your cart is empty.');
@@ -103,8 +184,16 @@ export class CheckoutComponent {
       return;
     }
 
+    // If the email is already registered, guide user to log in instead of attempting registration.
+    if (!this.auth.isAuthenticated() && this.emailAlreadyRegistered()) {
+      return;
+    }
+
     this.submitting.set(true);
     try {
+      const ok = await this.ensureAuthenticatedForCheckout();
+      if (!ok) return;
+
       const v = this.form.value;
       const shippingName = `${v.firstName} ${v.lastName}`.trim();
 
