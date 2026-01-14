@@ -314,6 +314,7 @@ h2 {
   background-size: cover;
   background-repeat: no-repeat;
   transform: scale(1.02);
+  transition: transform 0.4s ease;
 }
 
 .collectionTile__shade {
@@ -377,6 +378,12 @@ h2 {
   transform: translateY(-16px);
 }
 
+.collectionTile:hover .collectionTile__bg,
+.collectionTile:focus-visible .collectionTile__bg,
+.collectionTile:focus-within .collectionTile__bg {
+  transform: scale(1.08);
+}
+
 @media (hover: none) {
   /* On touch devices, show CTA by default (no hover). */
   .collectionTile__cta {
@@ -385,6 +392,9 @@ h2 {
   }
   .collectionTile__title {
     transform: translateY(-12px);
+  }
+  .collectionTile__bg {
+    transform: scale(1.08);
   }
 }
 
@@ -403,6 +413,12 @@ h2 {
   .collectionTile:focus-visible .collectionTile__title,
   .collectionTile:focus-within .collectionTile__title {
     transform: translateY(-8px);
+  }
+
+  .collectionTile:hover .collectionTile__bg,
+  .collectionTile:focus-visible .collectionTile__bg,
+  .collectionTile:focus-within .collectionTile__bg {
+    transform: scale(1.08);
   }
 }
 
