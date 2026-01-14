@@ -62,7 +62,7 @@
               [price]="p.price"
               [imageUrl]="p.imageUrl || null"
               [imageAlt]="p.name"
-              [link]="'/collections/all-products/products/' + p.slug"
+              [link]="'/products/' + p.slug"
               addMode="icon"
               (add)="addBestSellerToCart(p)"
             />
@@ -147,7 +147,7 @@
               [price]="p.price"
               [imageUrl]="p.imageUrl || null"
               [imageAlt]="p.name"
-              [link]="'/collections/all-products/products/' + p.slug"
+              [link]="'/products/' + p.slug"
               addMode="icon"
               (add)="addBestSellerToCart(p)"
             />
