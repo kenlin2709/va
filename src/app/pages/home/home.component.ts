@@ -5,6 +5,7 @@ import { ProductCardComponent } from '../../ui/product-card/product-card.compone
 import { PRODUCT_CATALOG } from '../../shared/product-catalog';
 import { firstValueFrom } from 'rxjs';
 import { CategoriesApiService, Category } from '../../shared/api/categories-api.service';
+import { ProductsApiService } from '../../shared/api/products-api.service';
 import { CartService } from '../../shared/cart/cart.service';
 
 type Product = { name: string; category: string; price: string; imageUrl?: string };
@@ -31,6 +32,7 @@ export class HomeComponent {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly categoriesApi = inject(CategoriesApiService);
+  private readonly productsApi = inject(ProductsApiService);
   private readonly cart = inject(CartService);
 
   readonly bestSellerBreakpoints = {
@@ -83,6 +85,7 @@ export class HomeComponent {
   private swipeStartY = 0;
 
   readonly apiCategories = signal<Category[]>([]);
+  readonly apiProducts = signal<any[]>([]);
 
   readonly collectionsForView = computed(() => {
     const cats = this.apiCategories();
@@ -125,6 +128,7 @@ export class HomeComponent {
     if (!this.isBrowser) return;
     this.startAutoRotate();
     void this.loadCategories();
+    void this.loadProducts();
   }
 
   ngOnDestroy(): void {
@@ -198,13 +202,35 @@ export class HomeComponent {
     }
   }
 
-  readonly bestSellers = PRODUCT_CATALOG.map((p) => ({
-    slug: p.slug,
-    name: p.title,
-    price: `$${p.price.toFixed(2)}`,
-    imageUrl: p.images[0],
-    priceNumber: p.price,
-  }));
+  private async loadProducts(): Promise<void> {
+    try {
+      const products = await firstValueFrom(this.productsApi.list({ limit: 8 }));
+      this.apiProducts.set(products.items);
+    } catch {
+      // keep fallback to static catalog
+    }
+  }
+
+  readonly bestSellers = computed(() => {
+    const apiProducts = this.apiProducts();
+    if (apiProducts.length > 0) {
+      return apiProducts.slice(0, 8).map((p: any) => ({
+        slug: p._id,
+        name: p.name,
+        price: `$${p.price.toFixed(2)}`,
+        imageUrl: p.productImageUrl || '',
+        priceNumber: p.price,
+      }));
+    }
+    // Fallback to static catalog
+    return PRODUCT_CATALOG.map((p) => ({
+      slug: p.slug,
+      name: p.title,
+      price: `$${p.price.toFixed(2)}`,
+      imageUrl: p.images[0],
+      priceNumber: p.price,
+    }));
+  });
 
   readonly features: Feature[] = [
     {

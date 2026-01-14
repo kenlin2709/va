@@ -55,7 +55,7 @@
           speed="450"
           [breakpoints]="bestSellerBreakpoints"
         >
-          <swiper-slide *ngFor="let p of bestSellers">
+          <swiper-slide *ngFor="let p of bestSellers()">
             <app-product-card
               class="mt-4"
               [title]="p.name"
@@ -146,7 +146,7 @@
           speed="450"
           [breakpoints]="bestSellerBreakpoints"
         >
-          <swiper-slide *ngFor="let p of bestSellers">
+          <swiper-slide *ngFor="let p of bestSellers()">
             <app-product-card
               class="mt-4"
               [title]="p.name"
