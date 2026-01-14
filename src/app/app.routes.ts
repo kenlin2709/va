@@ -126,5 +126,9 @@ export const routes: Routes = [
   {
     path: 'contact',
     loadComponent: () => import('./pages/contact/contact.component').then((m) => m.ContactComponent),
+  },
+  {
+    path: 'refund-policy',
+    loadComponent: () => import('./pages/refund-policy/refund-policy.component').then((m) => m.RefundPolicyComponent),
   }
 ];

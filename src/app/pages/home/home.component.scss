@@ -5,7 +5,7 @@
 
 .hero__frame {
   position: relative;
-  height: clamp(360px, 54vh, 620px);
+  height: clamp(480px, 70vh, 800px);
   overflow: hidden;
   touch-action: pan-y;
 }
@@ -13,7 +13,7 @@
 /* Give the hero more vertical room on small screens */
 @media (max-width: 520px) {
   .hero__frame {
-    height: clamp(520px, 78vh, 760px);
+    height: clamp(600px, 85vh, 900px);
   }
 
   .hero__bottle {
@@ -133,122 +133,122 @@
   gap: 10px;
 }
 
-/* Vape Lab Standard Section */
-.section--vape-lab {
-  position: relative;
-  background: #ffffff;
-  border-radius: 16px;
-  border: 1px solid rgba(11, 11, 16, 0.12);
-  margin: 3rem 0;
-}
-
-.split--vape-lab {
-  position: relative;
-  z-index: 1;
-  background: #ffffff;
-  border: none;
-  border-radius: 0;
-  padding: 2rem;
-  display: grid;
-  gap: 2rem;
-  align-items: center;
-}
-
-.split--vape-lab .split__left {
-  max-width: 480px;
-}
-
-.split--vape-lab .split__left h2 {
-  font-size: clamp(2rem, 4vw, 2.8rem);
-  font-weight: var(--fw-black);
-  letter-spacing: -0.02em;
-  color: var(--text);
-  margin: 0 0 1rem 0;
-}
-
-.split--vape-lab .split__left p {
+/* Vape Lab Standards Section */
+.section__subtitle {
   font-size: 1.1rem;
-  line-height: 1.6;
   color: var(--muted);
-  margin: 0 0 1.5rem 0;
-  font-weight: 500;
+  margin: 1rem 0 0 0;
+  text-align: center;
+  max-width: 600px;
+  margin: 1rem auto 0;
+  line-height: 1.6;
 }
 
-.split--vape-lab .btn--primary {
-  background: #0b0b10;
-  border: none;
-  color: white;
-  font-weight: var(--fw-bold);
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  font-size: 0.95rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
-  transition: all 0.3s ease;
+.standards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin: 3rem 0 2rem;
+  max-width: 1200px;
+  margin: 3rem auto 2rem;
 }
 
-.split--vape-lab .btn--primary:hover {
-  transform: translateY(-2px);
-  background: #1a1a1a;
-}
-
-.feature--enhanced {
+.standard-card {
   background: #ffffff;
   border: 1px solid rgba(11, 11, 16, 0.12);
   border-radius: 16px;
-  padding: 1.25rem;
+  padding: 2rem 1.5rem;
+  text-align: center;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(11, 11, 16, 0.06);
 }
 
-.feature--enhanced:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(11, 11, 16, 0.12);
+.standard-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(11, 11, 16, 0.15);
+  border-color: rgba(217, 122, 43, 0.2);
 }
 
-.feature--enhanced .feature__icon {
-  background: rgba(11, 11, 16, 0.03);
-  border: 1px solid rgba(11, 11, 16, 0.08);
+.standard-card__icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(217, 122, 43, 0.1), rgba(255, 138, 31, 0.1));
+  border: 2px solid rgba(217, 122, 43, 0.2);
+  display: grid;
+  place-items: center;
+  margin: 0 auto 1.5rem;
 }
 
-.feature--enhanced .feature__icon svg {
-  fill: #0b0b10;
-  opacity: 0.8;
+.standard-card__icon svg {
+  width: 32px;
+  height: 32px;
+  fill: #d97a2b;
 }
 
-.feature--enhanced .feature__title {
-  color: var(--text);
+.standard-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.standard-card__title {
+  font-size: 1.25rem;
   font-weight: var(--fw-bold);
-  font-size: 1.05rem;
+  color: var(--text);
+  margin: 0;
+  letter-spacing: -0.01em;
 }
 
-.feature--enhanced .feature__desc {
-  color: var(--muted);
+.standard-card__desc {
   font-size: 0.95rem;
+  color: var(--muted);
   line-height: 1.5;
+  margin: 0;
 }
 
-@media (min-width: 760px) {
-  .split--vape-lab {
-    grid-template-columns: 1fr 1.3fr;
-    padding: 3rem 2.5rem;
-    gap: 3rem;
-  }
-
-  .section--vape-lab {
-    margin: 4rem 0;
-  }
+.section__actions {
+  text-align: center;
+  margin-top: 2rem;
 }
 
-@media (max-width: 759px) {
-  .section--vape-lab {
-    margin: 2rem 1rem;
-    border-radius: 20px;
-  }
-
-  .split--vape-lab {
-    padding: 1.5rem;
+/* Responsive Design */
+@media (max-width: 968px) {
+  .standards-grid {
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
+    margin: 2.5rem 0 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .standards-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin: 2rem 0 1.5rem;
+  }
+
+  .standard-card {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .standard-card__icon {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 1.25rem;
+  }
+
+  .standard-card__icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .standard-card__title {
+    font-size: 1.15rem;
+  }
+
+  .standard-card__desc {
+    font-size: 0.9rem;
   }
 }
 

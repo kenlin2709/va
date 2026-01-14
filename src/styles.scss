@@ -261,15 +261,26 @@ h2 {
 
 .grid--collections {
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  gap: 16px;
   max-width: 1000px;
   margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Very small screens - maintain 2 columns but with smaller gaps */
+@media (max-width: 480px) {
+  .grid--collections {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 0 0.5rem;
+  }
 }
 
 @media (min-width: 720px) {
   .grid--collections {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 22px;
+    padding: 0 1rem;
   }
 }
 
@@ -277,6 +288,7 @@ h2 {
   .grid--collections {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 26px;
+    padding: 0 1rem;
   }
 }
 
@@ -285,7 +297,7 @@ h2 {
   overflow: hidden;
   position: relative;
   aspect-ratio: 1 / 1;
-  min-height: 180px;
+  min-height: clamp(140px, 35vw, 180px);
   border: 1px solid rgba(11, 11, 16, 0.12);
   background:
     radial-gradient(120% 120% at 30% 20%, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0) 60%),
@@ -314,7 +326,7 @@ h2 {
   inset: 0;
   z-index: 1;
   text-align: center;
-  padding: 18px;
+  padding: clamp(12px, 6%, 18px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -333,9 +345,9 @@ h2 {
 .collectionTile__cta {
   position: absolute;
   left: 50%;
-  bottom: 63px;
-  width: 120px;
-  height: 44px;
+  bottom: clamp(40px, 22%, 63px);
+  width: clamp(100px, 60%, 120px);
+  height: clamp(36px, 12%, 44px);
   border-radius: 12px;
   display: inline-flex;
   align-items: center;
@@ -343,6 +355,7 @@ h2 {
   border: 1px solid rgba(255, 255, 255, 0.55);
   color: rgba(255, 255, 255, 0.92);
   font-weight: 750;
+  font-size: clamp(0.85rem, 2.5vw, 0.95rem);
   background: rgba(0, 0, 0, 0.16);
   backdrop-filter: blur(6px);
   opacity: 0;
@@ -371,7 +384,25 @@ h2 {
     transform: translate(-50%, 0);
   }
   .collectionTile__title {
-    transform: translateY(-16px);
+    transform: translateY(-12px);
+  }
+}
+
+/* Small screen adjustments */
+@media (max-width: 480px) {
+  .collectionTile__title {
+    font-size: clamp(1.2rem, 4vw, 1.4rem);
+  }
+
+  .collectionTile__cta {
+    bottom: clamp(30px, 18%, 40px);
+    transform: translate(-50%, 8px);
+  }
+
+  .collectionTile:hover .collectionTile__title,
+  .collectionTile:focus-visible .collectionTile__title,
+  .collectionTile:focus-within .collectionTile__title {
+    transform: translateY(-8px);
   }
 }
 
