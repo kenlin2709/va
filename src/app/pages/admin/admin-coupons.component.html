@@ -1,0 +1,125 @@
+<section class="adminPage">
+  <div class="adminPage__head">
+    <div>
+      <h1 class="adminPage__title">Coupons</h1>
+      <p class="adminPage__muted">Create and manage discount coupons for customers.</p>
+    </div>
+
+    <div class="adminPage__actions">
+      <button class="btnA btnA--ghost" type="button" (click)="reload()" [disabled]="loading()">Refresh</button>
+    </div>
+  </div>
+
+  <div class="adminNotice adminNotice--error" *ngIf="error()">{{ error() }}</div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="card__head">
+        <h2>Create coupon</h2>
+      </div>
+
+      <form class="formGrid" [formGroup]="form" (ngSubmit)="create()">
+        <label class="field field--full">
+          <span class="field__label">Customer</span>
+          <select class="field__input" formControlName="customerId">
+            <option value="">Select a customer</option>
+            <option *ngFor="let c of customers()" [value]="c._id">
+              {{ c.email }} ({{ c.firstName }} {{ c.lastName }})
+            </option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span class="field__label">Value ($)</span>
+          <input class="field__input" type="number" formControlName="value" min="0.01" step="0.01" placeholder="10.00" />
+        </label>
+
+        <label class="field">
+          <span class="field__label">Expiry Date (optional)</span>
+          <input class="field__input" type="date" formControlName="expiryDate" />
+        </label>
+
+        <label class="field field--full">
+          <span class="field__label">Description (optional)</span>
+          <input class="field__input" type="text" formControlName="description" placeholder="e.g. Welcome bonus" />
+        </label>
+
+        <div class="adminPage__actions" style="justify-content: flex-start;">
+          <button class="btnA btnA--primary" type="submit" [disabled]="loading()">Create Coupon</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card__head">
+        <h2>All coupons ({{ count() }})</h2>
+        <input
+          class="searchInput"
+          type="search"
+          placeholder="Search by code, email, name..."
+          [value]="q()"
+          (input)="setQuery($any($event.target).value)"
+        />
+      </div>
+
+      <div class="tableWrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Customer</th>
+              <th>Value</th>
+              <th>Status</th>
+              <th>Expiry</th>
+              <th class="table__actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="loading() && coupons().length === 0">
+              <td colspan="6" class="table__muted">Loading...</td>
+            </tr>
+            <tr *ngFor="let c of filtered()">
+              <td class="mono strong">{{ c.code }}</td>
+              <td>
+                <div class="customerCell">
+                  <span class="customerCell__email">{{ c.customerEmail || 'Unknown' }}</span>
+                  <span class="customerCell__name" *ngIf="c.customerName">{{ c.customerName }}</span>
+                </div>
+              </td>
+              <td class="mono">{{ formatMoney(c.value) }}</td>
+              <td>
+                <span class="pill" [class.pill--on]="c.active && !c.isUsed" [class.pill--off]="!c.active || c.isUsed">
+                  <ng-container *ngIf="c.isUsed">Used</ng-container>
+                  <ng-container *ngIf="!c.isUsed && c.active">Active</ng-container>
+                  <ng-container *ngIf="!c.isUsed && !c.active">Inactive</ng-container>
+                </span>
+              </td>
+              <td>{{ formatDate(c.expiryDate) }}</td>
+              <td class="table__actions">
+                <button
+                  class="btnA btnA--ghost"
+                  type="button"
+                  (click)="toggleActive(c)"
+                  [disabled]="loading() || c.isUsed"
+                >
+                  {{ c.active ? 'Disable' : 'Enable' }}
+                </button>
+                <button
+                  class="btnA btnA--ghost btnA--danger"
+                  type="button"
+                  (click)="delete(c)"
+                  [disabled]="loading()"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="!loading() && filtered().length === 0">
+              <td colspan="6" class="table__muted">No coupons found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

@@ -32,6 +32,16 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/account/account-orders.component').then((m) => m.AccountOrdersComponent),
       },
+      {
+        path: 'coupons',
+        loadComponent: () =>
+          import('./pages/account/account-coupons.component').then((m) => m.AccountCouponsComponent),
+      },
+      {
+        path: 'referrals',
+        loadComponent: () =>
+          import('./pages/account/account-referral.component').then((m) => m.AccountReferralComponent),
+      },
     ],
   },
   {
@@ -93,6 +103,11 @@ export const routes: Routes = [
         path: 'referrals',
         loadComponent: () =>
           import('./pages/admin/admin-referrals.component').then((m) => m.AdminReferralsComponent),
+      },
+      {
+        path: 'coupons',
+        loadComponent: () =>
+          import('./pages/admin/admin-coupons.component').then((m) => m.AdminCouponsComponent),
       },
       {
         path: 'settings',

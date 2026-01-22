@@ -98,6 +98,7 @@ export class OrdersApiService {
     shippingState?: string;
     shippingPostcode?: string;
     referralCode?: string;
+    couponCodes?: string[];
   }) {
     return this.http.post<Order>(`${this.baseUrl}/orders`, body);
   }

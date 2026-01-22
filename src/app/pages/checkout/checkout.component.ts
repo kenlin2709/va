@@ -8,8 +8,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { CartService } from '../../shared/cart/cart.service';
 import { AuthService } from '../../shared/auth/auth.service';
-import { OrdersApiService, ValidateReferralResponse } from '../../shared/api/orders-api.service';
+import { Order, OrdersApiService } from '../../shared/api/orders-api.service';
 import { AuthApiService } from '../../shared/api/auth-api.service';
+import { Coupon, CouponsApiService } from '../../shared/api/coupons-api.service';
+import { PaymentSummaryModalComponent } from '../../ui/payment-summary-modal/payment-summary-modal.component';
 
 function isMongoId(id: string): boolean {
   return /^[a-f\d]{24}$/i.test(id);
@@ -18,7 +20,7 @@ function isMongoId(id: string): boolean {
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, PaymentSummaryModalComponent],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,6 +29,7 @@ export class CheckoutComponent {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly ordersApi = inject(OrdersApiService);
+  private readonly couponsApi = inject(CouponsApiService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly authApi = inject(AuthApiService);
 
@@ -36,25 +39,31 @@ export class CheckoutComponent {
   readonly submitting = signal(false);
   readonly error = signal<string | null>(null);
   readonly emailAlreadyRegistered = signal(false);
+  readonly createdOrder = signal<Order | null>(null);
 
   readonly items = computed(() => this.cart.items());
   readonly subtotal = computed(() => this.cart.subtotal());
 
-  // Referral state
-  readonly referralValidation = signal<ValidateReferralResponse | null>(null);
-  readonly referralError = signal<string | null>(null);
-  readonly referralLoading = signal(false);
+  // Coupon state (up to 3 coupons)
+  readonly availableCoupons = signal<Coupon[]>([]);
+  readonly selectedCoupons = signal<Coupon[]>([]);
+  readonly couponsLoading = signal(false);
+  readonly maxCoupons = 3;
 
   readonly discountAmount = computed(() => {
-    const referral = this.referralValidation();
-    if (!referral) return 0;
-
+    let discount = 0;
     const subtotal = this.subtotal();
-    if (referral.discountType === 'percent') {
-      return Math.min(subtotal, (subtotal * referral.discountValue) / 100);
-    } else {
-      return Math.min(subtotal, referral.discountValue);
+
+    // Coupon discounts (fixed amounts, up to 3)
+    const coupons = this.selectedCoupons();
+    for (const coupon of coupons) {
+      const remaining = subtotal - discount;
+      if (remaining > 0) {
+        discount += Math.min(remaining, coupon.value);
+      }
     }
+
+    return discount;
   });
 
   readonly total = computed(() => Math.max(0, this.subtotal() - this.discountAmount()));
@@ -71,10 +80,6 @@ export class CheckoutComponent {
     state: ['', [Validators.required]],
     postcode: ['', [Validators.required]],
     phone: ['', [Validators.required]],
-  });
-
-  readonly referralForm = this.fb.group({
-    referralCode: [''],
   });
 
   constructor() {
@@ -105,18 +110,15 @@ export class CheckoutComponent {
       ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.emailAlreadyRegistered.set(false));
 
-    // Validate referral code when it changes
-    this.referralForm
-      .get('referralCode')
-      ?.valueChanges.pipe(
-        takeUntilDestroyed(this.destroyRef),
-        map((v) => String(v ?? '').trim()),
-        debounceTime(500),
-        distinctUntilChanged(),
-        filter((code) => code.length > 0),
-        switchMap((code) => this.validateReferralCode(code)),
-      )
-      .subscribe();
+    // Load available coupons when authenticated
+    effect(() => {
+      if (this.auth.isAuthenticated()) {
+        this.loadAvailableCoupons();
+      } else {
+        this.availableCoupons.set([]);
+        this.selectedCoupons.set([]);
+      }
+    });
 
     // Proactively detect existing emails after user finishes typing (debounced) so we can show a login link
     // without waiting for "Complete order".
@@ -201,19 +203,45 @@ export class CheckoutComponent {
     await this.router.navigate(['/account/login'], { queryParams: { email, next: '/checkout' } });
   }
 
-  private async validateReferralCode(code: string): Promise<void> {
-    this.referralLoading.set(true);
-    this.referralError.set(null);
+  async onPaymentModalClose(): Promise<void> {
+    this.createdOrder.set(null);
+    await this.router.navigateByUrl('/account/orders');
+  }
 
+  private async loadAvailableCoupons(): Promise<void> {
+    this.couponsLoading.set(true);
     try {
-      const response = await firstValueFrom(this.ordersApi.validateReferral(code));
-      this.referralValidation.set(response);
+      const coupons = await firstValueFrom(this.couponsApi.listMine());
+      this.availableCoupons.set(coupons);
     } catch (e: any) {
-      this.referralValidation.set(null);
-      this.referralError.set(e?.error?.message ?? 'Invalid referral code');
+      this.availableCoupons.set([]);
     } finally {
-      this.referralLoading.set(false);
+      this.couponsLoading.set(false);
     }
+  }
+
+  toggleCoupon(couponCode: string, selected: boolean): void {
+    const coupon = this.availableCoupons().find((c) => c.code === couponCode);
+    if (!coupon) return;
+
+    const current = this.selectedCoupons();
+    if (selected) {
+      // Add coupon if not already selected and under limit
+      if (current.length < this.maxCoupons && !current.some((c) => c.code === couponCode)) {
+        this.selectedCoupons.set([...current, coupon]);
+      }
+    } else {
+      // Remove coupon
+      this.selectedCoupons.set(current.filter((c) => c.code !== couponCode));
+    }
+  }
+
+  isCouponSelected(couponCode: string): boolean {
+    return this.selectedCoupons().some((c) => c.code === couponCode);
+  }
+
+  get totalCouponDiscount(): number {
+    return this.selectedCoupons().reduce((sum, c) => sum + c.value, 0);
   }
 
   async submit(): Promise<void> {
@@ -246,13 +274,13 @@ export class CheckoutComponent {
       if (!ok) return;
 
       const v = this.form.value;
-      const referralV = this.referralForm.value;
       const shippingName = `${v.firstName} ${v.lastName}`.trim();
 
-      await firstValueFrom(
+      const couponCodes = this.selectedCoupons().map((c) => c.code);
+      const order = await firstValueFrom(
         this.ordersApi.create({
           items: this.items().map((it) => ({ productId: it.id, qty: it.qty })),
-          referralCode: String(referralV.referralCode ?? '').trim() || undefined,
+          couponCodes: couponCodes.length > 0 ? couponCodes : undefined,
           shippingName,
           shippingAddress1: v.address1!,
           shippingCity: v.city!,
@@ -262,7 +290,7 @@ export class CheckoutComponent {
       );
 
       this.cart.clear();
-      await this.router.navigateByUrl('/account/orders');
+      this.createdOrder.set(order);
     } catch (e: any) {
       this.error.set(e?.error?.message ?? e?.message ?? 'Failed to place order');
     } finally {

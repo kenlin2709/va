@@ -135,14 +135,30 @@
             <div class="sumPrice">{{ formatMoney(it.price * it.qty) }}</div>
           </div>
 
-          <div class="sumRow">
-            <form [formGroup]="referralForm" novalidate>
-              <input class="sumCode" type="text" placeholder="Referral code" formControlName="referralCode" />
-            </form>
-            <div *ngIf="referralLoading()" class="sumCode__loading">Validating…</div>
-            <div *ngIf="referralError()" class="sumCode__error">{{ referralError() }}</div>
-            <div *ngIf="referralValidation()" class="sumCode__success">
-              ✓ {{ referralValidation()?.programName }} applied
+          <div class="sumCoupons" *ngIf="auth.isAuthenticated() && availableCoupons().length > 0">
+            <div class="sumCoupons__label">Select coupons (up to 3)</div>
+            <div class="sumCouponList">
+              <label
+                class="sumCouponItem"
+                *ngFor="let coupon of availableCoupons()"
+                [class.sumCouponItem--selected]="isCouponSelected(coupon.code)"
+                [class.sumCouponItem--disabled]="!isCouponSelected(coupon.code) && selectedCoupons().length >= maxCoupons"
+              >
+                <input
+                  type="checkbox"
+                  [checked]="isCouponSelected(coupon.code)"
+                  [disabled]="!isCouponSelected(coupon.code) && selectedCoupons().length >= maxCoupons"
+                  (change)="toggleCoupon(coupon.code, $any($event.target).checked)"
+                />
+                <div class="sumCouponItem__info">
+                  <span class="sumCouponItem__code">{{ coupon.code }}</span>
+                  <span class="sumCouponItem__value">{{ formatMoney(coupon.value) }} off</span>
+                  <span class="sumCouponItem__desc" *ngIf="coupon.description">{{ coupon.description }}</span>
+                </div>
+              </label>
+            </div>
+            <div *ngIf="selectedCoupons().length > 0" class="sumCode__success">
+              ✓ {{ selectedCoupons().length }} coupon{{ selectedCoupons().length > 1 ? 's' : '' }} applied ({{ formatMoney(totalCouponDiscount) }} off)
             </div>
           </div>
 
@@ -151,7 +167,7 @@
             <div>{{ formatMoney(subtotal()) }}</div>
           </div>
           <div class="sumLine" *ngIf="discountAmount() > 0">
-            <div class="muted">Referral discount</div>
+            <div class="muted">Discount</div>
             <div class="sumDiscount">-{{ formatMoney(discountAmount()) }}</div>
           </div>
           <div class="sumLine">
@@ -168,5 +184,10 @@
     </div>
   </div>
 </section>
+
+<app-payment-summary-modal
+  [order]="createdOrder()"
+  (close)="onPaymentModalClose()"
+></app-payment-summary-modal>
 
 

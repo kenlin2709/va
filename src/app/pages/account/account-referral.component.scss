@@ -1,0 +1,199 @@
+.acctCard {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  padding: 1.15rem;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.05);
+}
+
+.acctCard__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.acctCard__title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 850;
+}
+
+.acctCard__muted {
+  margin: 0.25rem 0 0;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 650;
+}
+
+.acctNote {
+  padding: 0.9rem;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.acctNote__title {
+  font-weight: 850;
+  margin-bottom: 0.25rem;
+}
+
+.acctNote__sub {
+  color: rgba(0, 0, 0, 0.75);
+  font-weight: 650;
+}
+
+.acctNote a {
+  color: #111;
+  font-weight: 800;
+  text-decoration: underline;
+}
+
+.referralContent {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.referralBanner {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.referralBanner__icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.referralBanner__title {
+  font-size: 1.25rem;
+  font-weight: 850;
+  color: rgb(6, 95, 70);
+  margin-bottom: 0.35rem;
+}
+
+.referralBanner__desc {
+  color: rgba(0, 0, 0, 0.7);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.referralSection {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.referralCode {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.referralCode__label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.referralCode__value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #111;
+  letter-spacing: 0.05em;
+}
+
+.referralLink {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.referralLink__label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.referralLink__row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.referralLink__input {
+  flex: 1;
+  height: 46px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  padding: 0 0.85rem;
+  background: #fff;
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.7);
+  min-width: 0;
+}
+
+.referralLink__btn {
+  height: 46px;
+  padding: 0 1.25rem;
+  border-radius: 12px;
+  border: 0;
+  background: #111;
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.referralLink__btn:hover {
+  background: #333;
+}
+
+.referralSteps {
+  padding: 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.referralSteps__title {
+  font-weight: 850;
+  margin-bottom: 0.75rem;
+}
+
+.referralStep {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0;
+}
+
+.referralStep + .referralStep {
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.referralStep__num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 850;
+  font-size: 0.85rem;
+}
+
+.referralStep__text {
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.75);
+}

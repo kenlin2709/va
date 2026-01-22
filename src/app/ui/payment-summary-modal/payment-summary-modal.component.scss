@@ -10,21 +10,21 @@
 .paymentModal__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
 }
 
 .paymentModal__panel {
   position: relative;
   z-index: 1;
-  width: min(520px, 100%);
+  width: min(680px, 100%);
   max-height: calc(100vh - 2rem);
   overflow-y: auto;
-  border-radius: 18px;
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.98);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fff;
   padding: 1.75rem;
-  box-shadow: var(--shadow);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 
 .paymentModal__close {
@@ -53,7 +53,7 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #22c55e, #16a34a);
+  background: #d97706;
   color: #fff;
   font-size: 1.75rem;
   display: flex;
@@ -66,13 +66,15 @@
   margin: 0 0 1.25rem;
   text-align: center;
   font-size: 1.35rem;
+  font-weight: 900;
   letter-spacing: -0.01em;
 }
 
 .paymentModal__orderNum {
-  background: rgba(0, 0, 0, 0.03);
-  border-radius: 10px;
-  padding: 0.875rem 1rem;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -80,12 +82,13 @@
 }
 
 .paymentModal__label {
-  font-size: 0.875rem;
-  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.9rem;
+  font-weight: 750;
+  color: rgba(0, 0, 0, 0.65);
 }
 
 .paymentModal__value {
-  font-weight: 600;
+  font-weight: 850;
   font-size: 0.95rem;
   letter-spacing: 0.02em;
 }
@@ -95,11 +98,11 @@
 }
 
 .paymentModal__sectionTitle {
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 1.05rem;
+  font-weight: 900;
   margin: 0 0 0.75rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .paymentModal__items {
@@ -109,66 +112,70 @@
 .paymentModal__item {
   display: flex;
   justify-content: space-between;
-  padding: 0.375rem 0;
-  font-size: 0.875rem;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
 }
 
 .paymentModal__itemName {
   color: rgba(0, 0, 0, 0.75);
+  font-weight: 750;
 }
 
 .paymentModal__itemPrice {
-  font-weight: 500;
+  font-weight: 850;
 }
 
 .paymentModal__totals {
-  border-top: 1px solid var(--border);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
   padding-top: 0.75rem;
 }
 
 .paymentModal__row {
   display: flex;
   justify-content: space-between;
-  padding: 0.25rem 0;
-  font-size: 0.875rem;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
 
   &--total {
-    font-weight: 600;
-    font-size: 1rem;
-    padding-top: 0.5rem;
+    font-weight: 900;
+    font-size: 1.15rem;
+    padding-top: 0.75rem;
     margin-top: 0.25rem;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
   }
 }
 
 .paymentModal__discount {
   color: #16a34a;
+  font-weight: 700;
 }
 
 .paymentModal__bankNote {
-  font-size: 0.875rem;
-  color: rgba(0, 0, 0, 0.7);
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.65);
+  font-weight: 650;
   margin: 0 0 0.75rem;
-  line-height: 1.5;
+  line-height: 1.55;
 
   &--small {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     margin-top: 0.75rem;
     margin-bottom: 0;
   }
 }
 
 .paymentModal__bankDetails {
-  background: rgba(0, 0, 0, 0.03);
-  border-radius: 10px;
-  padding: 0.75rem 1rem;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 0.85rem 0.9rem;
 }
 
 .paymentModal__bankRow {
   display: flex;
   justify-content: space-between;
-  padding: 0.375rem 0;
-  font-size: 0.875rem;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
 
   &:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
@@ -177,26 +184,27 @@
 
 .paymentModal__bankLabel {
   color: rgba(0, 0, 0, 0.6);
+  font-weight: 650;
 }
 
 .paymentModal__bankValue {
-  font-weight: 500;
+  font-weight: 750;
 
   &--highlight {
-    color: #2563eb;
-    font-weight: 600;
+    color: #d97706;
+    font-weight: 850;
   }
 }
 
 .paymentModal__btn {
   width: 100%;
-  padding: 0.875rem 1.5rem;
+  height: 52px;
   border: none;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  border-radius: 12px;
+  background: #d97706;
   color: #fff;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 900;
   cursor: pointer;
   transition: opacity 0.2s;
 

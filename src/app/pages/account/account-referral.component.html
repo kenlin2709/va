@@ -1,0 +1,60 @@
+<div class="acctCard">
+  <div class="acctCard__head">
+    <div>
+      <h1 class="acctCard__title">Refer a Friend</h1>
+      <p class="acctCard__muted">Share your referral link and earn rewards.</p>
+    </div>
+  </div>
+
+  <div class="acctNote" *ngIf="!auth.isAuthenticated()">
+    <div class="acctNote__title">Log in to see your referral link</div>
+    <div class="acctNote__sub">
+      <a [routerLink]="['/account/login']">Log in</a>
+      or
+      <a [routerLink]="['/account/register']">create an account</a>.
+    </div>
+  </div>
+
+  <div class="referralContent" *ngIf="auth.isAuthenticated()">
+    <div class="referralBanner">
+      <div class="referralBanner__icon">🎁</div>
+      <div class="referralBanner__text">
+        <div class="referralBanner__title">Give $2, Get $2</div>
+        <div class="referralBanner__desc">Share your referral link with friends. When they sign up, you'll both receive a <strong>$2 coupon</strong>!</div>
+      </div>
+    </div>
+
+    <div class="referralSection" *ngIf="customer()?.referralCode">
+      <div class="referralCode">
+        <span class="referralCode__label">Your referral code</span>
+        <span class="referralCode__value">{{ customer()?.referralCode }}</span>
+      </div>
+
+      <div class="referralLink">
+        <span class="referralLink__label">Your referral link</span>
+        <div class="referralLink__row">
+          <input class="referralLink__input" type="text" [value]="referralLink()" readonly />
+          <button class="referralLink__btn" type="button" (click)="copyReferralLink()">
+            {{ copied() ? 'Copied!' : 'Copy' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="referralSteps">
+      <div class="referralSteps__title">How it works</div>
+      <div class="referralStep">
+        <div class="referralStep__num">1</div>
+        <div class="referralStep__text">Share your unique referral link with friends</div>
+      </div>
+      <div class="referralStep">
+        <div class="referralStep__num">2</div>
+        <div class="referralStep__text">Your friend signs up using your link</div>
+      </div>
+      <div class="referralStep">
+        <div class="referralStep__num">3</div>
+        <div class="referralStep__text">You both receive a $2 coupon to use on your next order</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,88 @@
+<div class="acctCard">
+  <div class="acctCard__head">
+    <div>
+      <h1 class="acctCard__title">My Coupons</h1>
+      <p class="acctCard__muted">View and manage your discount coupons.</p>
+    </div>
+    <button class="acctBtn acctBtn--ghost" type="button" (click)="load()" [disabled]="loading()">
+      Refresh
+    </button>
+  </div>
+
+  <div class="acctNote" *ngIf="!auth.isAuthenticated()">
+    <div class="acctNote__title">Log in to see your coupons</div>
+    <div class="acctNote__sub">
+      <a [routerLink]="['/account/login']">Log in</a>
+      or
+      <a [routerLink]="['/account/register']">create an account</a>.
+    </div>
+  </div>
+
+  <div class="acctError" *ngIf="error()">{{ error() }}</div>
+
+  <div class="couponCards" *ngIf="auth.isAuthenticated()">
+    <div class="couponCard muted" *ngIf="loading()">Loading…</div>
+
+    <div class="couponCard" *ngFor="let c of coupons()" [class.couponCard--used]="c.isUsed || !c.active || isExpired(c)">
+      <div class="couponCard__top">
+        <div class="couponCard__left">
+          <div class="couponCard__code mono">{{ c.code }}</div>
+          <div class="couponCard__value">{{ formatMoney(c.value) }} off</div>
+        </div>
+        <span class="pill" [class.pill--on]="getStatusClass(c) === 'pill--on'" [class.pill--off]="getStatusClass(c) === 'pill--off'">
+          {{ getStatus(c) }}
+        </span>
+      </div>
+      <div class="couponCard__meta">
+        <div class="couponCard__row" *ngIf="c.description">
+          <span class="muted">Description</span>
+          <span>{{ c.description }}</span>
+        </div>
+        <div class="couponCard__row">
+          <span class="muted">Expiry</span>
+          <span [class.expired]="isExpired(c)">{{ formatDate(c.expiryDate) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="couponCard muted" *ngIf="!loading() && coupons().length === 0">
+      No coupons yet. Coupons will appear here when assigned to your account.
+    </div>
+  </div>
+
+  <div class="tableWrap" *ngIf="auth.isAuthenticated()">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Value</th>
+          <th>Status</th>
+          <th>Description</th>
+          <th>Expiry</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="loading()">
+          <td colspan="5" class="muted">Loading…</td>
+        </tr>
+        <tr *ngFor="let c of coupons()" [class.row--used]="c.isUsed || !c.active || isExpired(c)">
+          <td class="mono strong">{{ c.code }}</td>
+          <td class="strong success">{{ formatMoney(c.value) }}</td>
+          <td>
+            <span class="pill" [class.pill--on]="getStatusClass(c) === 'pill--on'" [class.pill--off]="getStatusClass(c) === 'pill--off'">
+              {{ getStatus(c) }}
+            </span>
+          </td>
+          <td>
+            <span *ngIf="c.description">{{ c.description }}</span>
+            <span *ngIf="!c.description" class="muted">—</span>
+          </td>
+          <td [class.expired]="isExpired(c)">{{ formatDate(c.expiryDate) }}</td>
+        </tr>
+        <tr *ngIf="!loading() && coupons().length === 0">
+          <td colspan="5" class="muted">No coupons yet.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

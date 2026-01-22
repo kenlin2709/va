@@ -10,6 +10,7 @@ export type Customer = {
   firstName?: string;
   lastName?: string;
   phone?: string;
+  referralCode?: string;
   shippingAddress?: {
     fullName?: string;
     phone?: string;
@@ -30,6 +31,7 @@ export type RegisterRequest = {
   firstName?: string;
   lastName?: string;
   phone?: string;
+  referralCode?: string;
 };
 
 export type LoginRequest = {

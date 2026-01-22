@@ -38,6 +38,16 @@
   font-weight: 600;
 }
 
+.authCard__referral {
+  margin: 0 0 1rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: rgb(6, 95, 70);
+  font-weight: 600;
+}
+
 .authForm {
   display: grid;
   gap: 0.9rem;

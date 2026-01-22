@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -29,8 +29,6 @@ export class AccountSettingsComponent {
   readonly pwError = signal<string | null>(null);
   readonly pwSuccess = signal<string | null>(null);
 
-  readonly customer = computed(() => this.auth.customer());
-
   readonly form = this.fb.group({
     firstName: [''],
     lastName: [''],
@@ -53,7 +51,7 @@ export class AccountSettingsComponent {
 
   constructor() {
     effect(() => {
-      const c = this.customer();
+      const c = this.auth.customer();
       if (!c) return;
       const s = c.shippingAddress;
       this.form.patchValue(

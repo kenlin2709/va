@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../shared/auth/auth.service';
 
@@ -17,9 +17,11 @@ export class AccountRegisterComponent {
   private readonly fb = inject(FormBuilder);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
+  readonly referralCode = signal<string | null>(null);
 
   readonly form = this.fb.group({
     firstName: [''],
@@ -28,6 +30,16 @@ export class AccountRegisterComponent {
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8)]],
   });
+
+  constructor() {
+    // Get referral code from URL query params
+    this.route.queryParams.subscribe((params) => {
+      const ref = params['ref'];
+      if (ref) {
+        this.referralCode.set(ref);
+      }
+    });
+  }
 
   async submit(): Promise<void> {
     this.error.set(null);
@@ -44,6 +56,7 @@ export class AccountRegisterComponent {
         firstName: this.form.value.firstName || undefined,
         lastName: this.form.value.lastName || undefined,
         phone: this.form.value.phone || undefined,
+        referralCode: this.referralCode() || undefined,
       });
       await this.router.navigateByUrl('/');
     } catch (e: any) {

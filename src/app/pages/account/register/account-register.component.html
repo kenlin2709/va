@@ -4,6 +4,10 @@
       <h1 class="authCard__title">Create account</h1>
       <p class="authCard__sub">Create your account to track orders and checkout faster.</p>
 
+      <div class="authCard__referral" *ngIf="referralCode()">
+        You've been referred! You'll both receive a <strong>$2 coupon</strong> after signing up.
+      </div>
+
       <div class="authCard__error" *ngIf="error()">{{ error() }}</div>
 
       <form class="authForm" [formGroup]="form" (ngSubmit)="submit()">
