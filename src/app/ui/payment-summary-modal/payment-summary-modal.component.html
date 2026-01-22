@@ -1,0 +1,73 @@
+<div class="paymentModal" *ngIf="isOpen()" role="dialog" aria-modal="true">
+  <div class="paymentModal__backdrop" aria-hidden="true" (click)="onClose()"></div>
+  <div class="paymentModal__panel">
+    <button class="paymentModal__close" type="button" (click)="onClose()" aria-label="Close">×</button>
+
+    <div class="paymentModal__icon">✓</div>
+    <h2 class="paymentModal__title">Order Placed Successfully</h2>
+
+    <div class="paymentModal__orderNum">
+      <span class="paymentModal__label">Order Number</span>
+      <span class="paymentModal__value">{{ order()?.orderId || order()?._id }}</span>
+    </div>
+
+    <div class="paymentModal__section">
+      <h3 class="paymentModal__sectionTitle">Payment Summary</h3>
+      <div class="paymentModal__items">
+        <div class="paymentModal__item" *ngFor="let item of order()?.items">
+          <span class="paymentModal__itemName">{{ item.name }} × {{ item.qty }}</span>
+          <span class="paymentModal__itemPrice">{{ formatMoney(item.price * item.qty) }}</span>
+        </div>
+      </div>
+      <div class="paymentModal__totals">
+        <div class="paymentModal__row">
+          <span>Subtotal</span>
+          <span>{{ formatMoney(order()?.subtotal || 0) }}</span>
+        </div>
+        <div class="paymentModal__row" *ngIf="order()?.discountAmount">
+          <span>Discount</span>
+          <span class="paymentModal__discount">-{{ formatMoney(order()?.discountAmount || 0) }}</span>
+        </div>
+        <div class="paymentModal__row paymentModal__row--total">
+          <span>Total</span>
+          <span>{{ formatMoney(order()?.total || 0) }} AUD</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="paymentModal__section">
+      <h3 class="paymentModal__sectionTitle">Bank Details</h3>
+      <p class="paymentModal__bankNote">
+        Please make a transfer from your bank account using the details below.
+        Use your order number as the payment reference.
+      </p>
+      <div class="paymentModal__bankDetails">
+        <div class="paymentModal__bankRow">
+          <span class="paymentModal__bankLabel">Account Name</span>
+          <span class="paymentModal__bankValue">VLG Distribution Pty Ltd</span>
+        </div>
+        <div class="paymentModal__bankRow">
+          <span class="paymentModal__bankLabel">Bank</span>
+          <span class="paymentModal__bankValue">Westpac</span>
+        </div>
+        <div class="paymentModal__bankRow">
+          <span class="paymentModal__bankLabel">BSB</span>
+          <span class="paymentModal__bankValue">033090</span>
+        </div>
+        <div class="paymentModal__bankRow">
+          <span class="paymentModal__bankLabel">Account Number</span>
+          <span class="paymentModal__bankValue">693517</span>
+        </div>
+        <div class="paymentModal__bankRow">
+          <span class="paymentModal__bankLabel">Reference</span>
+          <span class="paymentModal__bankValue paymentModal__bankValue--highlight">{{ order()?.orderId || order()?._id }}</span>
+        </div>
+      </div>
+      <p class="paymentModal__bankNote paymentModal__bankNote--small">
+        Please email your payment receipt to <strong>hello&#64;vapelabgroup.com.au</strong> for confirmation.
+      </p>
+    </div>
+
+    <button class="paymentModal__btn" type="button" (click)="onClose()">Done</button>
+  </div>
+</div>

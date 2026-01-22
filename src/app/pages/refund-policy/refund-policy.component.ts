@@ -12,3 +12,4 @@ import { CommonModule } from '@angular/common';
 export class RefundPolicyComponent {
   // Component logic can be added here if needed
 }
+
