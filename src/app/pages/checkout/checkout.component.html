@@ -14,24 +14,77 @@
         <form class="coForm" [formGroup]="form" (ngSubmit)="submit()">
           <ng-container *ngIf="!auth.isAuthenticated()">
             <div class="co__sectionTitle">Account</div>
-            <div class="coHint">Create an account to complete checkout and track your order.</div>
 
-            <div class="coRow2">
-              <label class="coField">
-                <span>Email</span>
-                <input formControlName="email" type="email" autocomplete="email" />
-              </label>
+            <!-- Step 1: Email input -->
+            <ng-container *ngIf="verificationStep() === 'email'">
+              <div class="coHint">Enter your email to receive a verification code.</div>
+              <div class="coVerifyRow">
+                <label class="coField coField--grow">
+                  <span>Email</span>
+                  <input formControlName="email" type="email" autocomplete="email" />
+                </label>
+                <button
+                  class="coVerifyBtn"
+                  type="button"
+                  (click)="sendVerificationCode()"
+                  [disabled]="verificationLoading() || !form.get('email')?.valid">
+                  {{ verificationLoading() ? 'Sending...' : 'Send Code' }}
+                </button>
+              </div>
+              <div class="coHint" *ngIf="emailAlreadyRegistered()">
+                That email is already registered.
+                <button class="coLinkBtn" type="button" (click)="goToLogin()">Log in</button>
+                to continue checkout.
+              </div>
+            </ng-container>
+
+            <!-- Step 2: Verification code -->
+            <ng-container *ngIf="verificationStep() === 'verify'">
+              <div class="coHint">
+                We sent a code to <strong>{{ form.get('email')?.value }}</strong>
+                <button class="coLinkBtn" type="button" (click)="verificationStep.set('email')">Change</button>
+              </div>
+              <div class="coVerifyRow">
+                <label class="coField coField--grow">
+                  <span>Verification Code</span>
+                  <input
+                    [formControl]="verificationCodeControl"
+                    type="text"
+                    maxlength="6"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                  />
+                </label>
+                <button
+                  class="coVerifyBtn"
+                  type="button"
+                  (click)="verifyCode()"
+                  [disabled]="verificationLoading() || verificationCodeControl.invalid">
+                  {{ verificationLoading() ? 'Verifying...' : 'Verify' }}
+                </button>
+              </div>
+              <div class="coResend">
+                <ng-container *ngIf="verificationCooldown() > 0; else resendBtn">
+                  Resend code in {{ verificationCooldown() }}s
+                </ng-container>
+                <ng-template #resendBtn>
+                  <button class="coLinkBtn" type="button" (click)="resendCode()">Resend code</button>
+                </ng-template>
+              </div>
+            </ng-container>
+
+            <!-- Step 3: Password (after verification) -->
+            <ng-container *ngIf="verificationStep() === 'ready'">
+              <div class="coVerified">
+                ✓ Email verified: <strong>{{ form.get('email')?.value }}</strong>
+                <button class="coLinkBtn" type="button" (click)="verificationStep.set('email')">Change</button>
+              </div>
               <label class="coField">
                 <span>Password</span>
                 <input formControlName="password" type="password" autocomplete="new-password" />
+                <span class="coFieldHint">Minimum 8 characters. Creates your account.</span>
               </label>
-            </div>
-
-            <div class="coHint" *ngIf="emailAlreadyRegistered()">
-              That email is already registered.
-              <button class="coLinkBtn" type="button" (click)="goToLogin()">Log in</button>
-              to continue checkout.
-            </div>
+            </ng-container>
           </ng-container>
 
           <label class="coField">

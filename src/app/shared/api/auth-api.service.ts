@@ -27,12 +27,29 @@ export type Customer = {
 
 export type RegisterRequest = {
   email: string;
+  verificationToken: string;
   password: string;
   firstName?: string;
   lastName?: string;
   phone?: string;
   referralCode?: string;
+  shippingAddress?: {
+    fullName?: string;
+    phone?: string;
+    address1?: string;
+    address2?: string;
+    city?: string;
+    state?: string;
+    postcode?: string;
+    country?: string;
+  };
 };
+
+export type SendVerificationRequest = { email: string };
+export type SendVerificationResponse = { message: string };
+
+export type VerifyCodeRequest = { email: string; code: string };
+export type VerifyCodeResponse = { verificationToken: string };
 
 export type LoginRequest = {
   email: string;
@@ -48,6 +65,14 @@ export type AuthResponse = {
 export class AuthApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = inject(API_BASE_URL);
+
+  sendVerification(body: SendVerificationRequest) {
+    return this.http.post<SendVerificationResponse>(`${this.baseUrl}/auth/send-verification`, body);
+  }
+
+  verifyCode(body: VerifyCodeRequest) {
+    return this.http.post<VerifyCodeResponse>(`${this.baseUrl}/auth/verify-code`, body);
+  }
 
   register(body: RegisterRequest) {
     return this.http.post<AuthResponse>(`${this.baseUrl}/auth/register`, body);

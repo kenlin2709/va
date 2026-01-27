@@ -72,6 +72,56 @@
   color: rgba(0, 0, 0, 0.82);
 }
 
+// Verification flow styles
+.coVerifyRow {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.coField--grow {
+  flex: 1;
+}
+
+.coVerifyBtn {
+  height: 46px;
+  padding: 0 1.25rem;
+  border-radius: 10px;
+  background: #111;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.coVerifyBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.coVerified {
+  padding: 0.75rem 1rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 10px;
+  color: rgb(6, 95, 70);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.coResend {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.coFieldHint {
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.55);
+  font-weight: 500;
+}
+
 .co__error {
   margin: 0.75rem 0;
   padding: 0.75rem 0.9rem;

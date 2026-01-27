@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, computed, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { firstValueFrom, of } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
+import { firstValueFrom, of, interval } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, take, tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { CartService } from '../../shared/cart/cart.service';
@@ -40,6 +40,18 @@ export class CheckoutComponent {
   readonly error = signal<string | null>(null);
   readonly emailAlreadyRegistered = signal(false);
   readonly createdOrder = signal<Order | null>(null);
+
+  // Verification flow signals
+  readonly verificationStep = signal<'email' | 'verify' | 'ready'>('email');
+  readonly verificationToken = signal<string | null>(null);
+  readonly verificationCooldown = signal(0);
+  readonly verificationLoading = signal(false);
+
+  // Verification code form control
+  readonly verificationCodeControl = new FormControl('', [
+    Validators.required,
+    Validators.pattern(/^\d{6}$/),
+  ]);
 
   readonly items = computed(() => this.cart.items());
   readonly subtotal = computed(() => this.cart.subtotal());
@@ -86,19 +98,32 @@ export class CheckoutComponent {
     // Ensure we have customer info for prefilling.
     void this.auth.hydrateCustomer();
 
-    // If not authenticated, require email/password (create account or login) before placing order.
+    // Manage email/password controls based on auth state and verification step.
     effect(() => {
       const authed = this.auth.isAuthenticated();
+      const step = this.verificationStep();
       const emailCtrl = this.form.get('email');
       const passwordCtrl = this.form.get('password');
       if (!emailCtrl || !passwordCtrl) return;
 
       if (authed) {
+        // User is logged in, disable both
         emailCtrl.disable({ emitEvent: false });
         passwordCtrl.disable({ emitEvent: false });
       } else {
-        emailCtrl.enable({ emitEvent: false });
-        passwordCtrl.enable({ emitEvent: false });
+        // Email enabled only in 'email' step (before sending code)
+        if (step === 'email') {
+          emailCtrl.enable({ emitEvent: false });
+        } else {
+          emailCtrl.disable({ emitEvent: false });
+        }
+
+        // Password enabled only in 'ready' step (after email verified)
+        if (step === 'ready') {
+          passwordCtrl.enable({ emitEvent: false });
+        } else {
+          passwordCtrl.disable({ emitEvent: false });
+        }
 
         emailCtrl.updateValueAndValidity({ emitEvent: false });
         passwordCtrl.updateValueAndValidity({ emitEvent: false });
@@ -174,33 +199,106 @@ export class CheckoutComponent {
   private async ensureAuthenticatedForCheckout(): Promise<boolean> {
     if (this.auth.isAuthenticated()) return true;
 
-    const email = String(this.form.value.email ?? '').trim();
-    const password = String(this.form.value.password ?? '');
+    // Use verificationToken to register inline
+    const token = this.verificationToken();
+    if (!token) {
+      this.error.set('Please verify your email first.');
+      return false;
+    }
 
-    // Create account (creates session). If email already exists, show login link prompt.
     try {
+      const formValue = this.form.getRawValue();
+      const fullName = `${formValue.firstName || ''} ${formValue.lastName || ''}`.trim();
       await this.auth.register({
-        email,
-        password,
-        firstName: (this.form.value.firstName || '').trim() || undefined,
-        lastName: (this.form.value.lastName || '').trim() || undefined,
-        phone: (this.form.value.phone || '').trim() || undefined,
+        email: formValue.email!,
+        verificationToken: token,
+        password: formValue.password!,
+        firstName: formValue.firstName || undefined,
+        lastName: formValue.lastName || undefined,
+        phone: formValue.phone || undefined,
+        shippingAddress: {
+          fullName: fullName || undefined,
+          phone: formValue.phone || undefined,
+          address1: formValue.address1 || undefined,
+          address2: formValue.address2 || undefined,
+          city: formValue.city || undefined,
+          state: formValue.state || undefined,
+          postcode: formValue.postcode || undefined,
+          country: formValue.country || undefined,
+        },
       });
       return true;
     } catch (e: any) {
-      const msg = String(e?.error?.message ?? e?.message ?? '').toLowerCase();
-      const status = e?.status;
-      const looksLikeAlreadyExists = status === 409 || msg.includes('already') || msg.includes('exists');
-      if (!looksLikeAlreadyExists) throw e;
-
-      this.emailAlreadyRegistered.set(true);
+      this.error.set(e?.error?.message ?? 'Registration failed. Please try again.');
       return false;
     }
   }
 
   async goToLogin(): Promise<void> {
-    const email = String(this.form.value.email ?? '').trim() || undefined;
+    const email = String(this.form.get('email')?.value ?? '').trim() || undefined;
     await this.router.navigate(['/account/login'], { queryParams: { email, next: '/checkout' } });
+  }
+
+  async sendVerificationCode(): Promise<void> {
+    const email = String(this.form.get('email')?.value ?? '').trim();
+    if (!email || !this.form.get('email')?.valid) return;
+
+    this.error.set(null);
+    this.verificationLoading.set(true);
+
+    try {
+      await firstValueFrom(this.authApi.sendVerification({ email }));
+      this.verificationStep.set('verify');
+      this.startCooldown();
+    } catch (e: any) {
+      const msg = e?.error?.message ?? 'Failed to send verification code';
+      if (msg.toLowerCase().includes('already registered')) {
+        this.emailAlreadyRegistered.set(true);
+      } else {
+        this.error.set(msg);
+      }
+    } finally {
+      this.verificationLoading.set(false);
+    }
+  }
+
+  async verifyCode(): Promise<void> {
+    const email = String(this.form.get('email')?.value ?? '').trim();
+    const code = String(this.verificationCodeControl.value ?? '').trim();
+    if (!email || !code || this.verificationCodeControl.invalid) return;
+
+    this.error.set(null);
+    this.verificationLoading.set(true);
+
+    try {
+      const res = await firstValueFrom(this.authApi.verifyCode({ email, code }));
+      this.verificationToken.set(res.verificationToken);
+      this.verificationStep.set('ready');
+      this.verificationCodeControl.reset();
+    } catch (e: any) {
+      this.error.set(e?.error?.message ?? 'Invalid verification code');
+    } finally {
+      this.verificationLoading.set(false);
+    }
+  }
+
+  async resendCode(): Promise<void> {
+    if (this.verificationCooldown() > 0) return;
+    await this.sendVerificationCode();
+  }
+
+  private startCooldown(): void {
+    this.verificationCooldown.set(60);
+    interval(1000)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        take(60),
+        tap(() => {
+          const current = this.verificationCooldown();
+          if (current > 0) this.verificationCooldown.set(current - 1);
+        }),
+      )
+      .subscribe();
   }
 
   async onPaymentModalClose(): Promise<void> {
@@ -258,13 +356,27 @@ export class CheckoutComponent {
       return;
     }
 
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
+    // Check verification flow for non-authenticated users
+    if (!this.auth.isAuthenticated()) {
+      if (this.verificationStep() !== 'ready') {
+        this.error.set('Please verify your email first.');
+        return;
+      }
+
+      // Validate password when creating account
+      const password = this.form.get('password')?.value ?? '';
+      if (!password || password.length < 8) {
+        this.error.set('Password must be at least 8 characters.');
+        return;
+      }
+
+      if (this.emailAlreadyRegistered()) {
+        return;
+      }
     }
 
-    // If the email is already registered, guide user to log in instead of attempting registration.
-    if (!this.auth.isAuthenticated() && this.emailAlreadyRegistered()) {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
