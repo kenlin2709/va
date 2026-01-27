@@ -37,7 +37,7 @@ export type Order = {
   subtotal: number;
   discountAmount?: number;
   total: number;
-  status: 'pending' | 'paid' | 'shipped';
+  status: 'pending' | 'paid' | 'shipped' | 'canceled' | 'refunded';
   referralCodeUsed?: string;
   shippingName?: string;
   shippingAddress1?: string;
@@ -65,6 +65,55 @@ export type ValidateReferralResponse = {
   discountValue: number;
   programName: string;
 };
+
+export type MonthlyStat = {
+  year: number;
+  month: number;
+  totalSalesValue: number;
+  totalCouponUsed: number;
+  totalMoneyReceived: number;
+  canceledValue: number;
+  refundValue: number;
+  orderCount: number;
+};
+
+export type CategoryStat = {
+  categoryId: string | null;
+  categoryName: string;
+  totalSalesValue: number;
+  totalCouponUsed: number;
+  totalMoneyReceived: number;
+  canceledValue: number;
+  refundValue: number;
+};
+
+export type SalesAnalyticsResponse = {
+  monthlyStats: MonthlyStat[];
+  categoryStats: CategoryStat[];
+};
+
+export type DashboardStats = {
+  products: {
+    total: number;
+    lowStock: number;
+    outOfStock: number;
+  };
+  categories: {
+    total: number;
+  };
+  customers: {
+    total: number;
+  };
+  orders: {
+    total: number;
+    thisMonth: number;
+    pending: number;
+  };
+  revenue: {
+    total: number;
+    thisMonth: number;
+  };
+};
 @Injectable({ providedIn: 'root' })
 export class OrdersApiService {
   private readonly http = inject(HttpClient);
@@ -76,6 +125,10 @@ export class OrdersApiService {
 
   getMine(orderMongoId: string) {
     return this.http.get<Order>(`${this.baseUrl}/orders/my/${orderMongoId}`);
+  }
+
+  cancelMine(orderMongoId: string) {
+    return this.http.patch<Order>(`${this.baseUrl}/orders/my/${orderMongoId}/cancel`, {});
   }
 
   listAll() {
@@ -105,6 +158,14 @@ export class OrdersApiService {
 
   validateReferral(code: string) {
     return this.http.get<ValidateReferralResponse>(`${this.baseUrl}/orders/validate-referral/${encodeURIComponent(code)}`);
+  }
+
+  getSalesAnalytics() {
+    return this.http.get<SalesAnalyticsResponse>(`${this.baseUrl}/orders/sales`);
+  }
+
+  getDashboardStats() {
+    return this.http.get<DashboardStats>(`${this.baseUrl}/orders/dashboard`);
   }
 }
 

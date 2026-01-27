@@ -15,6 +15,7 @@ export class AdminLayoutComponent {
     { label: 'Products', icon: 'box', link: '/admin/products' },
     { label: 'Categories', icon: 'tag', link: '/admin/categories' },
     { label: 'Orders', icon: 'receipt', link: '/admin/orders' },
+    { label: 'Sales', icon: 'chart', link: '/admin/sales' },
     { label: 'Customers', icon: 'users', link: '/admin/customers' },
     { label: 'Referrals', icon: 'tag', link: '/admin/referrals' },
     { label: 'Coupons', icon: 'ticket', link: '/admin/coupons' },

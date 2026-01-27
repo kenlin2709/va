@@ -90,6 +90,11 @@ export const routes: Routes = [
           import('./pages/admin/admin-orders.component').then((m) => m.AdminOrdersComponent),
       },
       {
+        path: 'sales',
+        loadComponent: () =>
+          import('./pages/admin/admin-sales.component').then((m) => m.AdminSalesComponent),
+      },
+      {
         path: 'customers',
         loadComponent: () =>
           import('./pages/admin/admin-customers.component').then((m) => m.AdminCustomersComponent),

@@ -28,7 +28,11 @@
           <div class="orderCard__label">Order</div>
           <div class="orderCard__id mono">{{ orderDisplayId(o) }}</div>
         </div>
-        <span class="pill" [class.pill--on]="o.status === 'paid'" [class.pill--off]="o.status !== 'paid'">
+        <span class="pill"
+          [class.pill--on]="o.status === 'paid' || o.status === 'shipped'"
+          [class.pill--canceled]="o.status === 'canceled'"
+          [class.pill--refunded]="o.status === 'refunded'"
+          [class.pill--off]="o.status === 'pending'">
           {{ o.status }}
         </span>
       </div>
@@ -75,7 +79,11 @@
           <td class="muted">{{ o.createdAt ? (o.createdAt | date : 'medium') : '—' }}</td>
           <td class="mono">{{ orderDisplayId(o) }}</td>
           <td>
-            <span class="pill" [class.pill--on]="o.status === 'paid'" [class.pill--off]="o.status !== 'paid'">
+            <span class="pill"
+              [class.pill--on]="o.status === 'paid' || o.status === 'shipped'"
+              [class.pill--canceled]="o.status === 'canceled'"
+              [class.pill--refunded]="o.status === 'refunded'"
+              [class.pill--off]="o.status === 'pending'">
               {{ o.status }}
             </span>
           </td>
@@ -100,7 +108,11 @@
       <div>
         <div class="acctModal__title">Order {{ orderDisplayId(selected()!) }}</div>
         <div class="acctModal__sub">
-          <span class="pill" [class.pill--on]="selected()!.status === 'paid'" [class.pill--off]="selected()!.status !== 'paid'">
+          <span class="pill"
+            [class.pill--on]="selected()!.status === 'paid' || selected()!.status === 'shipped'"
+            [class.pill--canceled]="selected()!.status === 'canceled'"
+            [class.pill--refunded]="selected()!.status === 'refunded'"
+            [class.pill--off]="selected()!.status === 'pending'">
             {{ selected()!.status }}
           </span>
           <span class="acctModal__dot">•</span>
@@ -114,6 +126,7 @@
 
     <div class="acctModal__body">
       <div class="acctError" *ngIf="selectedError()">{{ selectedError() }}</div>
+      <div class="acctError" *ngIf="cancelError()">{{ cancelError() }}</div>
 
       <div class="acctModal__grid">
         <div class="card">
@@ -174,6 +187,16 @@
             <div class="totals__row"><span class="muted">Total</span><span class="strong">{{ formatMoney(selected()!.total) }}</span></div>
           </div>
         </div>
+      </div>
+
+      <div class="acctModal__footer" *ngIf="canCancel(selected()!)">
+        <button
+          class="cancelLink"
+          type="button"
+          (click)="cancelOrder()"
+          [disabled]="canceling()">
+          {{ canceling() ? 'Canceling...' : 'Cancel this order' }}
+        </button>
       </div>
     </div>
   </div>

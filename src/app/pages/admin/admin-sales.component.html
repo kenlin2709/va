@@ -1,0 +1,113 @@
+<section class="adminPage">
+  <div class="adminPage__head">
+    <div>
+      <h1 class="adminPage__title">Sales</h1>
+      <p class="adminPage__muted">View sales analytics by month and category.</p>
+    </div>
+
+    <div class="adminPage__actions">
+      <button class="refreshBtn" type="button" (click)="reload()" [disabled]="loading()">Refresh</button>
+    </div>
+  </div>
+
+  <div class="adminNotice" *ngIf="error()">{{ error() }}</div>
+
+  <div class="salesSection">
+    <div class="salesSection__header">
+      <h2 class="salesSection__title mb-4">Monthly Sales</h2>
+      <div class="filterGroup">
+        <label class="filterLabel">Year:</label>
+        <select
+          class="filterSelect"
+          [value]="selectedYear()"
+          (change)="setYear($any($event.target).value)">
+          <option value="all">All Time</option>
+          <option *ngFor="let year of availableYears()" [value]="year">{{ year }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="tableWrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Orders</th>
+            <th>Sales Value</th>
+            <th>Coupon Used</th>
+            <th>Money Received</th>
+            <th>Canceled</th>
+            <th>Refunded</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="loading()">
+            <td colspan="7" class="table__muted">Loading...</td>
+          </tr>
+          <tr *ngFor="let s of filteredMonthlyStats()">
+            <td class="strong">{{ formatMonth(s.year, s.month) }}</td>
+            <td>{{ s.orderCount }}</td>
+            <td class="strong">{{ formatMoney(s.totalSalesValue) }}</td>
+            <td class="table__muted">{{ formatMoney(s.totalCouponUsed) }}</td>
+            <td class="strong text-green">{{ formatMoney(s.totalMoneyReceived) }}</td>
+            <td class="text-red">{{ formatMoney(s.canceledValue) }}</td>
+            <td class="text-orange">{{ formatMoney(s.refundValue) }}</td>
+          </tr>
+          <tr *ngIf="!loading() && filteredMonthlyStats().length === 0">
+            <td colspan="7" class="table__muted">No sales data found.</td>
+          </tr>
+          <tr class="totalsRow" *ngIf="!loading() && filteredMonthlyStats().length > 0">
+            <td class="strong">Total</td>
+            <td class="strong">{{ monthlyTotals().orderCount }}</td>
+            <td class="strong">{{ formatMoney(monthlyTotals().totalSalesValue) }}</td>
+            <td class="strong">{{ formatMoney(monthlyTotals().totalCouponUsed) }}</td>
+            <td class="strong text-green">{{ formatMoney(monthlyTotals().totalMoneyReceived) }}</td>
+            <td class="strong text-red">{{ formatMoney(monthlyTotals().canceledValue) }}</td>
+            <td class="strong text-orange">{{ formatMoney(monthlyTotals().refundValue) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="salesSection">
+    <h2 class="salesSection__title mb-4">Sales by Category</h2>
+    <div class="tableWrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Sales Value</th>
+            <th>Coupon Used</th>
+            <th>Money Received</th>
+            <th>Canceled</th>
+            <th>Refunded</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="loading()">
+            <td colspan="6" class="table__muted">Loading...</td>
+          </tr>
+          <tr *ngFor="let s of categoryStats()">
+            <td class="strong">{{ s.categoryName }}</td>
+            <td class="strong">{{ formatMoney(s.totalSalesValue) }}</td>
+            <td class="table__muted">{{ formatMoney(s.totalCouponUsed) }}</td>
+            <td class="strong text-green">{{ formatMoney(s.totalMoneyReceived) }}</td>
+            <td class="text-red">{{ formatMoney(s.canceledValue) }}</td>
+            <td class="text-orange">{{ formatMoney(s.refundValue) }}</td>
+          </tr>
+          <tr *ngIf="!loading() && categoryStats().length === 0">
+            <td colspan="6" class="table__muted">No category data found.</td>
+          </tr>
+          <tr class="totalsRow" *ngIf="!loading() && categoryStats().length > 0">
+            <td class="strong">Total</td>
+            <td class="strong">{{ formatMoney(categoryTotals().totalSalesValue) }}</td>
+            <td class="strong">{{ formatMoney(categoryTotals().totalCouponUsed) }}</td>
+            <td class="strong text-green">{{ formatMoney(categoryTotals().totalMoneyReceived) }}</td>
+            <td class="strong text-red">{{ formatMoney(categoryTotals().canceledValue) }}</td>
+            <td class="strong text-orange">{{ formatMoney(categoryTotals().refundValue) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

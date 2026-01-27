@@ -4,6 +4,58 @@
   align-items: center;
 }
 
+.refreshBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 38px;
+  padding: 0 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #fff;
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.refreshBtn::before {
+  content: "↻";
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.refreshBtn:hover:not(:disabled) {
+  background: #fafafa;
+  border-color: rgba(0, 0, 0, 0.15);
+  color: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.refreshBtn:hover:not(:disabled)::before {
+  transform: rotate(180deg);
+}
+
+.refreshBtn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.refreshBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.refreshBtn:disabled::before {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 .adminTools {
   margin: 0.75rem 0 1rem;
 }
@@ -93,6 +145,18 @@
 .pill--off {
   background: rgba(0, 0, 0, 0.04);
   color: rgba(0, 0, 0, 0.65);
+}
+
+.pill--canceled {
+  background: rgba(220, 38, 38, 0.12);
+  border-color: rgba(220, 38, 38, 0.25);
+  color: rgb(153, 27, 27);
+}
+
+.pill--refunded {
+  background: rgba(217, 119, 6, 0.12);
+  border-color: rgba(217, 119, 6, 0.25);
+  color: rgb(146, 64, 14);
 }
 
 .rowLink {

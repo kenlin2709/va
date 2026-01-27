@@ -1,0 +1,224 @@
+.adminPage {
+  max-width: 1200px;
+}
+
+.adminPage__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.adminPage__title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.adminPage__muted {
+  margin: 0.25rem 0 0;
+  color: rgba(0, 0, 0, 0.55);
+  font-weight: 600;
+}
+
+.adminPage__actions {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.refreshBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 38px;
+  padding: 0 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #fff;
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.refreshBtn::before {
+  content: "↻";
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.refreshBtn:hover:not(:disabled) {
+  background: #fafafa;
+  border-color: rgba(0, 0, 0, 0.15);
+  color: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.refreshBtn:hover:not(:disabled)::before {
+  transform: rotate(180deg);
+}
+
+.refreshBtn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.refreshBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.refreshBtn:disabled::before {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.adminNotice {
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  background: rgba(220, 38, 38, 0.08);
+  color: rgb(153, 27, 27);
+  font-weight: 650;
+}
+
+.salesSection {
+  margin-bottom: 2.5rem;
+}
+
+.salesSection:last-child {
+  margin-bottom: 0;
+}
+
+.salesSection__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.salesSection__title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.filterLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.filterSelect {
+  height: 38px;
+  padding: 0 2.25rem 0 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat right 0.85rem center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  appearance: none;
+  min-width: 130px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.filterSelect:hover {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.tableWrap {
+  overflow: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 1rem 1.1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  vertical-align: middle;
+}
+
+.table th {
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.table tbody tr:hover {
+  background: rgba(0, 0, 0, 0.015);
+}
+
+.table__muted {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.strong {
+  font-weight: 800;
+}
+
+.text-green {
+  color: rgb(6, 95, 70);
+}
+
+.text-red {
+  color: rgb(180, 50, 50);
+}
+
+.text-orange {
+  color: rgb(180, 83, 9);
+}
+
+.totalsRow {
+  background: rgba(0, 0, 0, 0.035);
+}
+
+.totalsRow:hover {
+  background: rgba(0, 0, 0, 0.035) !important;
+}
+
+.totalsRow td {
+  border-bottom: none;
+  padding-top: 1.1rem;
+  padding-bottom: 1.1rem;
+  font-size: 0.95rem;
+}

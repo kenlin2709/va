@@ -1,31 +1,83 @@
 <section class="adminPage">
   <header class="adminPage__head">
-    <h1>Dashboard</h1>
-    <p class="adminPage__muted">Admin overview (placeholder)</p>
+    <div>
+      <h1 class="adminPage__title">Dashboard</h1>
+      <p class="adminPage__muted">Overview of your store</p>
+    </div>
+    <button class="refreshBtn" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
   </header>
 
-  <div class="dashGrid">
-    <article class="dashCard">
-      <div class="dashCard__label">Products</div>
-      <div class="dashCard__value">—</div>
-    </article>
-    <article class="dashCard">
-      <div class="dashCard__label">Categories</div>
-      <div class="dashCard__value">—</div>
-    </article>
-    <article class="dashCard">
-      <div class="dashCard__label">Orders</div>
-      <div class="dashCard__value">—</div>
-    </article>
-    <article class="dashCard">
-      <div class="dashCard__label">Customers</div>
-      <div class="dashCard__value">—</div>
-    </article>
+  <div class="adminNotice" *ngIf="error()">{{ error() }}</div>
+
+  <div class="dashGrid" *ngIf="stats()">
+    <a class="dashCard dashCard--link" routerLink="/admin/orders">
+      <div class="dashCard__icon" data-icon="revenue"></div>
+      <div class="dashCard__content">
+        <div class="dashCard__label">Revenue This Month</div>
+        <div class="dashCard__value">{{ formatMoney(stats()!.revenue.thisMonth) }}</div>
+        <div class="dashCard__sub">{{ formatMoney(stats()!.revenue.total) }} total</div>
+      </div>
+    </a>
+
+    <a class="dashCard dashCard--link" routerLink="/admin/orders">
+      <div class="dashCard__icon" data-icon="orders"></div>
+      <div class="dashCard__content">
+        <div class="dashCard__label">Orders</div>
+        <div class="dashCard__value">{{ stats()!.orders.thisMonth }} <span class="dashCard__unit">this month</span></div>
+        <div class="dashCard__sub">
+          {{ stats()!.orders.total }} total
+          <span class="dashCard__alert" *ngIf="stats()!.orders.pending > 0">{{ stats()!.orders.pending }} pending</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="dashCard dashCard--link" routerLink="/admin/products">
+      <div class="dashCard__icon" data-icon="products"></div>
+      <div class="dashCard__content">
+        <div class="dashCard__label">Products</div>
+        <div class="dashCard__value">{{ stats()!.products.total }}</div>
+        <div class="dashCard__sub">
+          <span class="dashCard__warn" *ngIf="stats()!.products.lowStock > 0">{{ stats()!.products.lowStock }} low stock</span>
+          <span class="dashCard__alert" *ngIf="stats()!.products.outOfStock > 0">{{ stats()!.products.outOfStock }} out of stock</span>
+          <span *ngIf="stats()!.products.lowStock === 0 && stats()!.products.outOfStock === 0">All stocked</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="dashCard dashCard--link" routerLink="/admin/customers">
+      <div class="dashCard__icon" data-icon="customers"></div>
+      <div class="dashCard__content">
+        <div class="dashCard__label">Customers</div>
+        <div class="dashCard__value">{{ stats()!.customers.total }}</div>
+        <div class="dashCard__sub">Registered accounts</div>
+      </div>
+    </a>
+
+    <a class="dashCard dashCard--link" routerLink="/admin/categories">
+      <div class="dashCard__icon" data-icon="categories"></div>
+      <div class="dashCard__content">
+        <div class="dashCard__label">Categories</div>
+        <div class="dashCard__value">{{ stats()!.categories.total }}</div>
+        <div class="dashCard__sub">Product categories</div>
+      </div>
+    </a>
+
+    <a class="dashCard dashCard--link" routerLink="/admin/sales">
+      <div class="dashCard__icon" data-icon="sales"></div>
+      <div class="dashCard__content">
+        <div class="dashCard__label">Sales Analytics</div>
+        <div class="dashCard__value dashCard__value--small">View Reports</div>
+        <div class="dashCard__sub">Monthly & category breakdown</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="dashGrid" *ngIf="loading()">
+    <div class="dashCard dashCard--loading" *ngFor="let i of [1,2,3,4,5,6]">
+      <div class="dashCard__content">
+        <div class="dashCard__label">Loading...</div>
+        <div class="dashCard__value">—</div>
+      </div>
+    </div>
   </div>
 </section>
-
-
-
-
-
-

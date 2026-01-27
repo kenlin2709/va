@@ -3,25 +3,40 @@
 }
 
 .adminPage__head {
-  margin-bottom: 14px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
 }
 
-.adminPage__head h1 {
+.adminPage__title {
   margin: 0;
-  font-size: 28px;
+  font-size: 1.75rem;
+  font-weight: 900;
   letter-spacing: -0.02em;
-  color: var(--a-text);
 }
 
 .adminPage__muted {
-  margin: 6px 0 0;
-  color: var(--a-muted);
+  margin: 0.25rem 0 0;
+  color: rgba(0, 0, 0, 0.55);
+  font-weight: 600;
+}
+
+.adminNotice {
+  margin-bottom: 1rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  background: rgba(220, 38, 38, 0.08);
+  color: rgb(153, 27, 27);
+  font-weight: 650;
 }
 
 .dashGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
 }
 
 @media (max-width: 1100px) {
@@ -30,24 +45,174 @@
   }
 }
 
+@media (max-width: 640px) {
+  .dashGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .dashCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
   border-radius: 16px;
-  background: var(--a-surface);
-  border: 1px solid var(--a-border);
-  padding: 14px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 1.25rem;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+
+.dashCard--link:hover {
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.dashCard--loading {
+  opacity: 0.6;
+}
+
+.dashCard__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dashCard__icon::before {
+  font-size: 1.5rem;
+}
+
+.dashCard__icon[data-icon="revenue"]::before {
+  content: "💰";
+}
+
+.dashCard__icon[data-icon="orders"]::before {
+  content: "📦";
+}
+
+.dashCard__icon[data-icon="products"]::before {
+  content: "🏷️";
+}
+
+.dashCard__icon[data-icon="customers"]::before {
+  content: "👥";
+}
+
+.dashCard__icon[data-icon="categories"]::before {
+  content: "📁";
+}
+
+.dashCard__icon[data-icon="sales"]::before {
+  content: "📊";
+}
+
+.dashCard__content {
+  flex: 1;
+  min-width: 0;
 }
 
 .dashCard__label {
-  font-size: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  color: var(--a-muted);
+  color: rgba(0, 0, 0, 0.5);
+  margin-bottom: 0.35rem;
 }
 
 .dashCard__value {
-  margin-top: 8px;
-  font-size: 26px;
-  font-weight: 800;
+  font-size: 1.75rem;
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
+.dashCard__value--small {
+  font-size: 1.1rem;
+}
 
+.dashCard__unit {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.dashCard__sub {
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  color: rgba(0, 0, 0, 0.55);
+  font-weight: 600;
+}
+
+.dashCard__alert {
+  color: rgb(185, 28, 28);
+  font-weight: 700;
+  margin-left: 0.5rem;
+}
+
+.dashCard__alert::before {
+  content: "• ";
+}
+
+.dashCard__warn {
+  color: rgb(180, 83, 9);
+  font-weight: 700;
+}
+
+.refreshBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 38px;
+  padding: 0 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #fff;
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.refreshBtn::before {
+  content: "↻";
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.refreshBtn:hover:not(:disabled) {
+  background: #fafafa;
+  border-color: rgba(0, 0, 0, 0.15);
+  color: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.refreshBtn:hover:not(:disabled)::before {
+  transform: rotate(180deg);
+}
+
+.refreshBtn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.refreshBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.refreshBtn:disabled::before {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

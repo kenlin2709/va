@@ -40,6 +40,35 @@
   color: #111;
 }
 
+.acctModal__footer {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+
+.cancelLink {
+  background: none;
+  border: none;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.cancelLink:hover:not(:disabled) {
+  color: rgb(153, 27, 27);
+  background: rgba(220, 38, 38, 0.06);
+}
+
+.cancelLink:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .acctNote {
   padding: 0.9rem;
   border-radius: 14px;
@@ -196,6 +225,18 @@ button.orderCard:hover {
 .pill--off {
   background: rgba(0, 0, 0, 0.04);
   color: rgba(0, 0, 0, 0.65);
+}
+
+.pill--canceled {
+  background: rgba(220, 38, 38, 0.12);
+  border-color: rgba(220, 38, 38, 0.25);
+  color: rgb(153, 27, 27);
+}
+
+.pill--refunded {
+  background: rgba(217, 119, 6, 0.12);
+  border-color: rgba(217, 119, 6, 0.25);
+  color: rgb(146, 64, 14);
 }
 
 .rowLink {

@@ -6,7 +6,7 @@
     </div>
 
     <div class="adminPage__actions">
-      <button class="btnA btnA--ghost" type="button" (click)="reload()" [disabled]="loading()">Refresh</button>
+      <button class="refreshBtn" type="button" (click)="reload()" [disabled]="loading()">Refresh</button>
     </div>
   </div>
 
@@ -46,7 +46,11 @@
           </td>
           <td class="mono">{{ o.customerEmail || o.customerId }}</td>
           <td>
-            <span class="pill" [class.pill--on]="o.status === 'paid'" [class.pill--off]="o.status !== 'paid'">
+            <span class="pill"
+              [class.pill--on]="o.status === 'paid' || o.status === 'shipped'"
+              [class.pill--canceled]="o.status === 'canceled'"
+              [class.pill--refunded]="o.status === 'refunded'"
+              [class.pill--off]="o.status === 'pending'">
               {{ o.status }}
             </span>
           </td>
@@ -68,7 +72,11 @@
       <div>
         <div class="adminModal__title">Order {{ orderDisplayId(selected()!) }}</div>
         <div class="adminModal__sub">
-          <span class="pill" [class.pill--on]="selected()!.status === 'paid'" [class.pill--off]="selected()!.status !== 'paid'">
+          <span class="pill"
+            [class.pill--on]="selected()!.status === 'paid' || selected()!.status === 'shipped'"
+            [class.pill--canceled]="selected()!.status === 'canceled'"
+            [class.pill--refunded]="selected()!.status === 'refunded'"
+            [class.pill--off]="selected()!.status === 'pending'">
             {{ selected()!.status }}
           </span>
           <span class="adminModal__dot">•</span>
@@ -88,6 +96,8 @@
               <option value="pending">pending</option>
               <option value="paid">paid</option>
               <option value="shipped">shipped</option>
+              <option value="canceled">canceled</option>
+              <option value="refunded">refunded</option>
             </select>
             <button class="btnA btnA--primary statusEdit__btn" type="button" (click)="saveStatus()" [disabled]="savingStatus()">
               {{ savingStatus() ? 'Saving…' : 'Save' }}

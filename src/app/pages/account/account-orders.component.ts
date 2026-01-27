@@ -24,6 +24,8 @@ export class AccountOrdersComponent {
   readonly selected = signal<Order | null>(null);
   readonly loadingSelected = signal(false);
   readonly selectedError = signal<string | null>(null);
+  readonly canceling = signal(false);
+  readonly cancelError = signal<string | null>(null);
 
   readonly hasOrders = computed(() => this.orders().length > 0);
 
@@ -52,13 +54,38 @@ export class AccountOrdersComponent {
 
   open(o: Order): void {
     this.selectedError.set(null);
+    this.cancelError.set(null);
     this.selected.set(o);
     void this.refreshSelected(o._id);
   }
 
   close(): void {
     this.selectedError.set(null);
+    this.cancelError.set(null);
     this.selected.set(null);
+  }
+
+  async cancelOrder(): Promise<void> {
+    const o = this.selected();
+    if (!o || o.status !== 'pending') return;
+
+    if (!confirm('Are you sure you want to cancel this order?')) return;
+
+    this.canceling.set(true);
+    this.cancelError.set(null);
+    try {
+      const updated = await firstValueFrom(this.api.cancelMine(o._id));
+      this.orders.set(this.orders().map((x) => (x._id === updated._id ? updated : x)));
+      this.selected.set(updated);
+    } catch (e: any) {
+      this.cancelError.set(e?.error?.message ?? e?.message ?? 'Failed to cancel order');
+    } finally {
+      this.canceling.set(false);
+    }
+  }
+
+  canCancel(o: Order): boolean {
+    return o.status === 'pending';
   }
 
   private async refreshSelected(id: string): Promise<void> {
