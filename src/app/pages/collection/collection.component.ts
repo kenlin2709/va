@@ -65,7 +65,7 @@ export class CollectionComponent {
 
   // UI state (drawer) — same as All Products page
   readonly isDrawerOpen = signal(false);
-  readonly sortKey = signal<SortKey>('featured');
+  readonly sortKey = signal<SortKey>('price_asc');
   readonly availability = signal<'all' | 'in' | 'out'>('all');
   readonly priceMin = signal<number | null>(null);
   readonly priceMax = signal<number | null>(null);

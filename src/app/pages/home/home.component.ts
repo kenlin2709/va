@@ -204,7 +204,7 @@ export class HomeComponent {
 
   private async loadProducts(): Promise<void> {
     try {
-      const products = await firstValueFrom(this.productsApi.list({ limit: 8 }));
+      const products = await firstValueFrom(this.productsApi.list({ limit: 200 }));
       this.apiProducts.set(products.items);
     } catch {
       // keep fallback to static catalog
@@ -214,22 +214,27 @@ export class HomeComponent {
   readonly bestSellers = computed(() => {
     const apiProducts = this.apiProducts();
     if (apiProducts.length > 0) {
-      return apiProducts.slice(0, 8).map((p: any) => ({
-        slug: p._id,
-        name: p.name,
-        price: `$${p.price.toFixed(2)}`,
-        imageUrl: p.productImageUrl || '',
-        priceNumber: p.price,
-      }));
+      return [...apiProducts]
+        .sort((a: any, b: any) => a.price - b.price)
+        .slice(0, 8)
+        .map((p: any) => ({
+          slug: p._id,
+          name: p.name,
+          price: `$${p.price.toFixed(2)}`,
+          imageUrl: p.productImageUrl || '',
+          priceNumber: p.price,
+        }));
     }
     // Fallback to static catalog
-    return PRODUCT_CATALOG.map((p) => ({
-      slug: p.slug,
-      name: p.title,
-      price: `$${p.price.toFixed(2)}`,
-      imageUrl: p.images[0],
-      priceNumber: p.price,
-    }));
+    return [...PRODUCT_CATALOG]
+      .sort((a, b) => a.price - b.price)
+      .map((p) => ({
+        slug: p.slug,
+        name: p.title,
+        price: `$${p.price.toFixed(2)}`,
+        imageUrl: p.images[0],
+        priceNumber: p.price,
+      }));
   });
 
   readonly features: Feature[] = [
