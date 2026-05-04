@@ -42,36 +42,140 @@ export class HomeComponent {
 
   readonly heroSlides: HeroSlide[] = [
     {
-      title: 'Sweet. Smooth.\nDecadent.',
-      subtitle: 'Indulge in rich, dessert-inspired blends like vanilla custard, apple crumble, and chocolate.',
+      title: 'Cool. Crisp.\nUnforgettable.',
+      subtitle: 'Experience an icy menthol blast with MAC Cool Blast Super Slims — pure refreshment in every draw.',
       cta: 'Shop Here',
-      href: '#',
-      tone: 'dessert',
-      imageUrl: '/images/hero/20250618456-2-scaled.jpg'
-    },
-    {
-      title: 'Classic. Smooth.\nRefined.',
-      subtitle: 'Discover rich tobacco notes crafted for the authentic taste you know and love.',
-      cta: 'Shop Here',
-      href: '#',
-      tone: 'tobacco',
-      imageUrl: '/images/hero/20250618456-4-scaled.jpg'
-    },
-    {
-      title: 'Fresh. Juicy.\nUnforgettable.',
-      subtitle: 'Bursting with flavour—sweet, tangy, and always refreshing.',
-      cta: 'Shop Here',
-      href: '#',
+      href: '/collections/all-products',
       tone: 'fruit',
-      imageUrl: '/images/hero/54846548.jpg'
+      imageUrl: '/images/hero/hero-01.jpg',
     },
     {
-      title: 'Lab-Crafted.\nAustralian.',
-      subtitle: 'Premium blends made for smooth hits, bold flavour, and reliable performance.',
+      title: 'Silky. Smooth.\nIconic.',
+      subtitle: 'AURE delivers a classic experience at an affordable price — silk-smooth flavour with every puff.',
       cta: 'Shop Here',
-      href: '#',
+      href: '/collections/all-products',
+      tone: 'tobacco',
+      imageUrl: '/images/hero/hero-02.jpg',
+    },
+    {
+      title: 'Bold. Intense.\nElectrifying.',
+      subtitle: 'Crush the Peel Scorpion capsule for a rush of bold flavour and long-lasting satisfaction.',
+      cta: 'Shop Here',
+      href: '/collections/all-products',
+      tone: 'fruit',
+      imageUrl: '/images/hero/hero-03.jpg',
+    },
+    {
+      title: 'Two Flavours.\nDouble the Burst.',
+      subtitle: 'Switch between Applemint and Orange with ESSE Change Double — twin capsules, one perfect smoke.',
+      cta: 'Shop Here',
+      href: '/collections/all-products',
+      tone: 'fruit',
+      imageUrl: '/images/hero/hero-04.jpg',
+    },
+    {
+      title: 'Refined. Elegant.\nEffortless.',
+      subtitle: 'AURE blends timeless craftsmanship with everyday value — silky smooth, classically refined.',
+      cta: 'Shop Here',
+      href: '/collections/all-products',
+      tone: 'tobacco',
+      imageUrl: '/images/hero/hero-05.jpg',
+    },
+    {
+      title: 'Refresh.\nEvery Moment.',
+      subtitle: 'Cool menthol meets a slim, elegant silhouette — ESSE Menthol Super Slim, refreshing from first puff to last.',
+      cta: 'Shop Here',
+      href: '/collections/all-products',
+      tone: 'fruit',
+      imageUrl: '/images/hero/hero-06.jpg',
+    },
+    {
+      title: 'Rich. Smooth.\nSatisfying.',
+      subtitle: 'Gold Pin Mixpod\'s fresh-seal pack delivers premium flavour and satisfying depth in every draw.',
+      cta: 'Shop Here',
+      href: '/collections/all-products',
+      tone: 'tobacco',
+      imageUrl: '/images/hero/hero-07.jpg',
+    },
+    {
+      title: 'Iconic Taste.\nTime-Honoured Quality.',
+      subtitle: 'Zhonghua carries a legacy of smooth, rich tradition — heritage in every carefully crafted blend.',
+      cta: 'Shop Here',
+      href: '/collections/all-products',
+      tone: 'tobacco',
+      imageUrl: '/images/hero/hero-08.jpg',
+    },
+    {
+      title: 'Classic Trust.\nSince 1906.',
+      subtitle: 'Shuangxi premium cigarettes deliver smooth, mellow, and rich flavour — over a century of craftsmanship.',
+      cta: 'Shop Here',
+      href: '/collections/all-products',
+      tone: 'tobacco',
+      imageUrl: '/images/hero/hero-09.jpg',
+    },
+    {
+      title: 'Rich. Refined.\nFull-Bodied.',
+      subtitle: 'Crush the Peel Red Wine capsule and unlock a smooth, aromatic red-wine experience — perfectly balanced.',
+      cta: 'Shop Here',
+      href: '/collections/all-products',
       tone: 'dessert',
-      imageUrl: '/images/hero/home-2-06-2048x1158.jpg'
+      imageUrl: '/images/hero/hero-10.jpg',
+    },
+    {
+      title: 'Limited Edition.\nGolden Style.',
+      subtitle: 'Manchester Queen Gold blends quality and elegance — rich, smooth, and satisfying with every draw.',
+      cta: 'Shop Here',
+      href: '/collections/all-products',
+      tone: 'tobacco',
+      imageUrl: '/images/hero/hero-11.jpg',
+    },
+    {
+      title: 'Smooth Draw.\nPure Enjoyment.',
+      subtitle: 'Crafted for a smooth, rich taste — savour every moment with our trusted Australian blends.',
+      cta: 'Shop Here',
+      href: '/collections/all-products',
+      tone: 'tobacco',
+      imageUrl: '/images/hero/hero-12.jpg',
+    },
+    {
+      title: 'Silky Smooth.\nClassic Experience.',
+      subtitle: 'AURE brings affordable luxury — timeless flavour with the polish of fine craftsmanship.',
+      cta: 'Shop Here',
+      href: '/collections/all-products',
+      tone: 'tobacco',
+      imageUrl: '/images/hero/hero-13.jpg',
+    },
+    {
+      title: 'Japanese Craftsmanship.\nRefined Pleasure.',
+      subtitle: 'Mevius delivers smooth, rich, and satisfying taste — precision-blended for the discerning smoker.',
+      cta: 'Shop Here',
+      href: '/collections/all-products',
+      tone: 'tobacco',
+      imageUrl: '/images/hero/hero-14.jpg',
+    },
+    {
+      title: 'Bold. Mysterious.\nPremium.',
+      subtitle: 'AURE in purple — silky smooth and full-flavoured, made in Indonesia for the bold at heart.',
+      cta: 'Shop Here',
+      href: '/collections/all-products',
+      tone: 'tobacco',
+      imageUrl: '/images/hero/hero-15.jpg',
+    },
+    {
+      title: 'Light. Refined.\nIconic.',
+      subtitle: 'ESSE Lights Super Slim — the iconic choice for a smooth, mild taste with a refined finish.',
+      cta: 'Shop Here',
+      href: '/collections/all-products',
+      tone: 'tobacco',
+      imageUrl: '/images/hero/hero-16.jpg',
+    },
+    {
+      title: 'Iconic Taste.\nTimeless Choice.',
+      subtitle: 'Marlboro — rich, smooth, and satisfying. The world\'s most loved blend, bold and unmistakable.',
+      cta: 'Shop Here',
+      href: '/collections/all-products',
+      tone: 'tobacco',
+      imageUrl: '/images/hero/hero-17.jpg',
     },
   ];
 
@@ -92,12 +196,12 @@ export class HomeComponent {
     if (!cats.length) {
       // SSR/prerender + initial load fallback
       return [
-        { title: 'All Products', href: '/collections/all-products', imageUrl: '/images/hero/20250618456-2-scaled.jpg' },
-        { title: 'Desserts', href: '/collections/desserts', imageUrl: '/images/hero/20250618456-4-scaled.jpg' },
-        { title: 'Energy', href: '/collections/energy', imageUrl: '/images/hero/54846548.jpg' },
-        { title: 'Fruit', href: '/collections/fruit', imageUrl: '/images/hero/home-2-06-2048x1158.jpg' },
-        { title: 'Tobacco', href: '/collections/tobacco', imageUrl: '/images/hero/20250618456-2-scaled.jpg' },
-        { title: 'Party Mix', href: '/collections/party-mix', imageUrl: '/images/hero/54846548.jpg' },
+        { title: 'All Products', href: '/collections/all-products', imageUrl: '/images/hero/hero-01.jpg' },
+        { title: 'Desserts', href: '/collections/desserts', imageUrl: '/images/hero/hero-02.jpg' },
+        { title: 'Energy', href: '/collections/energy', imageUrl: '/images/hero/hero-03.jpg' },
+        { title: 'Fruit', href: '/collections/fruit', imageUrl: '/images/hero/hero-04.jpg' },
+        { title: 'Tobacco', href: '/collections/tobacco', imageUrl: '/images/hero/hero-01.jpg' },
+        { title: 'Party Mix', href: '/collections/party-mix', imageUrl: '/images/hero/hero-03.jpg' },
       ];
     }
 
@@ -108,7 +212,7 @@ export class HomeComponent {
       return a.name.localeCompare(b.name);
     });
 
-    return sorted.slice(0, 6).map((c) => ({
+    return sorted.map((c) => ({
       title: c.name,
       href: c.name === 'All Products' ? '/collections/all-products' : `/collections/${this.slugify(c.name)}`,
       imageUrl: c.categoryImageUrl ?? '',
