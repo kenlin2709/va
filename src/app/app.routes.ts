@@ -148,6 +148,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/contact/contact.component').then((m) => m.ContactComponent),
   },
   {
+    path: 'about',
+    loadComponent: () => import('./pages/about/about.component').then((m) => m.AboutComponent),
+  },
+  {
     path: 'refund-policy',
     loadComponent: () => import('./pages/refund-policy/refund-policy.component').then((m) => m.RefundPolicyComponent),
   }
