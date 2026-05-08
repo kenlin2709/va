@@ -47,6 +47,29 @@
   background-repeat: no-repeat;
 }
 
+.hero__backdrop {
+  display: none;
+}
+
+@media (min-width: 1200px) {
+  .hero__image {
+    transform: none;
+    background-size: contain;
+    background-color: transparent;
+  }
+
+  .hero__backdrop {
+    display: block;
+    position: absolute;
+    inset: -8%;
+    background-image: var(--hero-img);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    filter: blur(40px) brightness(0.85) saturate(1.1);
+  }
+}
+
 .hero__shade {
   position: absolute;
   inset: 0;
