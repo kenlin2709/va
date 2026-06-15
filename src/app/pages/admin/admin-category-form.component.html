@@ -24,6 +24,12 @@
       </label>
 
       <label class="field">
+        <span>Order</span>
+        <input formControlName="order" type="number" min="0" step="1" placeholder="0" />
+        <small class="hint">Lower numbers appear first on the homepage.</small>
+      </label>
+
+      <label class="field">
         <span>Upload image</span>
         <input type="file" accept="image/*" (change)="onImageSelected($event)" [disabled]="uploading() || loading()" />
         <small class="hint" *ngIf="uploading()">Uploading…</small>

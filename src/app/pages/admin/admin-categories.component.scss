@@ -222,4 +222,11 @@
   text-align: right;
 }
 
+.table__order {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  color: var(--a-muted);
+  width: 80px;
+}
+
 

@@ -17,6 +17,7 @@ type HeroSlide = {
   href: string;
   tone: 'dessert' | 'tobacco' | 'fruit';
   imageUrl: string;
+  smallImageUrl: string;
 };
 
 @Component({
@@ -48,6 +49,7 @@ export class HomeComponent {
       href: '/collections/all-products',
       tone: 'fruit',
       imageUrl: '/images/hero/hero-01.jpg',
+      smallImageUrl: '/images/hero-small/hero-small-9.jpg',
     },
     {
       title: 'Silky. Smooth.\nIconic.',
@@ -56,6 +58,7 @@ export class HomeComponent {
       href: '/collections/all-products',
       tone: 'tobacco',
       imageUrl: '/images/hero/hero-02.jpg',
+      smallImageUrl: '/images/hero-small/hero-small-1.jpg',
     },
     {
       title: 'Bold. Intense.\nElectrifying.',
@@ -64,6 +67,7 @@ export class HomeComponent {
       href: '/collections/all-products',
       tone: 'fruit',
       imageUrl: '/images/hero/hero-03.jpg',
+      smallImageUrl: '/images/hero-small/hero-small-14.jpg',
     },
     {
       title: 'Two Flavours.\nDouble the Burst.',
@@ -72,6 +76,7 @@ export class HomeComponent {
       href: '/collections/all-products',
       tone: 'fruit',
       imageUrl: '/images/hero/hero-04.jpg',
+      smallImageUrl: '/images/hero-small/hero-small-12.jpg',
     },
     {
       title: 'Refined. Elegant.\nEffortless.',
@@ -80,6 +85,7 @@ export class HomeComponent {
       href: '/collections/all-products',
       tone: 'tobacco',
       imageUrl: '/images/hero/hero-05.jpg',
+      smallImageUrl: '/images/hero-small/hero-small-1.jpg',
     },
     {
       title: 'Refresh.\nEvery Moment.',
@@ -88,6 +94,7 @@ export class HomeComponent {
       href: '/collections/all-products',
       tone: 'fruit',
       imageUrl: '/images/hero/hero-06.jpg',
+      smallImageUrl: '/images/hero-small/hero-small-11.jpg',
     },
     {
       title: 'Rich. Smooth.\nSatisfying.',
@@ -96,6 +103,7 @@ export class HomeComponent {
       href: '/collections/all-products',
       tone: 'tobacco',
       imageUrl: '/images/hero/hero-07.jpg',
+      smallImageUrl: '/images/hero-small/hero-small-15.jpg',
     },
     {
       title: 'Iconic Taste.\nTime-Honoured Quality.',
@@ -104,6 +112,7 @@ export class HomeComponent {
       href: '/collections/all-products',
       tone: 'tobacco',
       imageUrl: '/images/hero/hero-08.jpg',
+      smallImageUrl: '/images/hero-small/hero-small-8.jpg',
     },
     {
       title: 'Classic Trust.\nSince 1906.',
@@ -112,6 +121,7 @@ export class HomeComponent {
       href: '/collections/all-products',
       tone: 'tobacco',
       imageUrl: '/images/hero/hero-09.jpg',
+      smallImageUrl: '/images/hero-small/hero-small-17.jpg',
     },
     {
       title: 'Rich. Refined.\nFull-Bodied.',
@@ -120,6 +130,7 @@ export class HomeComponent {
       href: '/collections/all-products',
       tone: 'dessert',
       imageUrl: '/images/hero/hero-10.jpg',
+      smallImageUrl: '/images/hero-small/hero-small-16.jpg',
     },
     {
       title: 'Limited Edition.\nGolden Style.',
@@ -128,6 +139,7 @@ export class HomeComponent {
       href: '/collections/all-products',
       tone: 'tobacco',
       imageUrl: '/images/hero/hero-11.jpg',
+      smallImageUrl: '/images/hero-small/hero-small-18.jpg',
     },
     {
       title: 'Smooth Draw.\nPure Enjoyment.',
@@ -136,6 +148,7 @@ export class HomeComponent {
       href: '/collections/all-products',
       tone: 'tobacco',
       imageUrl: '/images/hero/hero-12.jpg',
+      smallImageUrl: '/images/hero-small/hero-small-4.jpg',
     },
     {
       title: 'Silky Smooth.\nClassic Experience.',
@@ -144,6 +157,7 @@ export class HomeComponent {
       href: '/collections/all-products',
       tone: 'tobacco',
       imageUrl: '/images/hero/hero-13.jpg',
+      smallImageUrl: '/images/hero-small/hero-small-1.jpg',
     },
     {
       title: 'Japanese Craftsmanship.\nRefined Pleasure.',
@@ -152,6 +166,7 @@ export class HomeComponent {
       href: '/collections/all-products',
       tone: 'tobacco',
       imageUrl: '/images/hero/hero-14.jpg',
+      smallImageUrl: '/images/hero-small/hero-small-7.jpg',
     },
     {
       title: 'Bold. Mysterious.\nPremium.',
@@ -160,6 +175,7 @@ export class HomeComponent {
       href: '/collections/all-products',
       tone: 'tobacco',
       imageUrl: '/images/hero/hero-15.jpg',
+      smallImageUrl: '/images/hero-small/hero-small-2.jpg',
     },
     {
       title: 'Light. Refined.\nIconic.',
@@ -168,6 +184,7 @@ export class HomeComponent {
       href: '/collections/all-products',
       tone: 'tobacco',
       imageUrl: '/images/hero/hero-16.jpg',
+      smallImageUrl: '/images/hero-small/hero-small-13.jpg',
     },
     {
       title: 'Iconic Taste.\nTimeless Choice.',
@@ -176,6 +193,7 @@ export class HomeComponent {
       href: '/collections/all-products',
       tone: 'tobacco',
       imageUrl: '/images/hero/hero-17.jpg',
+      smallImageUrl: '/images/hero-small/hero-small-6.jpg',
     },
   ];
 
@@ -191,33 +209,13 @@ export class HomeComponent {
   readonly apiCategories = signal<Category[]>([]);
   readonly apiProducts = signal<any[]>([]);
 
-  readonly collectionsForView = computed(() => {
-    const cats = this.apiCategories();
-    if (!cats.length) {
-      // SSR/prerender + initial load fallback
-      return [
-        { title: 'All Products', href: '/collections/all-products', imageUrl: '/images/hero/hero-01.jpg' },
-        { title: 'Desserts', href: '/collections/desserts', imageUrl: '/images/hero/hero-02.jpg' },
-        { title: 'Energy', href: '/collections/energy', imageUrl: '/images/hero/hero-03.jpg' },
-        { title: 'Fruit', href: '/collections/fruit', imageUrl: '/images/hero/hero-04.jpg' },
-        { title: 'Tobacco', href: '/collections/tobacco', imageUrl: '/images/hero/hero-01.jpg' },
-        { title: 'Party Mix', href: '/collections/party-mix', imageUrl: '/images/hero/hero-03.jpg' },
-      ];
-    }
-
-    // Keep "All Products" first if it exists
-    const sorted = [...cats].sort((a, b) => {
-      if (a.name === 'All Products') return -1;
-      if (b.name === 'All Products') return 1;
-      return a.name.localeCompare(b.name);
-    });
-
-    return sorted.map((c) => ({
+  readonly collectionsForView = computed(() =>
+    this.apiCategories().map((c) => ({
       title: c.name,
       href: c.name === 'All Products' ? '/collections/all-products' : `/collections/${this.slugify(c.name)}`,
       imageUrl: c.categoryImageUrl ?? '',
-    }));
-  });
+    }))
+  );
 
   private slugify(name: string): string {
     return name

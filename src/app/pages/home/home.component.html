@@ -2,9 +2,9 @@
   <section class="hero" aria-label="Featured">
     <div class="hero__frame" (pointerdown)="onHeroPointerDown($event)" (pointerup)="onHeroPointerUp($event)">
       <div class="hero__slides" [attr.data-tone]="heroSlides[heroIndex()].tone">
-        <article class="hero__slide" *ngFor="let s of heroSlides; let i = index" [class.is-active]="i === heroIndex()" [style.--hero-img]="'url(' + s.imageUrl + ')'">
+        <article class="hero__slide" *ngFor="let s of heroSlides; let i = index" [class.is-active]="i === heroIndex()" [style.--hero-img]="'url(' + s.imageUrl + ')'" [style.--hero-img-small]="'url(' + s.smallImageUrl + ')'">
           <div class="hero__backdrop" aria-hidden="true"></div>
-          <div class="hero__image" aria-hidden="true" [style.backgroundImage]="'url(' + s.imageUrl + ')'"></div>
+          <div class="hero__image" aria-hidden="true"></div>
           <div class="hero__shade" aria-hidden="true"></div>
 
           <div class="hero__content">

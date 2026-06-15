@@ -25,6 +25,7 @@
         <table class="table">
           <thead>
             <tr>
+              <th>Order</th>
               <th>Name</th>
               <th>Description</th>
               <th class="table__actions">Actions</th>
@@ -32,6 +33,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let c of categories()">
+              <td class="table__order">{{ c.order ?? '—' }}</td>
               <td class="table__nameCell">
                 <span class="cIcon" aria-hidden="true">
                   <img

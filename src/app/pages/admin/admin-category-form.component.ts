@@ -28,6 +28,7 @@ export class AdminCategoryFormComponent {
   readonly form = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     description: new FormControl<string>('', { nonNullable: true }),
+    order: new FormControl<number | null>(null, { validators: [Validators.min(0)] }),
     // Backwards-compat: older UI versions referenced this control. We keep it so the form
     // never throws "Cannot find control with name: 'categoryImageUrl'".
     categoryImageUrl: new FormControl<string>('', { nonNullable: true }),
@@ -55,11 +56,12 @@ export class AdminCategoryFormComponent {
         this.form.setValue({
           name: c.name,
           description: c.description ?? '',
+          order: c.order ?? null,
           categoryImageUrl: c.categoryImageUrl ?? '',
         });
         this.existingImageUrl.set(c.categoryImageUrl ?? null);
       } else {
-        this.form.reset({ name: '', description: '', categoryImageUrl: '' });
+        this.form.reset({ name: '', description: '', order: null, categoryImageUrl: '' });
         this.existingImageUrl.set(null);
       }
     } catch (e: any) {
@@ -78,10 +80,14 @@ export class AdminCategoryFormComponent {
       const id = this.categoryId();
       const image = this.selectedImage;
 
+      const orderValue = this.form.controls.order.value;
+      const order = orderValue == null || orderValue === ('' as any) ? undefined : Number(orderValue);
+
       if (image) {
         const form = new FormData();
         form.append('name', this.form.controls.name.value);
         if (this.form.controls.description.value) form.append('description', this.form.controls.description.value);
+        if (order != null) form.append('order', String(order));
         form.append('image', image);
 
         if (id) await firstValueFrom(this.categoriesApi.updateMultipart(id, form));
@@ -90,6 +96,7 @@ export class AdminCategoryFormComponent {
         const payload = {
           name: this.form.controls.name.value,
           description: this.form.controls.description.value || undefined,
+          order,
         };
         if (id) await firstValueFrom(this.categoriesApi.update(id, payload));
         else await firstValueFrom(this.categoriesApi.create(payload));

@@ -7,6 +7,7 @@ export type Category = {
   name: string;
   description?: string;
   categoryImageUrl?: string;
+  order?: number;
 };
 
 @Injectable({ providedIn: 'root' })
@@ -22,7 +23,7 @@ export class CategoriesApiService {
     return this.http.get<Category[]>(`${this.baseUrl}/categories`);
   }
 
-  create(body: { name: string; description?: string; categoryImageUrl?: string }) {
+  create(body: { name: string; description?: string; categoryImageUrl?: string; order?: number }) {
     return this.http.post<Category>(`${this.baseUrl}/categories`, body);
   }
 
@@ -30,7 +31,7 @@ export class CategoriesApiService {
     return this.http.post<Category>(`${this.baseUrl}/categories`, form);
   }
 
-  update(id: string, body: { name?: string; description?: string; categoryImageUrl?: string }) {
+  update(id: string, body: { name?: string; description?: string; categoryImageUrl?: string; order?: number }) {
     return this.http.patch<Category>(`${this.baseUrl}/categories/${id}`, body);
   }
 
