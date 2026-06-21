@@ -3,9 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ProductCardComponent } from '../../ui/product-card/product-card.component';
 import { CartService } from '../../shared/cart/cart.service';
 import { ProductsApiService } from '../../shared/api/products-api.service';
+import { CategoriesApiService, Category } from '../../shared/api/categories-api.service';
 import { firstValueFrom } from 'rxjs';
-
-type SortKey = 'featured' | 'best' | 'az' | 'za' | 'price_asc' | 'price_desc';
 
 type Product = {
   id: string;
@@ -13,11 +12,9 @@ type Product = {
   price: number; // AUD
   inStock: boolean;
   imageUrl?: string;
+  categoryId?: string;
+  categoryIds?: string[];
 };
-
-function byTitleAsc(a: Product, b: Product): number {
-  return a.title.localeCompare(b.title);
-}
 
 function byPriceAsc(a: Product, b: Product): number {
   return a.price - b.price;
@@ -34,11 +31,14 @@ function byPriceAsc(a: Product, b: Product): number {
 export class AllProductsComponent {
   private readonly cart = inject(CartService);
   private readonly productsApi = inject(ProductsApiService);
+  private readonly categoriesApi = inject(CategoriesApiService);
 
-  // Backend-driven products
   readonly products = signal<Product[]>([]);
+  readonly categories = signal<Category[]>([]);
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
+
+  readonly selectedCategoryId = signal<string | null>(null);
 
   constructor() {
     void this.load();
@@ -48,7 +48,10 @@ export class AllProductsComponent {
     this.loading.set(true);
     this.error.set(null);
     try {
-      const res = await firstValueFrom(this.productsApi.list({ limit: 200 }));
+      const [res, cats] = await Promise.all([
+        firstValueFrom(this.productsApi.list({ limit: 200 })),
+        firstValueFrom(this.categoriesApi.list()),
+      ]);
       this.products.set(
         res.items.map((p) => ({
           id: p._id,
@@ -56,8 +59,12 @@ export class AllProductsComponent {
           price: p.price,
           inStock: (p.stockQty ?? 0) > 0,
           imageUrl: p.productImageUrl ?? undefined,
+          categoryId: p.categoryId,
+          categoryIds: p.categoryIds,
         })),
       );
+      const sorted = [...cats].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+      this.categories.set(sorted);
     } catch (e: any) {
       this.error.set(e?.error?.message ?? e?.message ?? 'Failed to load products');
     } finally {
@@ -65,73 +72,17 @@ export class AllProductsComponent {
     }
   }
 
-  // UI state (drawer)
-  readonly isDrawerOpen = signal(false);
-  readonly sortKey = signal<SortKey>('price_asc');
-  readonly availability = signal<'all' | 'in' | 'out'>('all');
-  readonly priceMin = signal<number | null>(null);
-  readonly priceMax = signal<number | null>(null);
-
-  readonly hasAnyFilter = computed(() => {
-    return this.availability() !== 'all' || this.priceMin() !== null || this.priceMax() !== null;
-  });
-
   readonly filtered = computed(() => {
-    const items = this.products();
-    const avail = this.availability();
-    const min = this.priceMin();
-    const max = this.priceMax();
-
-    return items.filter((p) => {
-      if (avail === 'in' && !p.inStock) return false;
-      if (avail === 'out' && p.inStock) return false;
-      if (min !== null && p.price < min) return false;
-      if (max !== null && p.price > max) return false;
-      return true;
-    });
+    const catId = this.selectedCategoryId();
+    const items = [...this.products()].sort(byPriceAsc);
+    if (!catId) return items;
+    const selectedCat = this.categories().find((c) => c._id === catId);
+    if (selectedCat?.name.toLowerCase().includes('all')) return items;
+    return items.filter((p) => p.categoryId === catId || (p.categoryIds ?? []).includes(catId));
   });
 
-  readonly sorted = computed(() => {
-    const items = [...this.filtered()];
-    switch (this.sortKey()) {
-      case 'az':
-        return items.sort(byTitleAsc);
-      case 'za':
-        return items.sort((a, b) => byTitleAsc(b, a));
-      case 'price_asc':
-        return items.sort(byPriceAsc);
-      case 'price_desc':
-        return items.sort((a, b) => byPriceAsc(b, a));
-      case 'best':
-      case 'featured':
-      default:
-        return items;
-    }
-  });
-
-  openDrawer(): void {
-    this.isDrawerOpen.set(true);
-  }
-
-  closeDrawer(): void {
-    this.isDrawerOpen.set(false);
-  }
-
-  clearAll(): void {
-    this.sortKey.set('featured');
-    this.availability.set('all');
-    this.priceMin.set(null);
-    this.priceMax.set(null);
-  }
-
-  setPriceMin(value: string): void {
-    const v = value.trim();
-    this.priceMin.set(v ? Number(v) : null);
-  }
-
-  setPriceMax(value: string): void {
-    const v = value.trim();
-    this.priceMax.set(v ? Number(v) : null);
+  selectCategory(id: string | null): void {
+    this.selectedCategoryId.set(id);
   }
 
   formatPrice(n: number): string {
@@ -150,5 +101,3 @@ export class AllProductsComponent {
     );
   }
 }
-
-
